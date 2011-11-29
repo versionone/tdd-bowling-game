@@ -1,6 +1,6 @@
 require 'rake'
 require 'albacore'
-require 'build_config.rb'
+require './build_config.rb'
 
 task :default => :compile
 
