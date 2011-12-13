@@ -12,7 +12,7 @@ namespace Bowling
 
     public class Frame
     {
-        private int _total = 0;
+        private int[] _pins_fallen = new int[] {0, 0};
         private int _rolls_taken = 0;
 
         public Frame()
@@ -22,19 +22,38 @@ namespace Bowling
 
         public void addRoll(int pins_fallen)
         {
-            _total += pins_fallen;
+            _pins_fallen[_rolls_taken] = pins_fallen;
             _rolls_taken++;
         }
 
         public int getTotal()
         {
-            return _total;
+            return _pins_fallen.Sum();
+        }
+
+        private int getFirst()
+        {
+            return _pins_fallen[0];
         }
 
         public bool isComplete()
         {
-            return (_rolls_taken >= 2);
+            return (getTotal() == 10 || _rolls_taken >= 2);
         }
+
+        public int my_score(Frame next1,  Frame next2)
+        {
+            if (getTotal() < 10)
+            {
+                return getTotal();
+            }
+
+            if (next1 != null)
+            {
+                //this is where we are
+            }
+
+    }
 
     }
 
@@ -53,8 +72,13 @@ namespace Bowling
 
         public int getScore()
         {
+
+            returnFrameScore(frame, n1frame, n2frame) => correct frame score
+
             return _frames.Sum(frame => frame.getTotal());
         }
+
+
 
         public void Roll(int pins_fallen)
         {
@@ -69,9 +93,6 @@ namespace Bowling
             }
 
             _frames[_current_frame].addRoll(pins_fallen);
-
-
-
             // i dont know when to increment the frame count
             // i don't know when the game has ended
         }

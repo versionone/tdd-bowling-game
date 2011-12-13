@@ -108,6 +108,34 @@ namespace specs_for_bowling
         }
     }
 
+    public class when_9_strikes_rolled_then_then_three_gutters_game_ends : concerns
+    {
+        [Specification]
+        public void score_is_10()
+        {
+            var game = new BowlingGame();
+            9.times(() => game.Roll(10));
+            game.Roll(0);
+            game.Roll(0);
+            typeof (GameEndException).should_be_thrown_by(() => game.Roll(0));
+        }
+    }
+
+    public class when_9_strikes_rolled_then_two_gutters_score_is_XX : concerns
+    {
+        [Specification]
+        public void score_is_250()
+        {
+            var game = new BowlingGame();
+            9.times(() => game.Roll(10));
+            game.Roll(0);
+            game.Roll(0);
+            game.getScore().should_equal(250);
+        }
+    }
+
+
+
     public class when_a_spare_is_rolled_then_a_bonus_then_all_gutters : concerns
     {
         [Specification]
