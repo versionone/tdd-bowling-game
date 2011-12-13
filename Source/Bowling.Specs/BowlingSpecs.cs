@@ -130,11 +130,9 @@ namespace specs_for_bowling
             9.times(() => game.Roll(10));
             game.Roll(0);
             game.Roll(0);
-            game.getScore().should_equal(250);
+            game.getScore().should_equal(240);
         }
     }
-
-
 
     public class when_a_spare_is_rolled_then_a_bonus_then_all_gutters : concerns
     {
@@ -147,6 +145,18 @@ namespace specs_for_bowling
             game.Roll(3); //bonus
             17.times(() => game.Roll(0));
             game.getScore().should_equal(16);
+        }
+    }
+
+    public class when_all_strikes_are_rolled : concerns
+    {
+        [Specification]
+        public void score_is_10()
+        {
+            var game = new BowlingGame();
+            12.times(() => game.Roll(10));
+            game.getScore().should_equal(300);
+            typeof (GameEndException).should_be_thrown_by(()=>game.Roll(5));
         }
     }
 }
