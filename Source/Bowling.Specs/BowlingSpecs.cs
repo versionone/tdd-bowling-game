@@ -36,7 +36,7 @@ namespace specs_for_bowling
         [Specification]
         public void the_score_is_0()
         {
-            _game.getScore().should_equal(0)
+            _game.getScore().should_equal(0);s
         }
 
     }
