@@ -9,23 +9,16 @@ namespace Bowling
 	{
 		private List<BowlingFrame> _frames = new List<BowlingFrame>();
 
+		public BowlingGame()
+		{
+			for(int index = 0; index <= 10; index++)
+				_frames.Add(new BowlingFrame());
+		}
+
 		public void Roll(int pinsKnockedDown)
 		{
-			BowlingFrame latestFrame = null;
-			
-			if(_frames.Count > 0)
-				latestFrame = _frames.Last();
-
-			if (latestFrame == null || latestFrame.IsComplete())
-			{
-				latestFrame = new BowlingFrame();
-				_frames.Add(latestFrame);
-			}
-
-			if (!latestFrame.Roll1.HasValue)
-				latestFrame.Roll1 = pinsKnockedDown;
-			else
-				latestFrame.Roll2 = pinsKnockedDown;
+			BowlingFrame latestFrame = _frames.First(f => !f.IsComplete());
+			latestFrame.ApplyRoll(pinsKnockedDown);
 		}
 
 		public int Score()
@@ -34,14 +27,9 @@ namespace Bowling
 
 			for (int index = 0; index < _frames.Count; index++)
 			{
-				BowlingFrame thisFrame = _frames[index];
-				BowlingFrame nextFrame = null;
-				BowlingFrame followingFrame = null;
-
-				if (index < _frames.Count - 1)
-					nextFrame = _frames[index + 1];
-				if (index < _frames.Count - 2)
-					followingFrame = _frames[index + 2];
+				BowlingFrame thisFrame = _frames.ElementAt(index);
+				BowlingFrame nextFrame = _frames.ElementAtOrDefault(index + 1);
+				BowlingFrame followingFrame = _frames.ElementAtOrDefault(index + 2);
 
 				score += thisFrame.CalculateScore(nextFrame, followingFrame);
 			}

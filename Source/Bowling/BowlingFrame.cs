@@ -14,26 +14,25 @@ namespace Bowling
 		#endregion
 
 		#region Methods
+		public void ApplyRoll(int pinsKnockedDown)
+		{
+			if (!Roll1.HasValue)
+				Roll1 = pinsKnockedDown;
+			else
+				Roll2 = pinsKnockedDown;
+		}
+
 		public int CalculateScore(BowlingFrame nextFrame, BowlingFrame followingFrame)
 		{
 			var thisTotal = Roll1.GetValueOrDefault() + Roll2.GetValueOrDefault();
 
-			if (IsSpare() && nextFrame != null)
+			if (IsSpare())
 			{
-				thisTotal += nextFrame.Roll1.GetValueOrDefault();
+				thisTotal += AddSpareBonus(nextFrame);
 			}
-			else if (IsStrike() && nextFrame != null)
+			else if (IsStrike())
 			{
-				if (nextFrame.IsStrike())
-				{
-					thisTotal += 10;
-					if (followingFrame != null)
-						thisTotal += followingFrame.Roll1.GetValueOrDefault();
-				}
-				else
-				{
-					thisTotal += nextFrame.Roll1.GetValueOrDefault() + nextFrame.Roll2.GetValueOrDefault();
-				}
+				thisTotal += AddStrikeBonus(nextFrame, followingFrame);
 			}
 
 			return thisTotal;
@@ -42,6 +41,29 @@ namespace Bowling
 		public int CalculateScore(BowlingFrame nextFrame)
 		{
 			return CalculateScore(nextFrame, null);
+		}
+
+		private int AddSpareBonus(BowlingFrame nextFrame)
+		{
+			if (nextFrame != null)
+				return nextFrame.Roll1.GetValueOrDefault();
+			else
+				return 0;
+		}
+
+		private int AddStrikeBonus(BowlingFrame nextFrame, BowlingFrame followingFrame)
+		{
+			var bonus = 0;
+
+			if (nextFrame != null)
+			{
+				bonus += nextFrame.Roll1.GetValueOrDefault() + nextFrame.Roll2.GetValueOrDefault();
+
+				if (nextFrame.IsStrike() && followingFrame != null)
+					bonus += followingFrame.Roll1.GetValueOrDefault();
+			}
+
+			return bonus;
 		}
 
 		public bool IsComplete()
