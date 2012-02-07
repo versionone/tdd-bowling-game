@@ -43,7 +43,6 @@ namespace specs_for_bowling
 		}
 	}
 
-
 	public class when_rolling_a_spare : concerns
 	{
 		private BowlingGame _game;
@@ -206,4 +205,30 @@ namespace specs_for_bowling
 			_frame.IsComplete().should_be_false();
 		}
 	}
+
+	public class when_rolling_two_spare : concerns
+	{
+		private BowlingGame _game;
+
+		protected override void context()
+		{
+			_game = new BowlingGame();
+			_game.Roll(3);
+			_game.Roll(7); //spare 10+4 (14)
+
+			_game.Roll(4); //spare bonus
+			_game.Roll(6); //spare 10+3 (27)
+
+			_game.Roll(3); //(30)
+			
+			15.times(() => _game.Roll(0));
+		}
+
+		[Specification]
+		public void score_is_30()
+		{
+			_game.Score().should_equal(30);
+		}
+	}
+
 }
