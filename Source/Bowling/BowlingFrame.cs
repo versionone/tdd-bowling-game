@@ -24,7 +24,16 @@ namespace Bowling
 			}
 			else if (IsStrike() && nextFrame != null)
 			{
-				thisTotal += nextFrame.CalculateScore(followingFrame, null);
+				if (nextFrame.IsStrike())
+				{
+					thisTotal += 10;
+					if (followingFrame != null)
+						thisTotal += followingFrame.Roll1.GetValueOrDefault();
+				}
+				else
+				{
+					thisTotal += nextFrame.Roll1.GetValueOrDefault() + nextFrame.Roll2.GetValueOrDefault();
+				}
 			}
 
 			return thisTotal;

@@ -36,10 +36,14 @@ namespace Bowling
 			{
 				BowlingFrame thisFrame = _frames[index];
 				BowlingFrame nextFrame = null;
+				BowlingFrame followingFrame = null;
+
 				if (index < _frames.Count - 1)
 					nextFrame = _frames[index + 1];
+				if (index < _frames.Count - 2)
+					followingFrame = _frames[index + 2];
 
-				score += thisFrame.CalculateScore(nextFrame);
+				score += thisFrame.CalculateScore(nextFrame, followingFrame);
 			}
 
 			return score;

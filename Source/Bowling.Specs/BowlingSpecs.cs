@@ -91,4 +91,69 @@ namespace specs_for_bowling
 		}
 	}
 
+	public class when_rolling_a_strike_and_open_frame : concerns
+	{
+		private BowlingGame _game;
+
+		protected override void context()
+		{
+			_game = new BowlingGame();
+			_game.Roll(10);
+			_game.Roll(1);
+			_game.Roll(2);
+
+			16.times(() => _game.Roll(0));
+		}
+
+		[Specification]
+		public void score_is_16()
+		{
+			_game.Score().should_equal(16);
+		}
+	}
+
+	public class when_rolling_a_strike_a_spare_and_open_frame : concerns
+	{
+		private BowlingGame _game;
+
+		protected override void context()
+		{
+			_game = new BowlingGame();
+			_game.Roll(10);
+			_game.Roll(3);
+			_game.Roll(7);
+			_game.Roll(4);
+
+			15.times(() => _game.Roll(0));
+		}
+
+		[Specification]
+		public void score_is_38()
+		{
+			_game.Score().should_equal(38);
+		}
+	}
+
+	public class when_rolling_three_strikes_and_open_frame : concerns
+	{
+		private BowlingGame _game;
+
+		protected override void context()
+		{
+			_game = new BowlingGame();
+			_game.Roll(10); //30
+			_game.Roll(10); //22 52
+			_game.Roll(10); //15 67
+			_game.Roll(2);
+			_game.Roll(3); //5 72
+
+			12.times(() => _game.Roll(0));
+		}
+
+		[Specification]
+		public void score_is_72()
+		{
+			_game.Score().should_equal(72);
+		}
+	}
 }
