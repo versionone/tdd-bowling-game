@@ -206,6 +206,48 @@ namespace specs_for_bowling
 		}
 	}
 
+	public class when_rolling_a_strike_and_open_frame : concerns
+	{
+		private BowlingFrame _frame;
+		private BowlingFrame _nextFrame;
+
+		protected override void context()
+		{
+			_frame = new BowlingFrame();
+			_frame.Roll1 = 10;
+
+			_nextFrame = new BowlingFrame();
+			_nextFrame.Roll1 = 1;
+			_nextFrame.Roll2 = 2;
+		}
+
+		[Specification]
+		public void score_is_13()
+		{
+			_frame.CalculateScore(_nextFrame).should_equal(13);
+		}
+	}
+
+	public class when_rolling_three_strike_frames : concerns
+	{
+		private BowlingFrame _frame1;
+		private BowlingFrame _frame2;
+		private BowlingFrame _frame3;
+
+		protected override void context()
+		{
+			_frame1 = new BowlingFrame() { Roll1 = 10 };
+			_frame2 = new BowlingFrame() { Roll1 = 10 };
+			_frame3 = new BowlingFrame() { Roll1 = 10 };
+		}
+
+		[Specification]
+		public void score_is_30()
+		{
+			_frame1.CalculateScore(_frame2, _frame3);
+		}
+	}
+
 	public class when_rolling_two_spare : concerns
 	{
 		private BowlingGame _game;
