@@ -61,21 +61,31 @@ namespace specs_for_bowling
 		}
 
 		[Specification]
-		public void score_is_9()
+		public void score_is_21()
 		{
-			_game.Score().should_equal(9);
+			_game.Score().should_equal(21);
 		}
 	}
 
 	public class when_rolling_a_spare_frame : concerns
 	{
 		private BowlingFrame _frame;
+		private BowlingFrame _nextFrame;
 
 		protected override void context()
 		{
 			_frame = new BowlingFrame();
 			_frame.Roll1 = 3;
 			_frame.Roll2 = 7;
+
+			_nextFrame = new BowlingFrame();
+			_nextFrame.Roll1 = 1;
+		}
+
+		[Specification]
+		public void score_is_11()
+		{
+			_frame.CalculateScore(_nextFrame).should_equal(11);
 		}
 
 		[Specification]
@@ -138,6 +148,12 @@ namespace specs_for_bowling
 		}
 
 		[Specification]
+		public void score_is_8()
+		{
+			_frame.CalculateScore(null).should_equal(8);
+		}
+
+		[Specification]
 		public void frame_is_not_a_strike()
 		{
 			_frame.IsStrike().should_be_false();
@@ -164,6 +180,12 @@ namespace specs_for_bowling
 		{
 			_frame = new BowlingFrame();
 			_frame.Roll1 = 3;
+		}
+
+		[Specification]
+		public void score_is_3()
+		{
+			_frame.CalculateScore(null).should_equal(3);
 		}
 
 		[Specification]

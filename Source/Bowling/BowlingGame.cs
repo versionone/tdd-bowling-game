@@ -7,16 +7,42 @@ namespace Bowling
 {
 	public class BowlingGame
 	{
-		private int _score;
+		private List<BowlingFrame> _frames = new List<BowlingFrame>();
 
 		public void Roll(int pinsKnockedDown)
 		{
-			_score += pinsKnockedDown;
+			BowlingFrame latestFrame = null;
+			
+			if(_frames.Count > 0)
+				latestFrame = _frames.Last();
+
+			if (latestFrame == null || latestFrame.IsComplete())
+			{
+				latestFrame = new BowlingFrame();
+				_frames.Add(latestFrame);
+			}
+
+			if (!latestFrame.Roll1.HasValue)
+				latestFrame.Roll1 = pinsKnockedDown;
+			else
+				latestFrame.Roll2 = pinsKnockedDown;
 		}
 
 		public int Score()
 		{
-			return _score;
+			var score = 0;
+
+			for (int index = 0; index < _frames.Count; index++)
+			{
+				BowlingFrame thisFrame = _frames[index];
+				BowlingFrame nextFrame = null;
+				if (index < _frames.Count - 1)
+					nextFrame = _frames[index + 1];
+
+				score += thisFrame.CalculateScore(nextFrame);
+			}
+
+			return score;
 		}
 	}
 }

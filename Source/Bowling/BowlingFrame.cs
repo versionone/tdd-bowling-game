@@ -14,6 +14,16 @@ namespace Bowling
 		#endregion
 
 		#region Methods
+		public int CalculateScore(BowlingFrame nextFrame)
+		{
+			var thisTotal = Roll1.GetValueOrDefault() + Roll2.GetValueOrDefault();
+
+			if (IsSpare() && nextFrame != null)
+				thisTotal += nextFrame.Roll1.GetValueOrDefault();
+
+			return thisTotal;
+		}
+
 		public bool IsComplete()
 		{
 			if (!Roll1.HasValue)
