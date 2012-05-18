@@ -1,8 +1,10 @@
 .DS_Store
+.idea
 *.user
 *.suo
 *resharper.user
 _ReSharper.*/
+Source/*.ReSharper
 *.orig
 *.sln.cache
 obj
