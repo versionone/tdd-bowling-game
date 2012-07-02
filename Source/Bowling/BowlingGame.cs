@@ -13,13 +13,8 @@ namespace Bowling
 
 	public class BowlingGame
 	{
-		private List<Frame> _frames = new List<Frame>(10);
-		private int _totalScore = 0;
-		private int _numberOfRollsInCurrentFrame = 0;
+		private readonly List<Frame> _frames = new List<Frame>(10);
 		private int _currentFrame = 0;
-		private int _previousFrameScore = 0;
-		private bool _s = false;
-		private int _numberOfRollsAfterStrike = 0;
 
 		public BowlingGame()
 		{
@@ -44,7 +39,12 @@ namespace Bowling
 				if ((previousFrame.WasSpare && currentFrame.NumberOfRolls == 1) || previousFrame.WasStrike)
 				{
 					previousFrame.Score += knockedDownPins;
-				}
+
+					if (_frames.Count > 2 && previousFrame.WasStrike && _frames[_currentFrame - 2].WasStrike && currentFrame.NumberOfRolls == 1)
+					{
+						_frames[_currentFrame - 2].Score += knockedDownPins;
+					}
+				} 
 			}
 
 			if (currentFrame.IsComplete) //first roll or they got a strike
