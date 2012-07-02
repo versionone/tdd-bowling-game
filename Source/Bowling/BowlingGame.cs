@@ -35,21 +35,24 @@ namespace Bowling
 			{
 				//apply bonus if deserving?
 				if ((currentFrame.PreviousFrame.WasSpare &&
-					currentFrame.NumberOfRolls == 1) || currentFrame.PreviousFrame.WasStrike)
+					 currentFrame.NumberOfRolls == 1) || currentFrame.PreviousFrame.WasStrike)
 				{
-					currentFrame.PreviousFrame.Score += knockedDownPins;
+						currentFrame.PreviousFrame.Score += knockedDownPins;
 
-					if (currentFrame.PreviousFrame.PreviousFrame != null &&
-						currentFrame.PreviousFrame.WasStrike &&
-						currentFrame.PreviousFrame.PreviousFrame.WasStrike && 
-						currentFrame.NumberOfRolls == 1)
-					{
-						currentFrame.PreviousFrame.PreviousFrame.Score += knockedDownPins;
+						if (
+							(currentFrame.PreviousFrame.PreviousFrame != null &&
+							 currentFrame.PreviousFrame.WasStrike &&
+							 currentFrame.PreviousFrame.PreviousFrame.WasStrike &&
+							 currentFrame.NumberOfRolls == 1) &&
+							currentFrame.NumberOfRolls != 2)
+						{
+							if (!(this.IsLastFrame && currentFrame.NumberOfRolls <= 2))
+								currentFrame.PreviousFrame.PreviousFrame.Score += knockedDownPins;
+						}
 					}
-				} 
 			}
 
-			if (currentFrame.IsComplete) //first roll or they got a strike
+			if (currentFrame.IsComplete && !this.IsLastFrame) //first roll or they got a strike
 			{
 				_frames.Add(new Frame());
 				_currentFrame++;
@@ -64,7 +67,12 @@ namespace Bowling
 
 		public bool IsGameComplete
 		{
-			get { return _frames.Count >= 10; }
+			get { return _frames.Count == 10; }
+		}
+
+		public bool IsLastFrame
+		{
+			get { return _currentFrame == 9; }
 		}
 	}
 

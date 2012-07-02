@@ -167,4 +167,30 @@ namespace specs_for_bowling
 			_game.IsGameComplete.should_be_true();
 		}
 	}
+	
+	class when_bowling_a_perfect_game : concerns
+	{
+		private BowlingGame _game;
+
+		protected override void context()
+		{
+			_game = new BowlingGame();
+			
+			10.times(() => _game.Roll(10));
+			_game.Roll(10);
+			_game.Roll(10);
+		}
+
+		[Specification]
+		public void the_score_should_be_300()
+		{
+			_game.Score.should_equal(300);
+		}
+
+		[Specification]
+		public void the_game_should_be_complete()
+		{
+			_game.IsGameComplete.should_be_true();
+		}
+	}
 }
