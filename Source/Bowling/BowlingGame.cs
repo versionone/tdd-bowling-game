@@ -35,6 +35,11 @@ namespace Bowling
 
 		public int Score { get { return _score; } }
 
+		public bool IsGameComplete
+		{
+			get { return _numberOfRolls == 20; }
+		}
+
 		private bool isNewFrame()
 		{
 			return (_numberOfRolls%2 != 0);
