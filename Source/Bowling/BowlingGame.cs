@@ -33,16 +33,18 @@ namespace Bowling
 
 			if (_frames.Count > 1)
 			{
-				Frame previousFrame = _frames[_currentFrame - 1];
-
 				//apply bonus if deserving?
-				if ((previousFrame.WasSpare && currentFrame.NumberOfRolls == 1) || previousFrame.WasStrike)
+				if ((currentFrame.PreviousFrame.WasSpare &&
+					currentFrame.NumberOfRolls == 1) || currentFrame.PreviousFrame.WasStrike)
 				{
-					previousFrame.Score += knockedDownPins;
+					currentFrame.PreviousFrame.Score += knockedDownPins;
 
-					if (_frames.Count > 2 && previousFrame.WasStrike && _frames[_currentFrame - 2].WasStrike && currentFrame.NumberOfRolls == 1)
+					if (currentFrame.PreviousFrame.PreviousFrame != null &&
+						currentFrame.PreviousFrame.WasStrike &&
+						currentFrame.PreviousFrame.PreviousFrame.WasStrike && 
+						currentFrame.NumberOfRolls == 1)
 					{
-						_frames[_currentFrame - 2].Score += knockedDownPins;
+						currentFrame.PreviousFrame.PreviousFrame.Score += knockedDownPins;
 					}
 				} 
 			}
@@ -51,6 +53,7 @@ namespace Bowling
 			{
 				_frames.Add(new Frame());
 				_currentFrame++;
+				_frames[_currentFrame].PreviousFrame = currentFrame;
 			}
 		}
 
@@ -67,6 +70,7 @@ namespace Bowling
 
 	internal class Frame
 	{
+		public Frame PreviousFrame { get; set; }
 		public int Score { get; set; }
 		public int NumberOfRolls { get; set; }
 
