@@ -116,4 +116,29 @@ namespace specs_for_bowling
 			_game.IsGameComplete.should_be_false();
 		}
 	}
+
+	class when_the_first_frame_is_a_strike_and_the_rest_are_two : concerns
+	{
+		private BowlingGame _game;
+
+		protected override void context()
+		{
+			_game = new BowlingGame();
+			_game.Roll(10);
+
+			18.times(() => _game.Roll(2));
+		}
+
+		[Specification]
+		public void the_score_should_be_fifty()
+		{
+			_game.Score.should_equal(50);
+		}
+
+		[Specification]
+		public void the_game_should_be_complete()
+		{
+			_game.IsGameComplete.should_be_true();
+		}
+	}
 }
