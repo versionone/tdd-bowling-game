@@ -5,74 +5,84 @@ using System.Text;
 
 namespace Bowling
 {
+	internal class Constants
+	{
+		public const int CLOSED_FRAME = 10;
+		public const int MAX_ROLLS = 2;
+	}
+
 	public class BowlingGame
 	{
-		private const int STRIKE = 10;
-		private int _score = 0;
+		private List<Frame> _frames = new List<Frame>(10);
+		private int _totalScore = 0;
 		private int _numberOfRollsInCurrentFrame = 0;
-		private int _numberOfFramesBowled = 0;
+		private int _currentFrame = 0;
 		private int _previousFrameScore = 0;
-		private bool _areInStrikeMode = false;
+		private bool _s = false;
 		private int _numberOfRollsAfterStrike = 0;
+
+		public BowlingGame()
+		{
+			_frames.Add(new Frame());
+		}
 
 		public void Roll(int knockedDownPins)
 		{
 			//increase the number of rolls in current frame
-			_numberOfRollsInCurrentFrame++;
+			Frame currentFrame = _frames[_currentFrame];
+
+			currentFrame.NumberOfRolls++;
 
 			//add pins to score
-			_score += knockedDownPins;
+			currentFrame.Score += knockedDownPins;
 
-			//track the next two rolls and add to score
-			if (_areInStrikeMode && _numberOfRollsAfterStrike < 2)
+			if (_frames.Count > 1)
 			{
-				_numberOfRollsAfterStrike++;
-				_score += knockedDownPins;
-			}
-			else
-			{ //clear the strike tracking
-				_areInStrikeMode = false;
-				_numberOfRollsAfterStrike = 0;
-			}
-
-			if (isNewFrame()) //first roll or they got a strike
-			{
-				_numberOfFramesBowled++;
-
-				//set to strike mode to track the next to rolls, and reset rolls
-				if (knockedDownPins == STRIKE)
-				{
-					_areInStrikeMode = true;
-					_numberOfRollsInCurrentFrame = 0;
-				}
+				Frame previousFrame = _frames[_currentFrame - 1];
 
 				//apply bonus if deserving?
-				if (_previousFrameScore == 10 && !_areInStrikeMode)
+				if ((previousFrame.WasSpare && currentFrame.NumberOfRolls == 1) || previousFrame.WasStrike)
 				{
-					_score += knockedDownPins;
+					previousFrame.Score += knockedDownPins;
 				}
-
-				//reset previous frame
-				_previousFrameScore = knockedDownPins;
 			}
-			else //second roll
+
+			if (currentFrame.IsComplete) //first roll or they got a strike
 			{
-				_previousFrameScore += knockedDownPins;
-				_numberOfRollsInCurrentFrame = 0;
+				_frames.Add(new Frame());
+				_currentFrame++;
 			}
 		}
 
-		public int Score { get { return _score; } }
+		public int Score
+		{
+			get { return _frames.Sum(frame => frame.Score); }
+		}
 
 		public bool IsGameComplete
 		{
-			get { return _numberOfFramesBowled >= 10; }
+			get { return _frames.Count >= 10; }
+		}
+	}
+
+	internal class Frame
+	{
+		public int Score { get; set; }
+		public int NumberOfRolls { get; set; }
+
+		public bool WasStrike
+		{
+			get { return (this.Score >= Constants.CLOSED_FRAME && this.NumberOfRolls != Constants.MAX_ROLLS); }
 		}
 
-		private bool isNewFrame()
+		public bool WasSpare
 		{
-			//current frame they have bowled two times or it was a strike
-			return (_numberOfRollsInCurrentFrame == 1);
+			get { return (this.Score >= Constants.CLOSED_FRAME && this.NumberOfRolls == Constants.MAX_ROLLS); }
+		}
+
+		public bool IsComplete
+		{
+			get { return (this.WasStrike || this.NumberOfRolls == Constants.MAX_ROLLS); }
 		}
 	}
 }
