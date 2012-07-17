@@ -6,13 +6,13 @@ namespace specs_for_bowling
 {
 	public class when_you_throw_all_gutters : concerns
 	{
-		private Game _game;
+		private IGame _game;
 
 		protected override void context()
 		{
 			_game = new Game();
 
-			10.times(() => _game.RollFrame(0, 0));
+			20.times(() => _game.Roll(0));
 		}
 
 		[Specification]
@@ -24,15 +24,16 @@ namespace specs_for_bowling
 
 	public class when_you_throw_open_frames_only_scores_should_be_cumulative_of_frames : concerns
 	{
-		private Game _game;
+		private IGame _game;
 
 		protected override void context()
 		{
 			_game = new Game();
 
-			_game.RollFrame(2, 3);
+			_game.Roll(2);
+			_game.Roll(3);
 
-			9.times(() => _game.RollFrame(0, 0));
+			18.times(() => _game.Roll(0));
 		}
 
 		[Specification]
@@ -44,17 +45,19 @@ namespace specs_for_bowling
 
 	public class when_you_throw_a_spare : concerns
 	{
-		private Game _game;
+		private IGame _game;
 
 		protected override void context()
 		{
 			_game = new Game();
 
-			_game.RollFrame(5, 5);
+			_game.Roll(5);
+			_game.Roll(5);
 
-			_game.RollFrame(3, 0);
+			_game.Roll(3);
+			_game.Roll(0);
 
-			8.times(() => _game.RollFrame(0, 0));
+			16.times(() => _game.Roll( 0));
 		}
 
 		[Specification]
@@ -66,12 +69,12 @@ namespace specs_for_bowling
 
 	public class when_ten_frames_have_been_rolled_game_is_complete : concerns
 	{
-		private Game _game;
+		private IGame _game;
 
 		protected override void context()
 		{
 			_game = new Game();
-			10.times(() => _game.RollFrame(0, 0));
+			20.times(() => _game.Roll( 0));
 
 		}
 
@@ -84,12 +87,12 @@ namespace specs_for_bowling
 
 	public class when_less_than_ten_frames_have_been_rolled : concerns
 	{
-		private Game _game;
+		private IGame _game;
 
 		protected override void context()
 		{
 			_game = new Game();
-			9.times(() => _game.RollFrame(0, 0));
+			18.times(() => _game.Roll( 0));
 
 		}
 
@@ -102,15 +105,21 @@ namespace specs_for_bowling
 
 	public class when_two_spares_are_rolled : concerns
 	{
-		private Game _game;
+		private IGame _game;
 
 		protected override void context()
 		{
 			_game = new Game();
-			_game.RollFrame(5, 5);
-			_game.RollFrame(5, 5);
-			_game.RollFrame(3, 0);
-			7.times(() => _game.RollFrame(0, 0));
+			_game.Roll(5);
+			_game.Roll(5);
+
+			_game.Roll(5);
+			_game.Roll(5);
+
+			_game.Roll(3);
+			_game.Roll(0);
+
+			14.times(() => _game.Roll(0));
 		}
 
 		[Specification]
@@ -122,15 +131,17 @@ namespace specs_for_bowling
 
 	public class when_you_a_roll_a_strike_then_an_open_frame_then_gutters : concerns
 	{
-		private Game _game;
+		private IGame _game;
 
 		protected override void context()
 		{
 			_game = new Game();
-			_game.RollFrame(10, 0);
-			_game.RollFrame(2, 6);
+			_game.Roll(10);
 
-			8.times(() => _game.RollFrame(0, 0));
+			_game.Roll(2);
+			_game.Roll(6);
+
+			16.times(() => _game.Roll(0));
 		}
 
 		[Specification]
@@ -142,7 +153,7 @@ namespace specs_for_bowling
 
 	public class when_roll_one_is_rolled_illegally : concerns
 	{
-		private Game _game;
+		private IGame _game;
 		Exception _exception = null;
 
 		protected override void context()
@@ -151,7 +162,8 @@ namespace specs_for_bowling
 
 			try
 			{
-				_game.RollFrame(11, 0);
+				_game.Roll(11);
+				_game.Roll(0);
 			}
 			catch (Exception ex)
 			{
@@ -169,7 +181,7 @@ namespace specs_for_bowling
 
 	public class when_roll_two_is_rolled_illegally : concerns
 	{
-		private Game _game;
+		private IGame _game;
 		Exception _exception = null;
 
 		protected override void context()
@@ -178,7 +190,8 @@ namespace specs_for_bowling
 
 			try
 			{
-				_game.RollFrame(0, -1);
+				_game.Roll(0);
+				_game.Roll(-1);
 			}
 			catch (Exception ex)
 			{
@@ -193,4 +206,24 @@ namespace specs_for_bowling
 		}
 
 	}
+
+//	public class when_you_roll_two_strikes_in_a_row_then_open_frame_then_gutters : concerns
+//	{
+//		private Game _game;
+//
+//		protected override void context()
+//		{
+//			_game = new Game();
+//			_game.Roll(10, 0);
+//			_game.Roll(10, 0);
+//			_game.Roll(3, 4); 
+//			7.times(() => _game.Roll(0, 0));
+//		}
+//
+//		[Specification]
+//		public void the_score_is_47()
+//		{
+//			_game.Score().should_equal(47);
+//		}
+//	}
 }
