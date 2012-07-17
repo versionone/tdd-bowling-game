@@ -1,3 +1,4 @@
+using Bowling;
 using Bowling.Specs.Infrastructure;
 
 namespace specs_for_bowling
@@ -20,15 +21,26 @@ namespace specs_for_bowling
 		}
 	}
 
-	public class Game
+	public class when_you_throw_open_frames_only_scores_should_be_cumulative_of_frames : concerns
 	{
-		public int Score()
+		private Game _game;
+
+		protected override void context()
 		{
-			return 0;
+			_game = new Game();
+
+			_game.Roll(2);
+
+			_game.Roll(3);
+
+			18.times(() => _game.Roll(0));
 		}
 
-		public void Roll(int numberOfPinsKnockedDown)
+		[Specification]
+		public void the_score_should_equal_five()
 		{
+			_game.Score().should_equal(5);
 		}
 	}
+
 }
