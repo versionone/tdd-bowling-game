@@ -2,19 +2,33 @@ using Bowling.Specs.Infrastructure;
 
 namespace specs_for_bowling
 {
-	public class when_everything_is_wired_up : concerns
+	public class when_you_throw_all_gutters : concerns
 	{
-		private bool _itWorked;
+		private Game _game;
 
 		protected override void context()
 		{
-			_itWorked = true;
+			_game = new Game();
+
+			20.times(()=> _game.Roll(0));
 		}
 
 		[Specification]
-		public void it_works()
+		public void the_score_should_be_zero()
 		{
-			_itWorked.should_be_true("we're ready to roll!");
+			_game.Score().should_equal(0);
+		}
+	}
+
+	public class Game
+	{
+		public int Score()
+		{
+			return 0;
+		}
+
+		public void Roll(int numberOfPinsKnockedDown)
+		{
 		}
 	}
 }
