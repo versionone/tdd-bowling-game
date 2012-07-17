@@ -11,7 +11,7 @@ namespace specs_for_bowling
 		{
 			_game = new Game();
 
-			20.times(()=> _game.Roll(0));
+			10.times(() => _game.RollFrame(0, 0));
 		}
 
 		[Specification]
@@ -29,17 +29,37 @@ namespace specs_for_bowling
 		{
 			_game = new Game();
 
-			_game.Roll(2);
+			_game.RollFrame(2, 3);
 
-			_game.Roll(3);
-
-			18.times(() => _game.Roll(0));
+			9.times(() => _game.RollFrame(0, 0));
 		}
 
 		[Specification]
 		public void the_score_should_equal_five()
 		{
 			_game.Score().should_equal(5);
+		}
+	}
+
+	public class when_you_throw_a_spare : concerns
+	{
+		private Game _game;
+
+		protected override void context()
+		{
+			_game = new Game();
+
+			_game.RollFrame(5, 5);
+
+			_game.RollFrame(3, 0);
+
+			8.times(() => _game.RollFrame(0, 0));
+		}
+
+		[Specification]
+		public void the_score_is_16()
+		{
+			_game.Score().should_equal(16);
 		}
 	}
 
