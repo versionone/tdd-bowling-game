@@ -8,6 +8,11 @@ namespace Bowling
 		private int _score;
 		private List<Frame> _frames = new List<Frame>();
 
+		public bool IsComplete
+		{
+			get { return _frames.Count == 10; }
+		}
+
 		public int Score()
 		{
 			return _score;

@@ -63,4 +63,40 @@ namespace specs_for_bowling
 		}
 	}
 
+	public class when_ten_frames_have_been_rolled_game_is_complete : concerns
+	{
+		private Game _game;
+
+		protected override void context()
+		{
+			_game = new Game();
+			10.times(() => _game.RollFrame(0, 0));
+
+		}
+
+		[Specification]
+		public void game_is_complete()
+		{
+			_game.IsComplete.should_be_true();
+		}
+	}
+
+	public class when_less_than_ten_frames_have_been_rolled : concerns
+	{
+		private Game _game;
+
+		protected override void context()
+		{
+			_game = new Game();
+			9.times(() => _game.RollFrame(0, 0));
+
+		}
+
+		[Specification]
+		public void the_game_is_not_complete()
+		{
+			_game.IsComplete.should_be_false();
+		}
+	}
+
 }
