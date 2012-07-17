@@ -1,3 +1,4 @@
+using System;
 using Bowling;
 using Bowling.Specs.Infrastructure;
 
@@ -137,5 +138,59 @@ namespace specs_for_bowling
 		{
 			_game.Score().should_equal(26);
 		}
+	}
+
+	public class when_roll_one_is_rolled_illegally : concerns
+	{
+		private Game _game;
+		Exception _exception = null;
+
+		protected override void context()
+		{
+			_game = new Game();
+
+			try
+			{
+				_game.RollFrame(11, 0);
+			}
+			catch (Exception ex)
+			{
+				_exception = ex;
+			}
+		}
+
+		[Specification]
+		public void Exception_should_be_thrown()
+		{
+			_exception.should_not_be_null();
+		}
+
+	}
+
+	public class when_roll_two_is_rolled_illegally : concerns
+	{
+		private Game _game;
+		Exception _exception = null;
+
+		protected override void context()
+		{
+			_game = new Game();
+
+			try
+			{
+				_game.RollFrame(0, -1);
+			}
+			catch (Exception ex)
+			{
+				_exception = ex;
+			}
+		}
+
+		[Specification]
+		public void Exception_should_be_thrown()
+		{
+			_exception.should_not_be_null();
+		}
+
 	}
 }

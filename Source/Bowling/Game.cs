@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -20,6 +21,8 @@ namespace Bowling
 
 		public void RollFrame(int numberOfPinsKnockedDownOnRollOne, int numberOfPinsKnockedDownOnRollTwo)
 		{
+			VerifyLegality(numberOfPinsKnockedDownOnRollOne, numberOfPinsKnockedDownOnRollTwo);
+
 			var frame = new Frame();
 			frame.RollOne = numberOfPinsKnockedDownOnRollOne;
 			frame.RollTwo = numberOfPinsKnockedDownOnRollTwo;
@@ -35,6 +38,14 @@ namespace Bowling
 			}
 
 			_frames.Add(frame);
+		}
+
+		private void VerifyLegality(int numberOfPinsKnockedDownOnRollOne, int numberOfPinsKnockedDownOnRollTwo)
+		{
+			if (numberOfPinsKnockedDownOnRollOne > 10 || numberOfPinsKnockedDownOnRollOne < 0)
+				throw new Exception("Roll 1 is out of bounds");
+			if (numberOfPinsKnockedDownOnRollTwo > 10 || numberOfPinsKnockedDownOnRollTwo < 0)
+				throw new Exception("Roll 2 is out of bounds");
 		}
 
 		private int CalculateBonusPins(Frame frameOne, Frame frameTwo)
