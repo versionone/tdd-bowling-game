@@ -37,21 +37,25 @@ namespace Bowling
 			_frames.Add(frame);
 		}
 
-		public int CalculateBonusPins(Frame frameOne, Frame frameTwo)
+		private int CalculateBonusPins(Frame frameOne, Frame frameTwo)
 		{
-			if (frameOne.IsSpare)
+			var bonus = 0;
+			if (!frameOne.IsOpen)
 			{
-				return frameTwo.RollOne;
+				bonus += frameTwo.RollOne;
 			}
-			else
+
+			if (frameOne.IsStrike)
 			{
-				return 0;
+				bonus += frameTwo.RollTwo;
 			}
+
+			return bonus;
 		}
 
 	}
 
-	public class Frame
+	internal class Frame
 	{
 		private int _score;
 
@@ -59,9 +63,14 @@ namespace Bowling
 
 		public int RollTwo { get; set; }
 
-		public bool IsSpare
+		public bool IsOpen
 		{
-			get { return Score() == 10; }
+			get { return Score() < 10; }
+		}
+
+		public bool IsStrike
+		{
+			get { return RollOne == 10; }
 		}
 
 		public int Score()

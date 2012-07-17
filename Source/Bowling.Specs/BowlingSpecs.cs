@@ -99,4 +99,43 @@ namespace specs_for_bowling
 		}
 	}
 
+	public class when_two_spares_are_rolled : concerns
+	{
+		private Game _game;
+
+		protected override void context()
+		{
+			_game = new Game();
+			_game.RollFrame(5, 5);
+			_game.RollFrame(5, 5);
+			_game.RollFrame(3, 0);
+			7.times(() => _game.RollFrame(0, 0));
+		}
+
+		[Specification]
+		public void score_should_equal_31()
+		{
+			_game.Score().should_equal(31);
+		}
+	}
+
+	public class when_you_a_roll_a_strike_then_an_open_frame_then_gutters : concerns
+	{
+		private Game _game;
+
+		protected override void context()
+		{
+			_game = new Game();
+			_game.RollFrame(10, 0);
+			_game.RollFrame(2, 6);
+
+			8.times(() => _game.RollFrame(0, 0));
+		}
+
+		[Specification]
+		public void the_score_is_26()
+		{
+			_game.Score().should_equal(26);
+		}
+	}
 }
