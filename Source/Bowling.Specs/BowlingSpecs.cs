@@ -207,23 +207,24 @@ namespace specs_for_bowling
 
 	}
 
-//	public class when_you_roll_two_strikes_in_a_row_then_open_frame_then_gutters : concerns
-//	{
-//		private Game _game;
-//
-//		protected override void context()
-//		{
-//			_game = new Game();
-//			_game.Roll(10, 0);
-//			_game.Roll(10, 0);
-//			_game.Roll(3, 4); 
-//			7.times(() => _game.Roll(0, 0));
-//		}
-//
-//		[Specification]
-//		public void the_score_is_47()
-//		{
-//			_game.Score().should_equal(47);
-//		}
-//	}
+	public class when_you_roll_two_strikes_in_a_row_then_open_frame_then_gutters : concerns
+	{
+		private Game _game;
+
+		protected override void context()
+		{
+			_game = new Game();
+			_game.Roll(10);
+			_game.Roll(10);
+			_game.Roll(3); 
+			_game.Roll( 4); 
+			14.times(() => _game.Roll(0));
+		}
+
+		[Specification]
+		public void the_score_is_47()
+		{
+			_game.Score().should_equal(47);
+		}
+	}
 }
