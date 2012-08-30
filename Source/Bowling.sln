@@ -11,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bowling", "Bowling\Bowling.csproj", "{9C2B758A-EE86-46F4-9CFC-06C09301DC35}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FizzBuzz", "FizzBuzz\FizzBuzz.csproj", "{614F7C77-24EE-47FE-97C0-B83600C027CF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,16 @@ Global
 		{9C2B758A-EE86-46F4-9CFC-06C09301DC35}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{9C2B758A-EE86-46F4-9CFC-06C09301DC35}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{9C2B758A-EE86-46F4-9CFC-06C09301DC35}.Release|x86.ActiveCfg = Release|Any CPU
+		{614F7C77-24EE-47FE-97C0-B83600C027CF}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{614F7C77-24EE-47FE-97C0-B83600C027CF}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{614F7C77-24EE-47FE-97C0-B83600C027CF}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{614F7C77-24EE-47FE-97C0-B83600C027CF}.Debug|x86.ActiveCfg = Debug|x86
+		{614F7C77-24EE-47FE-97C0-B83600C027CF}.Debug|x86.Build.0 = Debug|x86
+		{614F7C77-24EE-47FE-97C0-B83600C027CF}.Release|Any CPU.ActiveCfg = Release|x86
+		{614F7C77-24EE-47FE-97C0-B83600C027CF}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{614F7C77-24EE-47FE-97C0-B83600C027CF}.Release|Mixed Platforms.Build.0 = Release|x86
+		{614F7C77-24EE-47FE-97C0-B83600C027CF}.Release|x86.ActiveCfg = Release|x86
+		{614F7C77-24EE-47FE-97C0-B83600C027CF}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
