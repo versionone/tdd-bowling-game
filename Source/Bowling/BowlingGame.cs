@@ -3,10 +3,29 @@ namespace Bowling
 	public class BowlingGame
 	{
 		private int score;
-
-		public void Roll(int i)
+		private int roll;
+		private int lastFrameTally;
+		public void Roll(int pins)
 		{
-			score += i;
+
+			roll++;
+			if (LastFrameWasASpare())
+			{
+				score += pins;
+			}
+			if (roll % 2 != 0)
+				lastFrameTally = pins;
+			else
+				lastFrameTally += pins;
+
+			score += pins;
+			// create history of last two rolls for next call
+
+		}
+
+		private bool LastFrameWasASpare()
+		{
+			return lastFrameTally == 10;
 		}
 
 		public int CalculateScore()

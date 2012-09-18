@@ -73,11 +73,9 @@ namespace specs_for_bowling
 	{
 		protected override void PlayGame()
 		{
-			// frame 1
 			currentGame.Roll(9);
 			currentGame.Roll(1);
 
-			// frame 2
 			currentGame.Roll(1);
 			currentGame.Roll(0);
 
@@ -86,6 +84,34 @@ namespace specs_for_bowling
 			        		currentGame.Roll(0);
 			        		currentGame.Roll(0);
 			        	}
+				);
+		}
+
+		[Specification]
+		public void then_the_score_is_twelve()
+		{
+			currentGame.CalculateScore().should_equal(12);
+		}
+	}
+
+	public class when_I_only_a_get_a_spare_with_a_bonus_in_the_middle_of_a_game : bowling_concerns
+	{
+		protected override void PlayGame()
+		{
+			currentGame.Roll(0);
+			currentGame.Roll(0);
+
+			currentGame.Roll(9);
+			currentGame.Roll(1);
+
+			currentGame.Roll(1);
+			currentGame.Roll(0);
+
+			7.times(() =>
+			{
+				currentGame.Roll(0);
+				currentGame.Roll(0);
+			}
 				);
 		}
 
