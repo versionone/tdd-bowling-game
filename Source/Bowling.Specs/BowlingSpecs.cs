@@ -1,20 +1,22 @@
+using Bowling;
 using Bowling.Specs.Infrastructure;
 
 namespace specs_for_bowling
 {
-	public class when_everything_is_wired_up : concerns
+	public class when_rolling_all_gutters : concerns
 	{
-		private bool _itWorked;
+		private BowlingGame currentGame;
 
 		protected override void context()
 		{
-			_itWorked = true;
+			currentGame = new BowlingGame();
+			20.times(()=>currentGame.roll(0));
 		}
 
 		[Specification]
-		public void it_works()
+		public void then_the_score_is_zero()
 		{
-			_itWorked.should_be_true("we're ready to roll!");
+			currentGame.calculateScore().should_equal(0);
 		}
 	}
 }
