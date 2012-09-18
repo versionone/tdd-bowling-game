@@ -1,49 +1,79 @@
+using System.Collections.Generic;
+using System.Linq;
+
 namespace Bowling
 {
 	public class BowlingGame
 	{
-		private int score;
-		private int roll;
-		private int lastFrameTally;
-		private bool lastFrameWasStrike;
+		private IList<Frame> frames = new List<Frame>();
 		public void Roll(int pins)
 		{
-
-			roll++;
-			if (pins == 10) //strike, so incrementing rolls to simulate new frame
-			{
-				roll++;
-			}
-			if (StrikeInLastFrame() || LastFrameWasASpare())
-			{
-				score += pins;
-			}
-			score += pins;
-
-			if (roll % 2 != 0)
-			{
-				lastFrameTally = pins;
-			}
-			else
-			{
-				lastFrameTally += pins;
-				lastFrameWasStrike = (pins == 10);
-			}
+			GetCurrentFrame().AddRoll(pins);
 		}
 
-		private bool StrikeInLastFrame()
+		private Frame GetCurrentFrame()
 		{
-			return lastFrameWasStrike;
+			var frame = frames.LastOrDefault();
+			
+			if (frame== null || frame.IsComplete)
+			{
+				frame = new Frame();
+				frames.Add(frame);
+			}
+			return frame;
 		}
 
-		private bool LastFrameWasASpare()
-		{
-			return lastFrameTally == 10;
-		}
 
 		public int CalculateScore()
 		{
+			var score = 0;
+			Frame lastFrame = new Frame();
+			foreach (var frame in frames)
+			{
+				score += frame.Pins;
+				if (lastFrame.IsSpare)
+				{
+					score += frame.FirstRoll;
+				}
+				if (lastFrame.IsStrike)
+				{
+					score += frame.Pins;
+				}
+				lastFrame = frame;
+			}
 			return score;
+		}
+	}
+
+	internal class Frame
+	{
+		private List<int> rolls = new List<int>();
+		public void AddRoll(int pins)
+		{
+
+			rolls.Add(pins);
+		}
+
+		public int FirstRoll {
+			get { return rolls[0]; }
+		}
+
+		public int Pins {
+			get { return rolls.Sum(); }
+		}
+
+		public bool IsSpare
+		{
+			get { return Pins == 10 && rolls.Count == 2; }
+		}
+		public bool IsStrike
+		{
+			get { return Pins == 10 && rolls.Count == 1; }
+		}
+
+		public bool IsComplete
+		{
+			get { return Pins == 10 || rolls.Count == 2; }
 		}
 	}
 }
