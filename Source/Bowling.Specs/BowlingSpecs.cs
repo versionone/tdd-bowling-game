@@ -65,7 +65,7 @@ namespace specs_for_bowling
 		[Specification]
 		public void then_the_score_is_90()
 		{
-			currentGame.CalculateScore().should_equal(90);
+			AssertScoreIs(90);
 		}
 	}
 
@@ -90,7 +90,7 @@ namespace specs_for_bowling
 		[Specification]
 		public void then_the_score_is_twelve()
 		{
-			currentGame.CalculateScore().should_equal(12);
+			AssertScoreIs(12);
 		}
 	}
 
@@ -118,7 +118,81 @@ namespace specs_for_bowling
 		[Specification]
 		public void then_the_score_is_twelve()
 		{
-			currentGame.CalculateScore().should_equal(12);
+			AssertScoreIs(12);
+		}
+	}
+
+	public class when_I_only_get_two_spares_in_a_row : bowling_concerns
+	{
+		protected override void PlayGame()
+		{
+			currentGame.Roll(1);
+			currentGame.Roll(9);
+
+			currentGame.Roll(9);
+			currentGame.Roll(1);
+
+			8.times(() =>
+			{
+				currentGame.Roll(0);
+				currentGame.Roll(0);
+			}
+				);
+		}
+		[Specification]
+		public void the_the_score_is_twenty_nine()
+		{
+			AssertScoreIs(29);
+		}
+	}
+
+	public class when_two_spares_two_bonuses : bowling_concerns
+	{
+		protected override void PlayGame()
+		{
+			currentGame.Roll(1);
+			currentGame.Roll(9);
+
+			currentGame.Roll(9);
+			currentGame.Roll(1);
+
+			currentGame.Roll(1);
+			currentGame.Roll(0);
+
+			7.times(() =>
+			{
+				currentGame.Roll(0);
+				currentGame.Roll(0);
+			}
+				);
+		}
+		[Specification]
+		public void the_the_score_is_31()
+		{
+			AssertScoreIs(31);
+		}
+	}
+
+	public class when_getting_a_strike_with_bonus_on_first_frame : bowling_concerns
+	{
+		protected override void PlayGame()
+		{
+			currentGame.Roll(10);
+
+			currentGame.Roll(1);
+			currentGame.Roll(1);
+
+			8.times(() =>
+			        	{
+			        		currentGame.Roll(0);
+			        		currentGame.Roll(0);
+			        	}
+				);
+		}
+		[Specification]
+		public void the_the_score_is_14()
+		{
+			AssertScoreIs(14);
 		}
 	}
 

@@ -5,22 +5,35 @@ namespace Bowling
 		private int score;
 		private int roll;
 		private int lastFrameTally;
+		private bool lastFrameWasStrike;
 		public void Roll(int pins)
 		{
 
 			roll++;
-			if (LastFrameWasASpare())
+			if (pins == 10) //strike, so incrementing rolls to simulate new frame
+			{
+				roll++;
+			}
+			if (StrikeInLastFrame() || LastFrameWasASpare())
 			{
 				score += pins;
 			}
-			if (roll % 2 != 0)
-				lastFrameTally = pins;
-			else
-				lastFrameTally += pins;
-
 			score += pins;
-			// create history of last two rolls for next call
 
+			if (roll % 2 != 0)
+			{
+				lastFrameTally = pins;
+			}
+			else
+			{
+				lastFrameTally += pins;
+				lastFrameWasStrike = (pins == 10);
+			}
+		}
+
+		private bool StrikeInLastFrame()
+		{
+			return lastFrameWasStrike;
 		}
 
 		private bool LastFrameWasASpare()
