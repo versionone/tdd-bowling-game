@@ -27,27 +27,10 @@ namespace Bowling
 		public int CalculateScore()
 		{
 			var score = 0;
-			Frame lastFrame = new Frame();
-			Frame penultimateFrame = new Frame();
-			foreach (var frame in frames)
+			for (int i = 0; i < 10; i++)
 			{
-				score += frame.Pins;
-				if (lastFrame.IsSpare)
-				{
-					score += frame.FirstRoll;
-				}
-				if (lastFrame.IsStrike)
-				{
-					score += frame.Pins;
-					if (!frame.IsStrike && penultimateFrame.IsStrike)
-					{
-						score += lastFrame.Pins;
-					}
-				}
-
-				penultimateFrame = lastFrame; 
-				lastFrame = frame;
-
+				Frame f = frames[i];
+				score += f.CalculateScore(frames.ElementAtOrDefault(i+1), frames.ElementAtOrDefault(i+2));
 			}
 			return score;
 		}
@@ -82,6 +65,24 @@ namespace Bowling
 		public bool IsComplete
 		{
 			get { return Pins == 10 || rolls.Count == 2; }
+		}
+
+		public int CalculateScore(Frame nextFrame, Frame furtherFrame)
+		{
+			int score = Pins;
+			if (IsSpare)
+			{
+				score += nextFrame.FirstRoll;
+			}
+			else if (IsStrike)
+			{
+				score += nextFrame.Pins;
+				if (nextFrame.IsStrike)
+				{
+					score += furtherFrame.FirstRoll;
+				}
+			}
+			return score;
 		}
 	}
 }

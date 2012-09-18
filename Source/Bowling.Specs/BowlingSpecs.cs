@@ -200,9 +200,9 @@ namespace specs_for_bowling
 	{
 		protected override void PlayGame()
 		{
-			currentGame.Roll(10);
-			currentGame.Roll(10);
-			currentGame.Roll(10);
+			currentGame.Roll(10); // 30
+			currentGame.Roll(10); // 20
+			currentGame.Roll(10); // 10
 
 			7.times(() =>
 			        	{
@@ -215,6 +215,100 @@ namespace specs_for_bowling
 		public void the_the_score_is_60()
 		{
 			AssertScoreIs(60);
+		}
+	}
+
+	public class when_getting_a_canadian_monkey : bowling_concerns
+	{
+		protected override void PlayGame()
+		{
+			currentGame.Roll(10); // 20
+
+			currentGame.Roll(9); // 20
+			currentGame.Roll(1);
+
+			currentGame.Roll(10); // 20
+
+			currentGame.Roll(9); // 10
+			currentGame.Roll(1);
+
+			6.times(() =>
+			{
+				currentGame.Roll(0);
+				currentGame.Roll(0);
+			}
+				);
+		}
+		[Specification]
+		public void the_the_score_is_70()
+		{
+			AssertScoreIs(70);
+		}
+	}
+
+	public class when_perfect_game : bowling_concerns
+	{
+		protected override void PlayGame()
+		{
+			12.times(() => currentGame.Roll(10));
+		}
+
+		[Specification]
+		public void the_the_score_is_300()
+		{
+			AssertScoreIs(300);
+		}
+	}
+
+	public class when_single_pin_every_roll : bowling_concerns
+	{
+		protected override void PlayGame()
+		{
+			20.times(() => currentGame.Roll(1));
+		}
+
+		[Specification]
+		public void the_the_score_is_20()
+		{
+			AssertScoreIs(20);
+		}
+	}
+
+	public class when_all_spares_kind : bowling_concerns
+	{
+		protected override void PlayGame()
+		{
+			10.times(() =>
+			         	{
+			         		currentGame.Roll(9);
+			         		currentGame.Roll(1);
+			         	});
+			currentGame.Roll(9);
+		}
+
+		[Specification]
+		public void the_the_score_is_190()
+		{
+			AssertScoreIs(190);
+		}
+	}
+
+	public class when_all_spares_cruel : bowling_concerns
+	{
+		protected override void PlayGame()
+		{
+			10.times(() =>
+			{
+				currentGame.Roll(1);
+				currentGame.Roll(9);
+			});
+			currentGame.Roll(1);
+		}
+
+		[Specification]
+		public void the_the_score_is_110()
+		{
+			AssertScoreIs(110);
 		}
 	}
 
