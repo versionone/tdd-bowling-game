@@ -196,4 +196,26 @@ namespace specs_for_bowling
 		}
 	}
 
+	public class when_getting_a_turkey : bowling_concerns
+	{
+		protected override void PlayGame()
+		{
+			currentGame.Roll(10);
+			currentGame.Roll(10);
+			currentGame.Roll(10);
+
+			7.times(() =>
+			        	{
+			        		currentGame.Roll(0);
+			        		currentGame.Roll(0);
+			        	}
+				);
+		}
+		[Specification]
+		public void the_the_score_is_60()
+		{
+			AssertScoreIs(60);
+		}
+	}
+
 }

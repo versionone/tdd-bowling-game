@@ -28,6 +28,7 @@ namespace Bowling
 		{
 			var score = 0;
 			Frame lastFrame = new Frame();
+			Frame penultimateFrame = new Frame();
 			foreach (var frame in frames)
 			{
 				score += frame.Pins;
@@ -38,8 +39,15 @@ namespace Bowling
 				if (lastFrame.IsStrike)
 				{
 					score += frame.Pins;
+					if (!frame.IsStrike && penultimateFrame.IsStrike)
+					{
+						score += lastFrame.Pins;
+					}
 				}
+
+				penultimateFrame = lastFrame; 
 				lastFrame = frame;
+
 			}
 			return score;
 		}
