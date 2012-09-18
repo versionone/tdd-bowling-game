@@ -2,14 +2,16 @@ namespace Bowling
 {
 	public class BowlingGame
 	{
-		public void roll(int i)
+		private int score;
+
+		public void Roll(int i)
 		{
-			
+			score += i;
 		}
 
-		public int calculateScore()
+		public int CalculateScore()
 		{
-			return 0;
+			return score;
 		}
 	}
 }
