@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,13 +15,23 @@ namespace Bowling
 		private Frame GetCurrentFrame()
 		{
 			var frame = frames.LastOrDefault();
-			
 			if (frame== null || frame.IsComplete)
 			{
+				if (IsComplete()) throw new Exception("Too many rolls!");
 				frame = new Frame();
 				frames.Add(frame);
 			}
 			return frame;
+		}
+
+		private bool IsComplete()
+		{
+			if (frames.Count <= 9) return false;
+
+			var tenthFrame = frames[9];
+			if (tenthFrame.IsSpare) return frames.Count == 11;
+			if (tenthFrame.IsStrike) return frames.Count == 12;
+			return frames.Count == 10;
 		}
 
 
@@ -44,12 +55,8 @@ namespace Bowling
 
 			rolls.Add(pins);
 		}
-
-		public int FirstRoll {
-			get { return rolls[0]; }
-		}
-
-		public int Pins {
+		
+		private int Pins {
 			get { return rolls.Sum(); }
 		}
 
@@ -72,14 +79,14 @@ namespace Bowling
 			int score = Pins;
 			if (IsSpare)
 			{
-				score += nextFrame.FirstRoll;
+				score += nextFrame.rolls.First();
 			}
 			else if (IsStrike)
 			{
 				score += nextFrame.Pins;
 				if (nextFrame.IsStrike)
 				{
-					score += furtherFrame.FirstRoll;
+					score += furtherFrame.rolls.First();;
 				}
 			}
 			return score;

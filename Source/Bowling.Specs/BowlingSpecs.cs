@@ -1,3 +1,4 @@
+using System;
 using Bowling;
 using Bowling.Specs.Infrastructure;
 
@@ -309,6 +310,60 @@ namespace specs_for_bowling
 		public void the_the_score_is_110()
 		{
 			AssertScoreIs(110);
+		}
+	}
+
+	public class when_I_roll_too_many_balls_for_a_game_with_a_final_open_frame : bowling_concerns
+	{
+		protected override void PlayGame()
+		{
+			10.times(() =>
+			{
+				currentGame.Roll(1);
+				currentGame.Roll(1);
+			});
+		}
+
+		[Specification]
+		public void the_game_should_be_over()
+		{
+			typeof (Exception).should_be_thrown_by(() => currentGame.Roll(9));
+		}
+	}
+
+	public class when_I_roll_too_many_balls_for_a_game_with_a_final_spare_frame : bowling_concerns
+	{
+		protected override void PlayGame()
+		{
+			10.times(() =>
+			{
+				currentGame.Roll(9);
+				currentGame.Roll(1);
+			});
+			currentGame.Roll(9);
+		}
+
+		[Specification]
+		public void the_game_should_be_over()
+		{
+			typeof(Exception).should_be_thrown_by(() => currentGame.Roll(9));
+		}
+	}
+
+	public class when_I_roll_too_many_balls_for_a_game_with_a_final_strike_frame : bowling_concerns
+	{
+		protected override void PlayGame()
+		{
+			12.times(() =>
+			{
+				currentGame.Roll(10);
+			});
+		}
+
+		[Specification]
+		public void the_game_should_be_over()
+		{
+			typeof(Exception).should_be_thrown_by(() => currentGame.Roll(9));
 		}
 	}
 
