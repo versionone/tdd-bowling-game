@@ -27,6 +27,11 @@ namespace Bowling
 					score += frame.Rolls.First().Pins;
 				}
 
+				if (lastFrame != null && lastFrame.IsStrike)
+				{
+					score += frame.Rolls.Sum(r => r.Pins);
+				}
+
 				score +=frame.Rolls.Sum(r => r.Pins);
 				lastFrame = frame;
 			}

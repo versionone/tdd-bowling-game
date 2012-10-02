@@ -21,12 +21,25 @@ namespace Bowling
 				_rolls.Add(roll);
 			else
 				throw new MaxAllowedRollsExceededException();
+
+			if(roll.Pins==10 && _rolls.Count==1)
+			{
+				IsStrike = true;
+				IsComplete = true;
+			}
+			else if(_rolls.Count==2)
+			{
+				IsComplete = true;
+				{
+					if(_rolls.Sum(r => r.Pins) == 10)
+					{
+						IsSpare = true;
+					}
+				}
+			}
 		}
 
-		public bool IsComplete
-		{
-			get { return _rolls.Count >= 2; }
-		}
+		public bool IsComplete { get; private set; }
 
 		public IEnumerable<Roll> Rolls
 		{
@@ -38,10 +51,9 @@ namespace Bowling
 			return _rolls.Count < 2;
 		}
 
-		public bool IsSpare
-		{
-			get { return IsComplete && _rolls.Sum(roll => roll.Pins) == 10; }
-		}
+		public bool IsSpare { get; private set; }
+
+		public bool IsStrike { get; private set; }
 
 	}
 }
