@@ -22,21 +22,29 @@ namespace Bowling
 			else
 				throw new MaxAllowedRollsExceededException();
 
-			if(roll.Pins==10 && _rolls.Count==1)
+			if( IsFirstRoll && roll.Pins==10 )
 			{
 				IsStrike = true;
 				IsComplete = true;
 			}
-			else if(_rolls.Count==2)
+			else if(IsSecondRoll)
 			{
 				IsComplete = true;
+				if(_rolls.Sum(r => r.Pins) == 10)
 				{
-					if(_rolls.Sum(r => r.Pins) == 10)
-					{
-						IsSpare = true;
-					}
+					IsSpare = true;
 				}
 			}
+		}
+
+		private bool IsSecondRoll
+		{
+			get { return _rolls.Count==2; }
+		}
+
+		private bool IsFirstRoll
+		{
+			get { return _rolls.Count == 1; }
 		}
 
 		public bool IsComplete { get; private set; }
