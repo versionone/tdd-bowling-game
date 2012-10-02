@@ -7,6 +7,16 @@ namespace Bowling.Specs
 {
 	public class BowlingGame
 	{
-		public int Score { get; private set; }
+		private int? _score = null;
+		public int? Score 
+		{ get { return _score; }
+		}
+		public void Roll(int pins)
+		{
+			if (!_score.HasValue)
+				_score = 0;
+
+			_score += pins;
+		}
 	}
 }

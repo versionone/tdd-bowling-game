@@ -16,6 +16,22 @@ when rolling alternate strikes and spares, the score is 200.
 
 namespace specs_for_bowling
 {
+	public class empty_game : concerns
+	{
+		private BowlingGame SUT;
+
+		protected override void context()
+		{
+			SUT = new BowlingGame();
+		}
+
+		[Specification]
+		public void has_no_score()
+		{
+			SUT.Score.should_be_null();
+		}
+	}
+
 	public class when_rolling_all_gutter_balls : concerns
 	{
 		private BowlingGame SUT;
@@ -23,6 +39,7 @@ namespace specs_for_bowling
 		protected override void context()
 		{
 			SUT = new BowlingGame();
+			20.times(() => SUT.Roll(0));
 		}
 
 		[Specification]
