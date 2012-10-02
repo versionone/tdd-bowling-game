@@ -12,7 +12,7 @@ namespace Bowling.Specs
 		{
 			_frames = new List<Frame>();
 		}
-		private List<Frame> _frames;
+		private readonly List<Frame> _frames;
 		
 		public int Score()
 		{
@@ -31,30 +31,29 @@ namespace Bowling.Specs
 			}
 			return score;
 		}
-		
+
 		public void Roll(int pins)
 		{
-			if(_frames.Count ==0)
-			{
-				_frames.Add(new Frame());
-			}
-			else
-			{
-				if(_frames.Last().IsComplete)
-				{
-					if (_frames.Count == 10)
-						throw new InvalidOperationException();
-
-					_frames.Add(new Frame());
-		
-				}
-			}
-
-			Frame lastFrame = _frames.Last();
-			
-			lastFrame.AddRoll(new Roll(pins));
-
+			CurrentFrame.AddRoll(new Roll(pins));
 		}
 
+		private Frame CurrentFrame
+		{
+			get
+			{
+				if (_frames.Count == 0 || _frames.Last().IsComplete)
+					AddNewFrame();
+
+				return _frames.Last();
+			}
+		}
+
+		private void AddNewFrame()
+		{
+			if (_frames.Count == 10)
+				throw new InvalidOperationException();
+
+			_frames.Add(new Frame());
+		}
 	}
 }
