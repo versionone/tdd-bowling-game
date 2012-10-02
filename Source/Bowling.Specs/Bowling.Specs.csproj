@@ -60,7 +60,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BowlingGame.cs" />
+    <Compile Include="Game.cs" />
     <Compile Include="BowlingSpecs.cs" />
     <Compile Include="Frame.cs" />
     <Compile Include="Infrastructure\Concerns.cs" />

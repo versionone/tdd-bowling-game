@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Bowling.Specs
+namespace Bowling
 {
 	public class Roll
 	{

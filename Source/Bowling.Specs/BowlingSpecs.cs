@@ -1,4 +1,5 @@
 using System;
+using Bowling;
 using Bowling.Specs.Infrastructure;
 using Bowling.Specs;
 
@@ -19,11 +20,11 @@ namespace specs_for_bowling
 {
 	public class when_rolling_all_gutter_balls : concerns
 	{
-		private BowlingGame SUT;
+		private Game SUT;
 
 		protected override void context()
 		{
-			SUT = new BowlingGame();
+			SUT = new Game();
 			20.times(() => SUT.Roll(0));
 		}
 
@@ -36,11 +37,11 @@ namespace specs_for_bowling
 
 	public class when_first_frame_is_Spare_followed_by_all_2_rolls : concerns
 	{
-		private BowlingGame SUT;
+		private Game SUT;
 
 		protected override void context()
 		{
-			SUT = new BowlingGame();
+			SUT = new Game();
 			SUT.Roll(7);
 			SUT.Roll(3);
 			18.times(() => SUT.Roll(2));
@@ -55,11 +56,11 @@ namespace specs_for_bowling
 
 	public class when_first_frame_is_Spare_followed_by_all_4_rolls : concerns
 	{
-		private BowlingGame SUT;
+		private Game SUT;
 
 		protected override void context()
 		{
-			SUT = new BowlingGame();
+			SUT = new Game();
 			SUT.Roll(4);
 			SUT.Roll(6);
 			18.times(() => SUT.Roll(4));
@@ -74,11 +75,11 @@ namespace specs_for_bowling
 
 	public class when_first_two_frames_are_Spare_followed_by_all_2_rolls : concerns
 	{
-		private BowlingGame SUT;
+		private Game SUT;
 
 		protected override void context()
 		{
-			SUT = new BowlingGame();
+			SUT = new Game();
 			SUT.Roll(4);
 			SUT.Roll(6);
 			SUT.Roll(2);
@@ -95,11 +96,11 @@ namespace specs_for_bowling
 
 	public class when_10_frames_are_bowled : concerns
 	{
-		private BowlingGame SUT;
+		private Game SUT;
 
 		protected override void context()
 		{
-			SUT = new BowlingGame();
+			SUT = new Game();
 			20.times(() => SUT.Roll(0));
 		}
 
@@ -107,6 +108,24 @@ namespace specs_for_bowling
 		public void no_more_are_allowed()
 		{
 			SUT.Roll(0);
+		}
+	}
+
+	public class when_the_first_frame_is_Strike_and_the_rest_score_2 : concerns
+	{
+		private Game SUT;
+
+		protected override void context()
+		{
+			SUT = new Game();
+			SUT.Roll(10);
+			18.times(() => SUT.Roll(2));
+		}
+
+		[Specification]
+		public void score_is_50()
+		{
+			SUT.Score().should_equal(50);
 		}
 	}
 }

@@ -3,12 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Bowling.Specs;
 
-namespace Bowling.Specs
+namespace Bowling
 {
-	public class BowlingGame
+	public class Game
 	{
-		public BowlingGame()
+		public Game()
 		{
 			_frames = new List<Frame>();
 		}
