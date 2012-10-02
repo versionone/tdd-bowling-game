@@ -10,35 +10,47 @@ namespace Bowling.Specs
 	{
 		public BowlingGame()
 		{
-				_rolls = new List<Roll>();
+			_frames = new List<Frame>();
 		}
-		private int? _score = null;
-		private List<Roll> _rolls; 
-		public int? Score 
-		{ 
-			get { return _score; }
+		private List<Frame> _frames;
+		
+		public int Score()
+		{
+			var score=0;
+
+			Frame lastFrame = null;
+			foreach (var frame in _frames)
+			{
+				if (lastFrame != null && lastFrame.IsSpare)
+				{
+					score += frame.Rolls.First().Pins;
+				}
+
+				score +=frame.Rolls.Sum(r => r.Pins);
+				lastFrame = frame;
+			}
+			return score;
 		}
 		
 		public void Roll(int pins)
 		{
-			if (!_score.HasValue)
-				_score = 0;
-
-			Roll roll;
-
-			if(_rolls.Count==0)
-				roll = new Roll(pins, null);
-			else
-				roll = new Roll(pins, _rolls.Last());
-
-			if (_rolls.Count > 0 && _rolls.Last().IsSpare)
+			if(_frames.Count ==0)
 			{
-				_score += pins;
+				_frames.Add(new Frame());
+			}
+			else
+			{
+				if(_frames.Last().IsComplete)
+				{
+					_frames.Add(new Frame());
+		
+				}
 			}
 
-			_rolls.Add(roll);
+			Frame lastFrame = _frames.Last();
+			
+			lastFrame.AddRoll(new Roll(pins));
 
-			_score += pins;
 		}
 
 	}

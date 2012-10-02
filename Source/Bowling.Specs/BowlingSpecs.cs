@@ -16,22 +16,6 @@ when rolling alternate strikes and spares, the score is 200.
 
 namespace specs_for_bowling
 {
-	public class empty_game : concerns
-	{
-		private BowlingGame SUT;
-
-		protected override void context()
-		{
-			SUT = new BowlingGame();
-		}
-
-		[Specification]
-		public void has_no_score()
-		{
-			SUT.Score.should_be_null();
-		}
-	}
-
 	public class when_rolling_all_gutter_balls : concerns
 	{
 		private BowlingGame SUT;
@@ -45,7 +29,7 @@ namespace specs_for_bowling
 		[Specification]
 		public void score_is_zero()
 		{
-			SUT.Score.should_equal(0);
+			SUT.Score().should_equal(0);
 		}
 	}
 
@@ -64,7 +48,26 @@ namespace specs_for_bowling
 		[Specification]
 		public void score_is_48()
 		{
-			SUT.Score.should_equal(48);
+			SUT.Score().should_equal(48);
+		}
+	}
+
+	public class when_first_frame_is_Spare_followed_by_all_4_rolls : concerns
+	{
+		private BowlingGame SUT;
+
+		protected override void context()
+		{
+			SUT = new BowlingGame();
+			SUT.Roll(4);
+			SUT.Roll(6);
+			18.times(() => SUT.Roll(4));
+		}
+
+		[Specification]
+		public void score_is_86()
+		{
+			SUT.Score().should_equal(86);
 		}
 	}
 }

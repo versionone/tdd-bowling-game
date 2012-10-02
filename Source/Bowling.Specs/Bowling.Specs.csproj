@@ -66,6 +66,7 @@
     <Compile Include="Infrastructure\Concerns.cs" />
     <Compile Include="Infrastructure\HelperExtensions.cs" />
     <Compile Include="Infrastructure\SpecificationAttribute.cs" />
+    <Compile Include="MaxAllowedRollsExceededException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Infrastructure\Shoulds.cs" />
     <Compile Include="Roll.cs" />
