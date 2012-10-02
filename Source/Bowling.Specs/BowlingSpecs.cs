@@ -1,3 +1,4 @@
+using System;
 using Bowling.Specs.Infrastructure;
 using Bowling.Specs;
 
@@ -68,6 +69,44 @@ namespace specs_for_bowling
 		public void score_is_86()
 		{
 			SUT.Score().should_equal(86);
+		}
+	}
+
+	public class when_first_two_frames_are_Spare_followed_by_all_2_rolls : concerns
+	{
+		private BowlingGame SUT;
+
+		protected override void context()
+		{
+			SUT = new BowlingGame();
+			SUT.Roll(4);
+			SUT.Roll(6);
+			SUT.Roll(2);
+			SUT.Roll(8);
+			16.times(() => SUT.Roll(2));
+		}
+
+		[Specification]
+		public void score_is_56()
+		{
+			SUT.Score().should_equal(56);
+		}
+	}
+
+	public class when_10_frames_are_bowled : concerns
+	{
+		private BowlingGame SUT;
+
+		protected override void context()
+		{
+			SUT = new BowlingGame();
+			20.times(() => SUT.Roll(0));
+		}
+
+		[Specification, MbUnit.Framework.ExpectedException(typeof(InvalidOperationException))]
+		public void no_more_are_allowed()
+		{
+			SUT.Roll(0);
 		}
 	}
 }

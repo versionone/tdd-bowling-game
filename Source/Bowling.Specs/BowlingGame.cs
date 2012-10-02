@@ -42,6 +42,9 @@ namespace Bowling.Specs
 			{
 				if(_frames.Last().IsComplete)
 				{
+					if (_frames.Count == 10)
+						throw new InvalidOperationException();
+
 					_frames.Add(new Frame());
 		
 				}
