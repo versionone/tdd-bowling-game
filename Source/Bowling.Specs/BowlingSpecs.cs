@@ -48,4 +48,23 @@ namespace specs_for_bowling
 			SUT.Score.should_equal(0);
 		}
 	}
+
+	public class when_first_frame_is_Spare_followed_by_all_2_rolls : concerns
+	{
+		private BowlingGame SUT;
+
+		protected override void context()
+		{
+			SUT = new BowlingGame();
+			SUT.Roll(7);
+			SUT.Roll(3);
+			18.times(() => SUT.Roll(2));
+		}
+
+		[Specification]
+		public void score_is_48()
+		{
+			SUT.Score.should_equal(48);
+		}
+	}
 }
