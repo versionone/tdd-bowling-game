@@ -22,7 +22,9 @@ namespace Bowling
 			get
 			{
 				var score = 0;
-				_frames.ForEach(frame => score += frame.Sum());
+				for (int i = 0; i < _frames.Count; i++)
+					for (int j = 0; j < _frames[i].Count; j++)
+						score += _frames[i][j];
 				return score;
 			}
 		}
@@ -59,7 +61,13 @@ namespace Bowling
 					if ((_currentFrameIndex - 2) >= 0 && _frames.Count == 10 && pins == 10)
 						if (_frames[_currentFrameIndex - 2].Sum() < 30 && _frames[_currentFrameIndex - 1][0] == 10)
 							_frames[_currentFrameIndex - 2].Add(pins);
-					if (_frames[_currentFrameIndex - 1].Sum() < 30)
+					int sum = 0;
+					for (int i1 = 0; i1 < _frames[_currentFrameIndex - 1].Count; i1++)
+					{
+						int i = _frames[_currentFrameIndex - 1][i1];
+						sum += i;
+					}
+					if (sum < 30)
 						_frames[_currentFrameIndex - 1].Add(pins);
 				}
 			}
