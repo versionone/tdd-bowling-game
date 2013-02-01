@@ -107,4 +107,46 @@ namespace specs_for_bowling
 			_game.Score.should_equal(58);
 		}
 	}
+
+	public class when_first_strike_and_rest_two : concerns
+	{
+		private BowlingGame _game;
+
+		protected override void context()
+		{
+			_game = new BowlingGame();
+
+			_game.Roll(10);
+
+			18.times(() => _game.Roll(2));
+		}
+
+		[Specification]
+		public void the_score_is_correct()
+		{
+			_game.Score.should_equal(50);
+		}
+	}
+
+	public class if_score_before_game_complete_error : concerns
+	{
+		private BowlingGame _game;
+
+		protected override void context()
+		{
+			_game = new BowlingGame();
+
+			_game.Roll(10);
+			_game.Roll(7);
+			_game.Roll(3);
+
+			16.times(() => _game.Roll(0));
+		}
+
+		[Specification]
+		public void the_score_is_correct()
+		{
+			_game.IsComplete.should_be_true();
+		}
+	}
 }

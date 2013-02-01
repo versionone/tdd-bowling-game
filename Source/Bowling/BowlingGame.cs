@@ -7,31 +7,42 @@ namespace Bowling
 {
 	public class BowlingGame
 	{
-		public int Score { get; set; }
+		public int Score { get ; set; }
 
 		public int  RollCount { get; set; }
 		public int lastPins { get; set; }
-		public Frame gameFrame { get; set; }
+		public List<Frame> gameFrames { get; set; }
+
+		public bool IsComplete
+		{
+			get { 
+				var frameCount = this.gameFrames.Count() == 10;
+				var frameAllClosed = this.gameFrames.All(f => f.IsClosed);
+
+				return frameCount && frameAllClosed;
+			}
+		}
 
 		public BowlingGame()
 		{
-			gameFrame = new Frame();
+			gameFrames = new List<Frame> { new Frame() };
 
 		}
 
 		public void Roll(int pins)
 		{
-			if (gameFrame.IsSpare)
+			
+			if (gameFrames.Last().IsSpare)
 			{
 				Score += pins;
 			}
-			if (gameFrame.IsClosed)
+			if (gameFrames.Last().IsClosed)
 			{
-				gameFrame = new Frame();
+				gameFrames.Add(new Frame());
 			}
 
-			gameFrame.Turn++;
-			Score += gameFrame.Roll(pins);
+			gameFrames.Last().Turn++;
+			Score += gameFrames.Last().Roll(pins);
 		}
 	}
 }
