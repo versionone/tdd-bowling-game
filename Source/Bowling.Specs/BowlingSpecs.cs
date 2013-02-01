@@ -38,4 +38,48 @@ namespace specs_for_bowling
 			_game.Score.should_equal(40);
 		}
 	}
+
+	public class when_rolling_a_spare_then_all_gutters : concerns
+	{
+		private BowlingGame _game;
+
+		protected override void context()
+		{
+			_game = new BowlingGame();
+
+			_game.Roll(3);
+			_game.Roll(7); //spare
+
+			18.times(()=> _game.Roll(0));
+		}
+
+		[Specification]
+		public void the_score_is_10()
+		{
+			_game.Score.should_equal(10);
+		}
+	}
+
+	public class when_rolling_a_spare_then_with_a_bonus : concerns
+	{
+		private BowlingGame _game;
+
+		protected override void context()
+		{
+			_game = new BowlingGame();
+
+			_game.Roll(3);
+			_game.Roll(7); //spare
+
+			_game.Roll(2); //bonus
+
+			17.times(() => _game.Roll(0));
+		}
+
+		[Specification]
+		public void the_score_is_14()
+		{
+			_game.Score.should_equal(14);
+		}
+	}
 }
