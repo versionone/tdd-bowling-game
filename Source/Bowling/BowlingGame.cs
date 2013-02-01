@@ -8,37 +8,30 @@ namespace Bowling
 	public class BowlingGame
 	{
 		public int Score { get; set; }
-		public bool IsSpare { get; set; }
+
 		public int  RollCount { get; set; }
 		public int lastPins { get; set; }
+		public Frame gameFrame { get; set; }
 
-		public int Roll(int pins)
+		public BowlingGame()
 		{
-			RollCount++;
-			Score += pins;
+			gameFrame = new Frame();
 
-			if (IsEndOfFrame() && IsASpare(pins))
-			{
-				IsSpare = true;
-			}
-			else if (IsSpare)
+		}
+
+		public void Roll(int pins)
+		{
+			if (gameFrame.IsSpare)
 			{
 				Score += pins;
-				IsSpare = false;
+			}
+			if (gameFrame.IsClosed)
+			{
+				gameFrame = new Frame();
 			}
 
-			lastPins = pins;
-			return pins;
-		}
-
-		private bool IsASpare(int pins)
-		{
-			return (lastPins + pins) == 10;
-		}
-
-		private bool IsEndOfFrame()
-		{
-			return (RollCount % 2) == 0;
+			gameFrame.Turn++;
+			Score += gameFrame.Roll(pins);
 		}
 	}
 }
