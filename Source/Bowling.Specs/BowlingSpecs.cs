@@ -82,4 +82,29 @@ namespace specs_for_bowling
 			_game.Score.should_equal(14);
 		}
 	}
+
+	public class when_rolling_two_spare_and_rest_two : concerns
+	{
+		private BowlingGame _game;
+
+		protected override void context()
+		{
+			_game = new BowlingGame();
+
+			_game.Roll(3);
+			_game.Roll(7); //spare
+
+			_game.Roll(4);
+			_game.Roll(6); //spare
+
+
+			16.times(() => _game.Roll(2));
+		}
+
+		[Specification]
+		public void the_score_is_correct()
+		{
+			_game.Score.should_equal(58);
+		}
+	}
 }

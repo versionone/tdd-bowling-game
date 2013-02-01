@@ -10,20 +10,36 @@ namespace Bowling
 		public int Score { get; set; }
 		public bool IsSpare { get; set; }
 		public int  RollCount { get; set; }
+		public int lastPins { get; set; }
 
 		public int Roll(int pins)
 		{
 			RollCount++;
 			Score += pins;
-			if (RollCount == 2 && Score == 10)
+
+			if (IsEndOfFrame() && IsASpare(pins))
 			{
 				IsSpare = true;
 			}
-			if (IsSpare && RollCount == 3)
+			else if (IsSpare)
 			{
 				Score += pins;
+				IsSpare = false;
 			}
+
+			lastPins = pins;
 			return pins;
+		}
+
+		private bool IsASpare(int pins)
+		{
+			return (lastPins + pins) == 10;
+		}
+
+		private bool IsEndOfFrame()
+		{
+			return (RollCount % 2) == 0;
 		}
 	}
 }
+
