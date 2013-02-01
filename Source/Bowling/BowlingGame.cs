@@ -11,7 +11,7 @@ namespace Bowling
 
 		public int Roll(int pins)
 		{
-			Score = pins;
+			Score += pins;
 			return pins;
 		}
 	}
