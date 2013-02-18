@@ -11,17 +11,29 @@ namespace Bowling
 
 		public Game()
 		{
-			for (int i = 0; i < 9; i++)
-			{
-				_frames[i] = new Frame();
-			}
+
 			_frames[9] = new TenthFrame();
+			for (int i = 8; i >= 0; i--)
+			{
+				_frames[i] = new Frame(_frames[i+1]);
+			}
 		}
 
 		private class Frame
 		{
 			protected int? first;
 			protected int? second;
+			protected Frame _nextFrame;
+
+			public Frame(Frame nextFrame)
+			{
+				_nextFrame = nextFrame;
+			}
+
+			protected Frame()
+			{
+
+			}
 
 			public bool isStrike()
 			{
@@ -54,20 +66,49 @@ namespace Bowling
 				}
 			}
 
-			public int getFirst()
+			public virtual int getScore()
 			{
-				return first ?? 0;
+				if (isSpare())
+				{
+					return 10 + _nextFrame.getSpareBonus();
+				}
+				else if (isStrike())
+				{
+					return 10 + _nextFrame.getStrikeBonus();
+				}
+				else
+				{
+					return first.Value + second.Value;
+				}
 			}
 
-			public int getSecond()
+			public int getSpareBonus()
 			{
-				return second ?? 0;
+				return first.Value;
 			}
+
+			public virtual int getStrikeBonus()
+			{
+				if (isStrike())
+				{
+					return 10 + _nextFrame.getSpareBonus();
+				}
+				else
+				{
+					return first.Value + second.Value;
+				}
+			}
+
 		}
 
 		private class TenthFrame : Frame
 		{
 			private int? third;
+
+			public TenthFrame()
+			{
+
+			}
 
 			public override bool isComplete()
 			{
@@ -97,9 +138,14 @@ namespace Bowling
 				}
 			}
 
-			public int getScore()
+			public override int getScore()
 			{
 				return first.Value + second.Value + (third ?? 0);
+			}
+
+			public override int getStrikeBonus()
+			{
+				return first.Value + second.Value;
 			}
 		}
 
@@ -128,52 +174,10 @@ namespace Bowling
 
 		public int Score()
 		{
-			var score = 0;
 			if(!isComplete())
 				throw new GameIncompleteException();
 
-			for (var i = 0; i < 9; i++)
-			{
-				var frame = _frames[i];
-				Frame nextFrame;
-
-				if (frame.isStrike())
-				{
-					
-					nextFrame = _frames[i + 1];
-
-					if (nextFrame.isStrike())
-					{
-						
-						if (i < 8)
-						{
-							var nextNextFrame = _frames[i + 2];
-							score += 20 + nextNextFrame.getFirst();
-						}
-						else
-						{
-							score += 20 + nextFrame.getSecond();
-						}
-					}
-					else
-					{
-						score += 10 + nextFrame.getFirst() + nextFrame.getSecond();
-					}
-				}
-				else if (frame.isSpare())
-				{
-					nextFrame = _frames[i + 1];
-					score += 10 + nextFrame.getFirst();
-				}
-				else
-				{
-					score += frame.getFirst() + frame.getSecond();
-				}
-			}
-
-			score += ((TenthFrame)_frames[9]).getScore();
-
-			return score;
+			return _frames.Sum((frame) => frame.getScore());
 		}
 	}
 }
