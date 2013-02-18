@@ -98,7 +98,16 @@ namespace Bowling
 				if (frame.isStrike())
 				{
 					nextFrame = _frames[i + 1];
-					score += 10 + nextFrame.getFirst() + nextFrame.getSecond();
+
+					if (nextFrame.isStrike())
+					{
+						var nextNextFrame = _frames[i + 2];
+						score += 20 + nextNextFrame.getFirst();
+					}
+					else
+					{
+						score += 10 + nextFrame.getFirst() + nextFrame.getSecond();
+					}
 				}
 				else if (frame.isSpare())
 				{

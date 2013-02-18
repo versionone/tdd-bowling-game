@@ -122,5 +122,24 @@ namespace specs_for_bowling
 		}
 	}
 
+	internal class when_you_roll_2_strikes_and_then_threes : concerns
+	{
+		private Game _game;
+
+		protected override void context()
+		{
+			_game = new Game();
+
+			_game.Roll(10);
+			_game.Roll(10);
+			16.times(() => _game.Roll(3));
+		}
+
+		[Specification]
+		private void scores_eight_seven()
+		{
+			_game.Score().should_equal(87);
+		}
+	}
 
 }
