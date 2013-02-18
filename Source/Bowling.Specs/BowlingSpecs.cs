@@ -99,7 +99,7 @@ namespace specs_for_bowling
 		[Specification]
 		private void rolling_again_fails()
 		{
-			typeof (GameCompleteException).should_be_thrown_by(() => _game.Roll(3));
+			typeof (Exceptions).should_be_thrown_by(() => _game.Roll(3));
 		}
 	}
 
