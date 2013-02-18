@@ -103,7 +103,7 @@ namespace specs_for_bowling
 		}
 	}
 
-	internal class when_you_roll_a_strike_and_then_twos : concerns
+	internal class when_you_roll_a_strike_and_then_threes : concerns
 	{
 		private Game _game;
 
@@ -121,5 +121,6 @@ namespace specs_for_bowling
 			_game.Score().should_equal(70);
 		}
 	}
+
 
 }

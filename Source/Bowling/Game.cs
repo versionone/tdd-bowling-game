@@ -13,54 +13,105 @@ namespace Bowling
 
 		private readonly int[][] _rolls = new int[10][];
 
+		private Frame[] _frames = new Frame[10];
+
+		private class Frame
+		{
+			private int? first;
+			private int? second;
+
+			public bool isStrike()
+			{
+				return (first == 10);
+			}
+
+			public bool isSpare()
+			{
+				return (first + second == 10) && (first != 10);
+			}
+
+			public bool isComplete()
+			{
+
+				if (isStrike())
+					return true;
+				else
+					return (second != null);
+			}
+
+			public void add(int number)
+			{
+				if (first == null)
+				{
+					first = number;
+				}
+				else if (!isComplete())
+				{
+					second = number;
+				}
+			}
+
+			public int getFirst()
+			{
+				return first ?? 0;
+			}
+
+			public int getSecond()
+			{
+				return second ?? 0;
+			}
+		}
+
 		public void Roll(int number)
 		{
-			if (_frame_count > 9) throw new GameCompleteException();
+			if (_frames[_frame_count] == null) _frames[_frame_count] = new Frame();
 
-			_score += number;
+			var currentFrame = _frames[_frame_count];
 
-			if(_roll_count == 0)
-				_rolls[_frame_count] = new int[2]; //initialize frame
-
-			var current_frame = _rolls[_frame_count];
-			current_frame[_roll_count] = number;
-
-			if (_frame_count > 0) //bonus check 
-			{
-				var previousFrame = _rolls[_frame_count - 1];
-				if (_roll_count == 1 && previousFrame[0] == 10) //strike
-				{
-					_score += current_frame[0] + current_frame[1];
-				}
-				else if (_roll_count == 0 && 
-					previousFrame[0] != 10 &&
-					previousFrame[0] + previousFrame[1] == 10) //spare 
-				{
-					_score += number;
-				}
-			}
-
-
-			if (_roll_count == 1) //end of frame
-			{
-				_frame_count ++;
-				_roll_count = 0;
-			} 
-			else if (_roll_count == 0 && number == 10) //end of strike
+			if (currentFrame.isComplete())
 			{
 				_frame_count++;
-				_roll_count = 0;
-			}
-			else //middle of the frame
-			{
-				_roll_count ++;
+
+				if (_frame_count > 9)
+					throw new GameCompleteException();
+
+				_frames[_frame_count] = new Frame();
+				currentFrame = _frames[_frame_count];
 			}
 
+			currentFrame.add(number);
 		}
 
 		public int Score()
 		{
-			return _score;
+			var score = 0;
+			if (_frame_count < 9)
+			{
+				throw new GameCompleteException();
+			}
+
+			for (var i = 0; i < 10; i++)
+			{
+				var frame = _frames[i];
+				Frame nextFrame;
+
+				if (frame.isStrike())
+				{
+					nextFrame = _frames[i + 1];
+					score += 10 + nextFrame.getFirst() + nextFrame.getSecond();
+				}
+				else if (frame.isSpare())
+				{
+					nextFrame = _frames[i + 1];
+					score += 10 + nextFrame.getFirst();
+				}
+				else
+				{
+					score += frame.getFirst() + frame.getSecond();
+				}
+			}
+
+			return score;
 		}
 	}
 }
