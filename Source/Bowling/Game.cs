@@ -7,12 +7,21 @@ namespace Bowling
 	public class Game
 	{
 		private int _frame_count = 0;
-		private Frame[] _frames = new Frame[12];
+		private Frame[] _frames = new Frame[10];
+
+		public Game()
+		{
+			for (int i = 0; i < 9; i++)
+			{
+				_frames[i] = new Frame();
+			}
+			_frames[9] = new TenthFrame();
+		}
 
 		private class Frame
 		{
-			private int? first;
-			private int? second;
+			protected int? first;
+			protected int? second;
 
 			public bool isStrike()
 			{
@@ -24,7 +33,7 @@ namespace Bowling
 				return (first + second == 10) && (first != 10);
 			}
 
-			public bool isComplete()
+			public virtual bool isComplete()
 			{
 
 				if (isStrike())
@@ -33,7 +42,7 @@ namespace Bowling
 					return (second != null);
 			}
 
-			public void add(int number)
+			public virtual void add(int number)
 			{
 				if (first == null)
 				{
@@ -56,24 +65,61 @@ namespace Bowling
 			}
 		}
 
+		private class TenthFrame : Frame
+		{
+			private int? third;
+
+			public override bool isComplete()
+			{
+				if (isStrike() || isSpare())
+				{
+					return (third != null);
+				}
+				else
+				{
+					return (second != null);
+				}
+			}
+
+			public override void add(int number)
+			{
+				if (first == null)
+				{
+					first = number;
+				}
+				else if (second == null)
+				{
+					second = number;
+				}
+				else if (!isComplete())
+				{
+					third = number;
+				}
+			}
+
+			public int getScore()
+			{
+				return first.Value + second.Value + (third ?? 0);
+			}
+		}
+
+		public bool isComplete()
+		{
+			return _frames.All(f => f.isComplete());
+		}
+
+
 		public void Roll(int number)
 		{
-			if (_frames[_frame_count] == null) _frames[_frame_count] = new Frame();
+			if (isComplete())
+				throw new GameCompleteException();
+
 
 			var currentFrame = _frames[_frame_count];
 
 			if (currentFrame.isComplete())
 			{
 				_frame_count++;
-
-				if (_frame_count > 9)
-				{
-					var frame = _frames[9];
-					if (!(frame.isStrike() || frame.isSpare()))
-						throw new GameCompleteException();
-				}
-
-				_frames[_frame_count] = new Frame();
 				currentFrame = _frames[_frame_count];
 			}
 
@@ -83,24 +129,31 @@ namespace Bowling
 		public int Score()
 		{
 			var score = 0;
-			if (_frame_count < 9)
-			{
-				throw new GameCompleteException();
-			}
+			if(!isComplete())
+				throw new GameIncompleteException();
 
-			for (var i = 0; i < 10; i++)
+			for (var i = 0; i < 9; i++)
 			{
 				var frame = _frames[i];
 				Frame nextFrame;
 
 				if (frame.isStrike())
 				{
+					
 					nextFrame = _frames[i + 1];
 
 					if (nextFrame.isStrike())
 					{
-						var nextNextFrame = _frames[i + 2];
-						score += 20 + nextNextFrame.getFirst();
+						
+						if (i < 8)
+						{
+							var nextNextFrame = _frames[i + 2];
+							score += 20 + nextNextFrame.getFirst();
+						}
+						else
+						{
+							score += 20 + nextFrame.getSecond();
+						}
 					}
 					else
 					{
@@ -117,6 +170,8 @@ namespace Bowling
 					score += frame.getFirst() + frame.getSecond();
 				}
 			}
+
+			score += ((TenthFrame)_frames[9]).getScore();
 
 			return score;
 		}
