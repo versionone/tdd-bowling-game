@@ -142,4 +142,67 @@ namespace specs_for_bowling
 		}
 	}
 
+	internal class when_you_roll_threes_then_a_spare_on_the_tenth_frame : concerns
+	{
+		private Game _game;
+
+		protected override void context()
+		{
+			_game = new Game();
+
+			18.times(() => _game.Roll(3)); //9 frames = 54
+
+			_game.Roll(6); //roll 1 of tenth  = 60
+			_game.Roll(4); //64
+			_game.Roll(4); //bonus = 68
+		}
+
+		[Specification]
+		private void scores_sixty_eight()
+		{
+			_game.Score().should_equal(68);
+		}
+	}
+
+	internal class when_you_roll_all_strikes : concerns
+	{
+		private Game _game;
+
+		protected override void context()
+		{
+			_game = new Game();
+
+			12.times(() => _game.Roll(10));
+		}
+
+		[Specification]
+		private void scores_perfect()
+		{
+			_game.Score().should_equal(300);
+		}
+	}
+
+	internal class when_you_roll_dutch : concerns
+	{
+		private Game _game;
+
+		protected override void context()
+		{
+			_game = new Game();
+
+			5.times(() =>
+				{
+					_game.Roll(10);
+					_game.Roll(5);
+					_game.Roll(5);
+				});
+			_game.Roll(10);
+		}
+
+		[Specification]
+		private void scores_perfect()
+		{
+			_game.Score().should_equal(200);
+		}
+	}
 }

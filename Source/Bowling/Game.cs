@@ -6,14 +6,8 @@ namespace Bowling
 {
 	public class Game
 	{
-		private int _score;
-
-		private int _roll_count = 0;
 		private int _frame_count = 0;
-
-		private readonly int[][] _rolls = new int[10][];
-
-		private Frame[] _frames = new Frame[10];
+		private Frame[] _frames = new Frame[12];
 
 		private class Frame
 		{
@@ -73,7 +67,11 @@ namespace Bowling
 				_frame_count++;
 
 				if (_frame_count > 9)
-					throw new GameCompleteException();
+				{
+					var frame = _frames[9];
+					if (!(frame.isStrike() || frame.isSpare()))
+						throw new GameCompleteException();
+				}
 
 				_frames[_frame_count] = new Frame();
 				currentFrame = _frames[_frame_count];
