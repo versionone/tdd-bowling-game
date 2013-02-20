@@ -39,4 +39,27 @@ namespace specs_for_bowling
             _score.should_equal(40);
         }
     }
+
+    public class when_rolling_spare_frame : concerns
+    {
+        private int _score;
+
+        protected override void context()
+        {
+            var game = new Game();
+
+            game.Roll(2);
+            game.Roll(8);
+
+            18.times(() => game.Roll(2));
+            _score = game.Score();
+        }
+
+        [Specification]
+        public void the_score_is_zero()
+        {
+            _score.should_equal(48);
+        }
+
+    }
 }
