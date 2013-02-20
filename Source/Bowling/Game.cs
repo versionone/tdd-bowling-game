@@ -9,7 +9,7 @@ namespace Bowling
     {
         private int _score;
         private int _frameCount;
-        private bool _isFirst;
+        private bool _isFirstRoll;
 
         private int[,] frames = new int[10,2];
 
@@ -17,41 +17,36 @@ namespace Bowling
         {
             _score = 0;
             _frameCount = 0;
-            _isFirst = true;
+            _isFirstRoll = true;
         }
 
         public void Roll(int _pins)
         {
             int _rollScore = _pins;
-            if (_pins == 0) _rollScore = 0;
-            
-            //_score += _pins;
-            int position = Convert.ToInt32(_isFirst);
-            
 
-            if (_isFirst && _frameCount != 0)
+            if (_isFirstRoll && _frameCount != 0)
             {
-                int _bonus = (frames[(_frameCount - 1), 0] + frames[(_frameCount - 1), 1]);
-                if (_bonus > 9)
+                if (IsSpare(frames[(_frameCount - 1), 0], frames[(_frameCount - 1), 1]))
                 {
                     frames[(_frameCount - 1), 1] += _rollScore;
-                    
                 }
-
             }
 
-            frames[_frameCount, position] = _rollScore;
+            frames[_frameCount, Convert.ToInt32(_isFirstRoll)] = _rollScore;
 
             
-            if (!_isFirst)
+            if (!_isFirstRoll)
             {
                 _frameCount++;
 
             }
 
-            _isFirst = !_isFirst;
+            _isFirstRoll = !_isFirstRoll;
+        }
 
-
+        private bool IsSpare(int firstRoll, int secondRoll)
+        {
+            return firstRoll + secondRoll == 10;
         }
 
         public int Score()
