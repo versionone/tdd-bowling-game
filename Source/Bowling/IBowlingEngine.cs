@@ -3,6 +3,6 @@
     public interface IBowlingEngine
     {
 	    int Score();
-        void AddFrame(int firstRoll, int secondRoll);
+	    void AddRoll(int roll);
     }
 }

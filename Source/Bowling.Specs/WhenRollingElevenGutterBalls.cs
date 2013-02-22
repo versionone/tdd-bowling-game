@@ -10,7 +10,7 @@ namespace Bowling.Specs
 		protected override void context()
 		{
 			_engine = new BowlingEngine();
-			10.times(() => _engine.AddFrame(0, 0));
+			20.times(() => _engine.AddRoll(0));
 		}
 
 		[Specification]
@@ -19,7 +19,7 @@ namespace Bowling.Specs
 			Exception tooManyFramesException = null;
 			try
 			{
-				_engine.AddFrame(0, 0);
+				_engine.AddRoll(0);
 			}
 			catch (Exception exception)
 			{

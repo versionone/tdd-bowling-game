@@ -9,25 +9,20 @@ namespace Bowling
 
 		public int FirstRoll { get { return Rolls[0]; } }
 
-		public FrameStatus Status
-		{
-			get
-			{
-				if (Rolls.Count == 0 || (FirstRoll < 10 && Rolls.Count == 1))
-					return FrameStatus.Open;
-				if (FirstRoll == 10)
-					return FrameStatus.Strike;
-				if (FrameTotal() == 10)
-					return FrameStatus.Spare;
-				return FrameStatus.Simple;
-			}
-		}
+		public bool Closed;
 
 		public Frame() {}
 
 		public void Add(int roll)
 		{
-			Rolls.Add(roll);
+			if (!Closed)
+			{
+				Rolls.Add(roll);
+				if (Rolls.Count == 3 || (Rolls.Count == 2 && Rolls.Sum() < 10))
+				{
+					Closed = true;
+				}
+			}
 		}
 
 		public int FrameTotal()

@@ -9,8 +9,8 @@ namespace Bowling.Specs
 		protected override void context()
 		{
 			_engine = new BowlingEngine();
-			2.times(() =>_engine.AddFrame(10, 0));
-			8.times(() => _engine.AddFrame(2, 2));
+			2.times(() =>_engine.AddRoll(10));
+			16.times(() => _engine.AddRoll(2));
 		}
 
 		[Specification]
