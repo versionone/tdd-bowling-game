@@ -2,7 +2,7 @@
 {
     public interface IBowlingEngine
     {
-        int Score { get; set; }
+	    int Score();
         int AddFrame(int firstRoll, int secondRoll);
     }
 }

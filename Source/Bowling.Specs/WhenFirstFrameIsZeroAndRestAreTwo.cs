@@ -2,20 +2,21 @@ using Bowling.Specs.Infrastructure;
 
 namespace Bowling.Specs
 {
-	public class WhenRollingAllGutterBalls : concerns
+	public class WhenFirstFrameIsZeroAndRestAreTwo : concerns
 	{
 		private BowlingEngine _engine;
 
 		protected override void context()
 		{
 			_engine = new BowlingEngine();
-			10.times(() => _engine.AddFrame(0, 0));
+			_engine.AddFrame(9, 1);
+			9.times(() => _engine.AddFrame(2, 2));
 		}
 
 		[Specification]
-		public void ScoreShouldBeZero()
+		public void ScoreShouldBeFortyEight()
 		{
-			_engine.Score().should_equal(0);
+			_engine.Score().should_equal(48);
 		}
 	}
 }
