@@ -12,8 +12,11 @@ namespace Bowling
 			Frame previousFrame = null;
 			foreach (var frame in _frames)
 			{
-				//Spare Logic
-				if (previousFrame != null && previousFrame.FirstRoll + previousFrame.SecondRoll == 10)
+				if (previousFrame != null && previousFrame.FirstRoll == 10)
+				{
+					total += frame.FirstRoll + frame.SecondRoll;
+				}
+				else if (previousFrame != null && previousFrame.FirstRoll + previousFrame.SecondRoll == 10)
 				{
 					total += frame.FirstRoll;
 				}
