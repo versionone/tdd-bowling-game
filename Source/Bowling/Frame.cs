@@ -1,9 +1,14 @@
-﻿namespace Bowling
+﻿using System.Collections.Generic;
+
+namespace Bowling
 {
 	public class Frame
 	{
-		public int FirstRoll;
-		public int SecondRoll;
+		public List<int> Rolls = new List<int>();
+
+		public int FirstRoll { get { return Rolls[0]; } }
+		public int SecondRoll { get { return Rolls[1]; } }
+		public int ThirdRoll { get { return Rolls[2]; } }
 
 		public FrameStatus Status
 		{
@@ -19,10 +24,15 @@
 
 		public Frame() {}
 
+		public void Add(int roll)
+		{
+			Rolls.Add(roll);
+		}
+
 		public Frame(int firstRoll, int secondRoll)
 		{
-			FirstRoll = firstRoll;
-			SecondRoll = secondRoll;
+			Add(firstRoll);
+			Add(secondRoll);
 		}
 	}
 }

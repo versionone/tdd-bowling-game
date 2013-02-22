@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Bowling
 {
@@ -48,12 +49,32 @@ namespace Bowling
 			}
 			return total;
 		}
-		 
-		public int AddFrame(int firstRoll, int secondRoll)
+		
+		public void AddRoll(int roll)
+		{
+			Frame lastFrame = _frames.LastOrDefault();
+
+			if (lastFrame != null)
+			{
+				if (lastFrame.Status != FrameStatus.Simple)
+				{
+					var frame = new Frame();
+					frame.Add(roll);
+					_frames.Add(frame);
+				}
+			}
+			else
+			{
+				var frame = new Frame();
+				frame.Add(roll);
+				_frames.Add(frame);
+			}
+		}
+
+		public void AddFrame(int firstRoll, int secondRoll)
 		{
 			if (_frames.Count == 10) throw new TooManyFramesException();
-			_frames.Add(new Frame {FirstRoll = firstRoll, SecondRoll = secondRoll});
-			return Score();
+			_frames.Add(new Frame (firstRoll, secondRoll));
 		}
 	}
 }

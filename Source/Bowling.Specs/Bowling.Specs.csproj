@@ -62,6 +62,7 @@
   <ItemGroup>
     <Compile Include="WhenFirstTwoFramesAreStrikesAndRemainingRollsAreTwo.cs" />
     <Compile Include="WhenFirstFrameIsAStrikeAndRemainingRollsAreTwo.cs" />
+    <Compile Include="WhenRollingAPerfectGame.cs" />
     <Compile Include="WhenRollingElevenGutterBalls.cs" />
     <Compile Include="WhenFirstFrameIsASpareAndRemainingRollsAreTwo.cs" />
     <Compile Include="WhenFirstTwoFramesAreSparesAndRemainingRollsAreTwo.cs" />
