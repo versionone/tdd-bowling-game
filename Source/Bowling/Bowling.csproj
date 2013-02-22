@@ -42,7 +42,9 @@
   <ItemGroup>
     <Compile Include=" BowlingEngine.cs" />
     <Compile Include="Frame.cs" />
+    <Compile Include="FrameStatus.cs" />
     <Compile Include="IBowlingEngine.cs" />
+    <Compile Include="IFrame.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TooManyFramesException.cs" />
   </ItemGroup>

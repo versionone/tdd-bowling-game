@@ -9,18 +9,41 @@ namespace Bowling
 		public int Score()
 		{
 			int total = 0;
+
 			Frame previousFrame = null;
+			Frame previousPreviousFrame = null;
+
 			foreach (var frame in _frames)
 			{
-				if (previousFrame != null && previousFrame.FirstRoll == 10)
-				{
-					total += frame.FirstRoll + frame.SecondRoll;
-				}
-				else if (previousFrame != null && previousFrame.FirstRoll + previousFrame.SecondRoll == 10)
+				if (previousPreviousFrame != null && 
+					previousPreviousFrame.Status == FrameStatus.Strike && 
+					previousFrame.Status == FrameStatus.Strike)
 				{
 					total += frame.FirstRoll;
 				}
+
+				if (previousFrame != null)
+				{
+					if (previousFrame.Status == FrameStatus.Strike)
+					{
+						if (frame.Status == FrameStatus.Strike)
+						{
+							total += frame.FirstRoll;
+						}
+						else
+						{
+							total += frame.FirstRoll + frame.SecondRoll;
+						}
+					} 
+					else if (previousFrame.Status == FrameStatus.Spare)
+					{
+						total += frame.FirstRoll;
+					}
+				}
+
 				total += frame.FirstRoll + frame.SecondRoll;
+
+				previousPreviousFrame = previousFrame;
 				previousFrame = frame;
 			}
 			return total;

@@ -60,6 +60,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="WhenFirstTwoFramesAreStrikesAndRemainingRollsAreTwo.cs" />
     <Compile Include="WhenFirstFrameIsAStrikeAndRemainingRollsAreTwo.cs" />
     <Compile Include="WhenRollingElevenGutterBalls.cs" />
     <Compile Include="WhenFirstFrameIsASpareAndRemainingRollsAreTwo.cs" />

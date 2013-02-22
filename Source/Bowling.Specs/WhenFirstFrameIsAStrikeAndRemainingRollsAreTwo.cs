@@ -14,7 +14,7 @@ namespace Bowling.Specs
 		}
 
 		[Specification]
-		public void ScoreShouldBeFortyEight()
+		public void ScoreShouldBeFifty()
 		{
 			_engine.Score().should_equal(50);
 		}		
