@@ -10,7 +10,7 @@ namespace Bowling
 
 	public class BowlingEngine : IBowlingEngine
 	{
-		List<Frame> _frames = new List<Frame>();
+		readonly List<Frame> _frames = new List<Frame>();
 
 		public int Score()
 		{

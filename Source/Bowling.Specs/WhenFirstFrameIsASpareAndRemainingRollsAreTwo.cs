@@ -2,7 +2,7 @@ using Bowling.Specs.Infrastructure;
 
 namespace Bowling.Specs
 {
-	public class WhenFirstFrameIsZeroAndRestAreTwo : concerns
+	public class WhenFirstFrameIsASpareAndRemainingRollsAreTwo : concerns
 	{
 		private BowlingEngine _engine;
 
