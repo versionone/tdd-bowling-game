@@ -11,57 +11,41 @@ namespace Bowling
 		{
 			int total = 0;
 
-			Frame previousFrame = null;
-			Frame previousPreviousFrame = null;
+			Frame previousFrame = new Frame();
+			Frame previousPreviousFrame = new Frame();
 
 			foreach (var frame in _frames)
 			{
-				if (previousPreviousFrame != null && 
-					previousPreviousFrame.Status == FrameStatus.Strike && 
+				if (previousPreviousFrame.Status == FrameStatus.Strike &&
 					previousFrame.Status == FrameStatus.Strike)
 				{
 					total += frame.FirstRoll;
 				}
 
-				if (previousFrame != null)
+				if (previousFrame.Status == FrameStatus.Strike)
 				{
-					if (previousFrame.Status == FrameStatus.Strike)
-					{
-						if (frame.Status == FrameStatus.Strike)
-						{
-							total += frame.FirstRoll;
-						}
-						else
-						{
-							total += frame.FirstRoll + frame.SecondRoll;
-						}
-					} 
-					else if (previousFrame.Status == FrameStatus.Spare)
-					{
-						total += frame.FirstRoll;
-					}
+					total += frame.FrameTotal();
+				}
+				else if (previousFrame.Status == FrameStatus.Spare)
+				{
+					total += frame.FirstRoll;
 				}
 
-				total += frame.FirstRoll + frame.SecondRoll;
+				total += frame.FrameTotal();
 
 				previousPreviousFrame = previousFrame;
 				previousFrame = frame;
 			}
 			return total;
 		}
-		
+
 		public void AddRoll(int roll)
 		{
 			Frame lastFrame = _frames.LastOrDefault();
 
-			if (lastFrame != null)
+			if (lastFrame != null && (lastFrame.Status == FrameStatus.Open || _frames.Count == 10))
 			{
-				if (lastFrame.Status != FrameStatus.Simple)
-				{
-					var frame = new Frame();
-					frame.Add(roll);
-					_frames.Add(frame);
-				}
+				lastFrame.Add(roll);
 			}
 			else
 			{
@@ -69,12 +53,14 @@ namespace Bowling
 				frame.Add(roll);
 				_frames.Add(frame);
 			}
+
+
 		}
 
 		public void AddFrame(int firstRoll, int secondRoll)
 		{
 			if (_frames.Count == 10) throw new TooManyFramesException();
-			_frames.Add(new Frame (firstRoll, secondRoll));
+			_frames.Add(new Frame(firstRoll, secondRoll));
 		}
 	}
 }

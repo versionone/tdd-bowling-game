@@ -4,6 +4,7 @@
 	{
 		Strike,
 		Spare,
-		Simple
+		Simple,
+		Open
 	}
 }

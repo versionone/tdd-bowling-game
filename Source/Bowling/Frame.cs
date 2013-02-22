@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Bowling
 {
@@ -7,16 +8,16 @@ namespace Bowling
 		public List<int> Rolls = new List<int>();
 
 		public int FirstRoll { get { return Rolls[0]; } }
-		public int SecondRoll { get { return Rolls[1]; } }
-		public int ThirdRoll { get { return Rolls[2]; } }
 
 		public FrameStatus Status
 		{
 			get
 			{
+				if (Rolls.Count == 0 || (FirstRoll < 10 && Rolls.Count == 1))
+					return FrameStatus.Open;
 				if (FirstRoll == 10)
 					return FrameStatus.Strike;
-				if (FirstRoll + SecondRoll == 10)
+				if (FrameTotal() == 10)
 					return FrameStatus.Spare;
 				return FrameStatus.Simple;
 			}
@@ -27,6 +28,11 @@ namespace Bowling
 		public void Add(int roll)
 		{
 			Rolls.Add(roll);
+		}
+
+		public int FrameTotal()
+		{
+			return Rolls.Sum();
 		}
 
 		public Frame(int firstRoll, int secondRoll)
