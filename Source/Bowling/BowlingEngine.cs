@@ -2,12 +2,6 @@
 
 namespace Bowling
 {
-	public class Frame
-	{
-		public int FirstRoll;
-		public int SecondRoll;
-	}
-
 	public class BowlingEngine : IBowlingEngine
 	{
 		readonly List<Frame> _frames = new List<Frame>();
@@ -31,6 +25,7 @@ namespace Bowling
 		 
 		public int AddFrame(int firstRoll, int secondRoll)
 		{
+			if (_frames.Count == 10) throw new TooManyFramesException();
 			_frames.Add(new Frame {FirstRoll = firstRoll, SecondRoll = secondRoll});
 			return Score();
 		}

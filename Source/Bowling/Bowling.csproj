@@ -41,8 +41,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include=" BowlingEngine.cs" />
+    <Compile Include="Frame.cs" />
     <Compile Include="IBowlingEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TooManyFramesException.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
