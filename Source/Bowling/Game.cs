@@ -7,7 +7,6 @@ namespace specs_for_bowling
 	public class Game
 	{
 		private readonly List<Frame> _frames = new List<Frame>();
-		private readonly int[] _rolls = new int[21];
 
 		public Game()
 		{
@@ -33,7 +32,13 @@ namespace specs_for_bowling
 			for (int index = 0; index < _frames.Count; index++)
 			{
 				var frame = _frames[index];
-				if (frame.IsSpare())
+				if (frame.IsStrike())
+				{
+					score += frame.FirstRoll.Value;
+					Frame nextFrame = _frames[index + 1];
+					score += nextFrame.FirstRoll.Value + nextFrame.SecondRoll.Value;
+				}
+				else if (frame.IsSpare())
 				{
 					score += (frame.FirstRoll.Value + frame.SecondRoll.Value);
 					Frame nextFrame = _frames[index + 1];

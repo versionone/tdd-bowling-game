@@ -100,22 +100,43 @@ namespace specs_for_bowling
 		protected override void context()
 		{
 			_game.Roll(8);
-			_game.Roll(2);
+			_game.Roll(2); // 18
+
+			_game.Roll(8);
+			_game.Roll(2); // 12
+
+			16.times(() => _game.Roll(2));
+		}
+
+		[Specification]
+		public void the_score_is_62()
+		{
+			_game.Score().should_equal(62);
+		}
+	}
+
+	public class when_rolling_a_strike_followed_by_all_2s : concerns
+	{
+		private readonly Game _game = new Game();
+
+		protected override void context()
+		{
+			_game.Roll(10);
 
 			18.times(() => _game.Roll(2));
 		}
 
 		[Specification]
-		public void the_score_is_48()
+		public void the_score_is_50()
 		{
-			//_game.Score().should_equal(48);
+			_game.Score().should_equal(50);
 		}
 	}
 }
 
 namespace specs_for_frames
 {
-	public class when_the_sum_of_firstRoll_and_secondRoll_equals_ten_ : concerns
+	public class when_the_sum_of_firstRoll_and_secondRoll_equals_ten : concerns
 	{
 		private readonly Frame _frame = new Frame();
 
@@ -138,7 +159,7 @@ namespace specs_for_frames
 		}
 	}
 
-	public class when_the_sum_of_firstRoll_and_secondRoll_is_less_than_ten_ : concerns
+	public class when_the_sum_of_firstRoll_and_secondRoll_is_less_than_ten : concerns
 	{
 		private readonly Frame _frame = new Frame();
 
@@ -152,6 +173,40 @@ namespace specs_for_frames
 		public void frame_is_open()
 		{
 			_frame.IsOpen().should_equal(true);
+		}
+
+		[Specification]
+		public void frame_is_not_spare()
+		{
+			_frame.IsSpare().should_equal(false);
+		}
+	}
+
+	public class when_the_first_roll_is_a_ten : concerns
+	{
+		private readonly Frame _frame = new Frame();
+
+		protected override void context()
+		{
+			_frame.AddPins(10);
+		}
+
+		[Specification]
+		public void frame_is_strike()
+		{
+			_frame.IsStrike().should_equal(true);
+		}
+
+		[Specification]
+		public void frame_is_complete()
+		{
+			_frame.IsFrameComplete().should_equal(true);
+		}
+
+		[Specification]
+		public void frame_is_not_open()
+		{
+			_frame.IsOpen().should_equal(false);
 		}
 
 		[Specification]
