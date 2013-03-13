@@ -36,7 +36,15 @@ namespace specs_for_bowling
 				{
 					score += frame.FirstRoll.Value;
 					Frame nextFrame = _frames[index + 1];
-					score += nextFrame.FirstRoll.Value + nextFrame.SecondRoll.Value;
+					if (nextFrame.IsStrike())
+					{
+						Frame secondFrame = _frames[index + 2];
+						score += nextFrame.FirstRoll.Value + secondFrame.FirstRoll.Value;
+					}
+					else
+					{
+						score += nextFrame.FirstRoll.Value + nextFrame.SecondRoll.Value;
+					}
 				}
 				else if (frame.IsSpare())
 				{

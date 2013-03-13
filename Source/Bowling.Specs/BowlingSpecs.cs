@@ -132,6 +132,25 @@ namespace specs_for_bowling
 			_game.Score().should_equal(50);
 		}
 	}
+
+	public class when_rolling_two_strikes_followed_by_all_2s : concerns
+	{
+		private readonly Game _game = new Game();
+
+		protected override void context()
+		{
+			_game.Roll(10); // 22
+			_game.Roll(10); // 14
+
+			16.times(() => _game.Roll(2));
+		}
+
+		[Specification]
+		public void the_score_is_68()
+		{
+			_game.Score().should_equal(68);
+		}
+	}
 }
 
 namespace specs_for_frames
