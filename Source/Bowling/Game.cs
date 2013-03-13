@@ -29,7 +29,7 @@ namespace specs_for_bowling
 		{
 			int score = 0;
 
-			for (int index = 0; index < _frames.Count; index++)
+			for (int index = 0; index < 10; index++)
 			{
 				var frame = _frames[index];
 				if (frame.IsStrike())

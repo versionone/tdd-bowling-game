@@ -151,6 +151,70 @@ namespace specs_for_bowling
 			_game.Score().should_equal(68);
 		}
 	}
+
+	public class when_rolling_a_perfect_game : concerns
+	{
+		private readonly Game _game = new Game();
+
+		protected override void context()
+		{
+			12.times(() => _game.Roll(10));
+		}
+
+		[Specification]
+		public void the_score_is_300()
+		{
+			_game.Score().should_equal(300);
+		}
+	}
+
+	public class when_rolling_a_dutch_game : concerns
+	{
+		private readonly Game _game = new Game();
+
+		protected override void context()
+		{
+			5.times(() =>
+			        	{
+			        		_game.Roll(10);
+
+			        		_game.Roll(2);
+			        		_game.Roll(8);
+			        	});
+			_game.Roll(10);
+		}
+
+		[Specification]
+		public void the_score_is_200()
+		{
+			_game.Score().should_equal(200);
+		}
+	}
+
+	public class when_ending_with_a_spare : concerns
+	{
+		private readonly Game _game = new Game();
+
+		protected override void context()
+		{
+			9.times(() =>
+			{
+				_game.Roll(0);
+				_game.Roll(0);
+			});
+
+			_game.Roll(8);
+			_game.Roll(2);
+			_game.Roll(2);
+		}
+
+		[Specification]
+		public void the_score_is_12()
+		{
+			_game.Score().should_equal(12);
+		}
+	}
+
 }
 
 namespace specs_for_frames
