@@ -16,16 +16,22 @@ namespace Bowling
 
 		public void Roll(int pins)
 		{
+			
+			
+			ScoreRoll(pins);
+			ScoreBonus(pins);
+			if (_pinsStanding == 0) //you got them all! you 
+			{
+				_bonuses = 1;
+			}
 			if (pins == 10)
 			{
 				_bonuses = 2;
 				_frameCounter = 2;
-
 			}
-
-			ScoreRoll(pins);
-			ScoreBonus(pins);
 			EndOfFrame();
+
+			
 		}
 
 		private void ScoreBonus(int pins)
@@ -56,10 +62,6 @@ namespace Bowling
 		private void SetCounters()
 		{
 			_frameCounter = 1; //starts the frame
-			if (_pinsStanding == 0) //you got them all! you 
-			{
-				_bonuses = 1;
-			}
 			_pinsStanding = 10;
 		}
 
