@@ -38,8 +38,16 @@ namespace Bowling
 				}
 				else if (frames[i].ftype == Frame.FrameType.Strike)
 				{
-					frames[i]._bonus1 = frames[i + 1]._roll1;
-					frames[i]._bonus2 = frames[i + 1]._roll2;
+					if (frames[i + 1].ftype == Frame.FrameType.Strike)
+					{
+						frames[i]._bonus1 = frames[i + 1]._roll1;
+						frames[i]._bonus2 = frames[i + 2]._roll1;
+					}
+					else
+					{
+						frames[i]._bonus1 = frames[i + 1]._roll1;
+						frames[i]._bonus2 = frames[i + 1]._roll2;
+					}
 				}
 
 			}

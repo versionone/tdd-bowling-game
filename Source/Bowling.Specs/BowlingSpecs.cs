@@ -144,31 +144,31 @@ namespace specs_for_bowling
 			_score.should_equal(28);
 		}
 	}
-//
-//	public class when_rolling_two_strikes_in_a_row : concerns
-//	{
-//		private int _score;
-//
-//		protected override void context()
-//		{
-//			var game = new Game();
-//			game.Roll(10); 
-//			game.Roll(10); 
-//			game.Roll(3); 
-//			game.Roll(4);
-//			14.times(() =>
-//			{
-//				game.Roll(0);
-//			});
-//			_score = game.Score();
-//		}
-//
-//		[Specification]
-//		public void both_strikes_get_bonuses()
-//		{
-//			_score.should_equal(47);
-//		}
-//	}
+
+	public class when_rolling_two_strikes_in_a_row : concerns
+	{
+		private int _score;
+
+		protected override void context()
+		{
+			var game = new Game();
+			game.Roll(10); 
+			game.Roll(10); 
+			game.Roll(3); 
+			game.Roll(4);
+			14.times(() =>
+			{
+				game.Roll(0);
+			});
+			_score = game.Score();
+		}
+
+		[Specification]
+		public void both_strikes_get_bonuses()
+		{
+			_score.should_equal(47);
+		}
+	}
 
 
 }
