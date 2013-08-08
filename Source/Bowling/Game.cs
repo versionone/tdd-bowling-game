@@ -22,11 +22,11 @@ namespace Bowling
 			ScoreBonus(pins);
 			if (_pinsStanding == 0) //you got them all! you 
 			{
-				_bonuses = 1;
+				_bonuses += 1;
 			}
 			if (pins == 10)
 			{
-				_bonuses = 2;
+				_bonuses += 1;
 				_frameCounter = 2;
 			}
 			EndOfFrame();
