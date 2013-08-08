@@ -8,67 +8,68 @@ namespace Bowling
 {
 	public class Game
 	{
-
-		private int _score = 0;
-		private int _pinsStanding = 10;
-		private int _frameCounter = 1;
-		private int _bonuses = 0;
-
+		private List<Frame> frames = new List<Frame> { new Frame()}; 
+		
 		public void Roll(int pins)
 		{
-			
-			
-			ScoreRoll(pins);
-			ScoreBonus(pins);
-			if (_pinsStanding == 0) //you got them all! you 
+			if (frames.Last().finished)
 			{
-				_bonuses += 1;
+				frames.Add(new Frame());
 			}
-			if (pins == 10)
-			{
-				_bonuses += 1;
-				_frameCounter = 2;
-			}
-			EndOfFrame();
 
-			
-		}
+			frames.Last().Roll(pins);
 
-		private void ScoreBonus(int pins)
-		{
-			if (_bonuses > 0)
-			{
-				_score += pins;
-				_bonuses--;
-			}
-		}
 
-		private void ScoreRoll(int pins)
-		{
-			_score += pins;
-			_pinsStanding -= pins;
-		}
-
-		private void EndOfFrame()
-		{
-			_frameCounter++;
-
-			if (_frameCounter == 3)
-			{
-				SetCounters();
-			}
-		}
-
-		private void SetCounters()
-		{
-			_frameCounter = 1; //starts the frame
-			_pinsStanding = 10;
 		}
 
 		public int Score()
 		{
-			return _score;
+			return frames.Sum((f) => f.TotalScore());
 		}
 
 	}
+
+	public class Frame
+	{
+		public int _baseScore;
+		public int _bonus1;
+		public int _bonus2;
+		public bool finished = false;
+		public int roll;
+		private FrameType ftype;
+		public enum FrameType
+		{
+			Open,
+			Spare,
+			Strike
+		}
+
+
+		public void Roll(int pins)
+		{
+			_baseScore += pins;
+			roll++;
+			if (pins == 10)
+			{
+				finished = true;
+				ftype=FrameType.Strike;
+			}
+			if (roll == 2 && _baseScore != 10)
+			{
+				finished = true;
+				ftype = FrameType.Open;
+			}
+			else if (roll == 2 && _baseScore == 10)
+			{
+				finished = true;
+				ftype = FrameType.Spare;
+			}
+		}
+
+		public int TotalScore()
+		{
+			return _baseScore + _bonus1 + _bonus2;
+		}
+	}
+
 }
