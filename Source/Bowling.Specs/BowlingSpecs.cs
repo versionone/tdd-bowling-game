@@ -120,5 +120,28 @@ namespace specs_for_bowling
 		}
 	}
 
+	public class when_rolling_a_strike : concerns
+	{
+		private int _score;
 
+		protected override void context()
+		{
+			var game = new Game();
+			game.Roll(10); //frame 1 - 10 + 6 + 3
+			game.Roll(6); //frame 2 - 
+			game.Roll(3); //frame 2 - 6 + 3
+			
+			16.times(() =>
+			{
+				game.Roll(0);
+			});
+			_score = game.Score();
+		}
+
+		[Specification]
+		public void the_next_two_rolls_are_added_to_the_strike_frames_score()
+		{
+			_score.should_equal(28);
+		}
+	}
 }
