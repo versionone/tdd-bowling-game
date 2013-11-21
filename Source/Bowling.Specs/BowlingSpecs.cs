@@ -141,4 +141,23 @@ namespace specs_for_bowling
 		}
 	}
 
+	public class steeeeeerike : concerns<BowlingGame>
+	{
+		private int _score;
+
+		protected override void context()
+		{
+			var game = build_up();
+			game.Roll(10);
+			18.times(() => game.Roll(2));
+			_score = game.Score;
+		}
+
+		[Specification]
+		public void score_is_50()
+		{
+			_score.should_equal(50);
+		}
+	}
+
 }

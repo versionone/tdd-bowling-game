@@ -16,9 +16,10 @@ namespace Bowling
 			//Score = 0;
 		}
 
-		public int CurrentFrameIndex { get; set; } 
+		private int CurrentFrameIndex { get; set; } 
 
-		public List<Frame> frames { get; set; }
+		private List<Frame> frames { get; set; }
+
 		public int Score
 		{
 			get
@@ -29,12 +30,21 @@ namespace Bowling
 				{
 					Frame frame = frames[i];
 					// Frame .Score needs to be smarter.. able to figure out bonuses
-					score += frame.Score;
+					score += frame.SumOfPinsKnockedDown;
 					if (frame.NeedsBonus())
 					{
 						// peek forward/ determine bonus
 						Frame nextFrame = frames[i + 1];
+
+						// Spare bonus (or a strike) bonus is the next ball
 						int bonusScore = nextFrame.Rolls[0].PinsKnockedDown;
+
+						// is frame a strike?
+						// if it is, then peek ahead another roll, and add to that to the bonus too
+						if (frame.IsStrike())
+							bonusScore += nextFrame.Rolls[1].PinsKnockedDown;
+
+
 						score += bonusScore;
 					}
 				}
@@ -62,7 +72,7 @@ namespace Bowling
 
 		public bool IsDone()
 		{
-			if (Rolls.Count == 2)
+			if (Rolls.Count == 2 || SumOfPinsKnockedDown == 10)
 				return true;
 			else
 				return false;
@@ -76,13 +86,21 @@ namespace Bowling
 				return false;
 		}
 
+		public bool IsStrike()
+		{
+			if (Rolls.Count == 1 && NeedsBonus())
+				return true;
+			else
+				return false;
+		}
+
 		public Frame()
 		{
 			// make a place for rolls to go
 			Rolls = new List<Roll>();
 		}
 
-		public int Score
+		public int SumOfPinsKnockedDown
 		{
 			get
 			{
