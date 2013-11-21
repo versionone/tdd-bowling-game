@@ -229,4 +229,33 @@ namespace specs_for_bowling
 			_score.should_equal(200);
 		}
 	}
+
+	public class alternating_spares_and_strikes : concerns<BowlingGame>
+	{
+		private int _score;
+
+		protected override void context()
+		{
+			var game = build_up();
+
+			5.times(() =>
+			{
+				game.Roll(1);
+				game.Roll(9);
+
+				game.Roll(10);
+			});
+
+			game.Roll(1);
+			game.Roll(9);
+
+			_score = game.Score;
+		}
+
+		[Specification]
+		public void score_is_200()
+		{
+			_score.should_equal(200);
+		}
+	}
 }
