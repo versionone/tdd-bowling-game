@@ -42,7 +42,17 @@ namespace Bowling
 						// is frame a strike?
 						// if it is, then peek ahead another roll, and add to that to the bonus too
 						if (frame.IsStrike())
-							bonusScore += nextFrame.Rolls[1].PinsKnockedDown;
+						{
+							if (nextFrame.IsStrike())
+							{
+								// need to get a roll from the following frame
+								Frame nextNextFrame = frames[i + 2];
+								bonusScore += nextNextFrame.Rolls[0].PinsKnockedDown;
+							}
+							else
+								bonusScore += nextFrame.Rolls[1].PinsKnockedDown;
+
+						}
 
 
 						score += bonusScore;

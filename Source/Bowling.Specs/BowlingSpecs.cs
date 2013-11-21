@@ -160,4 +160,26 @@ namespace specs_for_bowling
 		}
 	}
 
+	public class two_strikes_followed_by_all_twos_ : concerns<BowlingGame>
+	{
+		private int _score;
+
+		protected override void context()
+		{
+			var game = build_up();
+
+			game.Roll(10);
+
+			game.Roll(10);
+
+			16.times(() => game.Roll(2));
+			_score = game.Score;
+		}
+
+		[Specification]
+		public void score_is_68()
+		{
+			_score.should_equal(68);
+		}
+	}
 }
