@@ -10,16 +10,35 @@ namespace Bowling
 		public void Roll(int pinsKnockedDown)
 		{
 
-			if (Rolls == 2 && Score == 10)
+			Rolls += 1;
+
+			if (Rolls == 3 && Score == 10)
+				Score += pinsKnockedDown;
+			if (Rolls == 5 && Score == 22)
 				Score += pinsKnockedDown;
 
-			Score += pinsKnockedDown;
+			if (Frames > 9)
+			{
+				var ex = new GameOverException();
+				throw ex;
+			}
 
-			Rolls += 1;
+
+			if (Rolls%2 == 0 || pinsKnockedDown == 10)
+				Frames += 1;
+
+			Score += pinsKnockedDown;
 		}
 
 		public int Score { get; set; }
 
 		public int Rolls { get; set; }
+
+		public int Frames { get; set; }
 	}
+
+	public class GameOverException :Exception
+	{
+	}
+
 }
