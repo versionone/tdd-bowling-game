@@ -182,4 +182,23 @@ namespace specs_for_bowling
 			_score.should_equal(68);
 		}
 	}
+
+	public class perfect_game_ : concerns<BowlingGame>
+	{
+		private int _score;
+
+		protected override void context()
+		{
+			var game = build_up();
+
+			12.times(() => game.Roll(10));
+			_score = game.Score;
+		}
+
+		[Specification]
+		public void score_is_300()
+		{
+			_score.should_equal(300);
+		}
+	}
 }

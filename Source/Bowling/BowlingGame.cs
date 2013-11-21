@@ -71,7 +71,7 @@ namespace Bowling
 			var r = new Roll { PinsKnockedDown = pinsKnockedDown };
 			frames[CurrentFrameIndex].Rolls.Add(r);
 
-			if (frames[CurrentFrameIndex].IsDone())
+			if (frames[CurrentFrameIndex].IsDone(CurrentFrameIndex))
 				CurrentFrameIndex += 1;
 		}
 	}
@@ -80,9 +80,11 @@ namespace Bowling
 	{
 		public List<Roll> Rolls { get; set; }
 
-		public bool IsDone()
+		public bool IsDone(int currentIndex)
 		{
-			if (Rolls.Count == 2 || SumOfPinsKnockedDown == 10)
+			if ((currentIndex < 9 && (Rolls.Count == 2 || SumOfPinsKnockedDown == 10)) 
+				|| (currentIndex == 9 && (Rolls.Count == 2 && SumOfPinsKnockedDown < 10))
+				|| (currentIndex == 9 && (Rolls.Count == 3)))
 				return true;
 			else
 				return false;
