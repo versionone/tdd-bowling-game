@@ -183,7 +183,7 @@ namespace specs_for_bowling
 		}
 	}
 
-	public class perfect_game_ : concerns<BowlingGame>
+	public class perfect_game : concerns<BowlingGame>
 	{
 		private int _score;
 
@@ -199,6 +199,34 @@ namespace specs_for_bowling
 		public void score_is_300()
 		{
 			_score.should_equal(300);
+		}
+	}
+
+	public class alternating_strikes_and_spares : concerns<BowlingGame>
+	{
+		private int _score;
+
+		protected override void context()
+		{
+			var game = build_up();
+
+			5.times(()=>
+			{
+				game.Roll(10);
+
+				game.Roll(1);
+				game.Roll(9);
+			});
+
+			game.Roll(10);
+
+			_score = game.Score;
+		}
+
+		[Specification]
+		public void score_is_200()
+		{
+			_score.should_equal(200);
 		}
 	}
 }
