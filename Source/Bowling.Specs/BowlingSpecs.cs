@@ -98,6 +98,34 @@ namespace specs_for_bowling
 		}
 	}
 
+	public class spares_followed_by_twos_followed_by_spare_then_all_twos : concerns<BowlingGame>
+	{
+		private int _score;
+
+		protected override void context()
+		{
+			var game = build_up();
+
+			game.Roll(2);
+			game.Roll(8);
+
+			game.Roll(2);
+			game.Roll(2);
+
+			game.Roll(2);
+			game.Roll(8);
+
+			14.times(() => game.Roll(2));
+			_score = game.Score;
+		}
+
+		[Specification]
+		public void score_is_56()
+		{
+			_score.should_equal(56);
+		}
+	}
+
 	public class game_that_has_ten_completed_frames : concerns<BowlingGame>
 	{
 		protected override void context()
