@@ -82,12 +82,16 @@ namespace Bowling
 
 		public bool IsDone(int currentIndex)
 		{
-			if ((currentIndex < 9 && (Rolls.Count == 2 || SumOfPinsKnockedDown == 10)) 
-				|| (currentIndex == 9 && (Rolls.Count == 2 && SumOfPinsKnockedDown < 10))
-				|| (currentIndex == 9 && (Rolls.Count == 3)))
+			if (currentIndex < 9)
+				return (Rolls.Count == 2 || SumOfPinsKnockedDown == 10);
+
+			if (Rolls.Count == 2 && SumOfPinsKnockedDown < 10)
 				return true;
-			else
-				return false;
+
+			if (Rolls.Count == 3)
+				return true;
+
+			return false;
 		}
 
 		public bool NeedsBonus()
@@ -116,12 +120,7 @@ namespace Bowling
 		{
 			get
 			{
-				int score = 0;
-				foreach (var roll in Rolls)
-				{
-					score += roll.PinsKnockedDown;
-				}
-				return score;
+				return Rolls.Sum(roll => roll.PinsKnockedDown);
 			}
 		}
 	}
