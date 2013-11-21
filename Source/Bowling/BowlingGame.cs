@@ -9,9 +9,17 @@ namespace Bowling
 	{
 		public void Roll(int pinsKnockedDown)
 		{
-			Score = pinsKnockedDown;
+
+			if (Rolls == 2 && Score == 10)
+				Score += pinsKnockedDown;
+
+			Score += pinsKnockedDown;
+
+			Rolls += 1;
 		}
 
 		public int Score { get; set; }
+
+		public int Rolls { get; set; }
 	}
 }
