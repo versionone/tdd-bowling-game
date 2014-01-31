@@ -5,6 +5,7 @@ An example of doing Test-Driven Development using Bowling as the domain.
 Below are some scenarios we can use to drive the development of the game.
 
 * when rolling all gutter balls, the score is 0.
+* when rolling all 2s, the score is 40.
 * when the first frame is a spare and the rest score 2, the score is 48.
 * when the first 2 frames are spare (as 2,8) and the rest score 2, the score is 56.
 * when 10 frames have been bowled, don't allow any more to be bowled.
