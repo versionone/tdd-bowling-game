@@ -11,6 +11,8 @@ namespace Bowling
 		private int roll_count = 0;
 		private bool last_frame_was_spare = false;
 
+		private int first_roll;
+
 		public int Score
 		{
 			get { return score; }
@@ -26,7 +28,7 @@ namespace Bowling
 			score += value;
 			if (roll_count == 1)
 			{
-				if (score == 10)
+				if ((first_roll+value) == 10)
 				{
 					last_frame_was_spare = true;
 				}
@@ -35,6 +37,7 @@ namespace Bowling
 			}
 			else
 			{
+				first_roll = value;
 				roll_count++;
 			}
 			

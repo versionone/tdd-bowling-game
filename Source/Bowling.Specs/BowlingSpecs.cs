@@ -85,4 +85,38 @@ namespace specs_for_bowling
 			_game.Score.should_equal(48);
 		}
 	}
+	public class when_twos_then_threes : concerns
+	{
+		private BowlingGame _game;
+
+		protected override void context()
+		{
+			_game = new BowlingGame();
+			2.times(() => { _game.Roll(2); });
+			18.times(() => { _game.Roll(3); });
+		}
+
+		[Specification]
+		public void the_score_is_58()
+		{
+			_game.Score.should_equal(58);
+		}
+	}
+	public class when_first_two_are_spare_then_twos : concerns
+	{
+		private BowlingGame _game;
+
+		protected override void context()
+		{
+			_game = new BowlingGame();
+			2.times(() => { _game.Roll(2); _game.Roll(8); });
+			16.times(() => { _game.Roll(2); });
+		}
+
+		[Specification]
+		public void the_score_is_56()
+		{
+			_game.Score.should_equal(56);
+		}
+	}
 }
