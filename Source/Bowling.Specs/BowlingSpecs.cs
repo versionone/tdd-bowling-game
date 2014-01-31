@@ -27,6 +27,7 @@ namespace specs_for_bowling
 		protected override void context()
 		{
 			_game = new BowlingGame();
+			20.times(() => _game.Roll(0));
 		}
 
 		[Specification]
@@ -155,23 +156,80 @@ namespace specs_for_bowling
 			_game.Score.should_equal(50);
 		}
 	}
-//
-//	public class when_rolling_2_strikes_followed_by_all_2s : concerns
-//	{
-//		private BowlingGame _game;
-//
-//		protected override void context()
-//		{
-//			_game = new BowlingGame();
-//			_game.Roll(10);
-//			_game.Roll(10);
-//			16.times(() => { _game.Roll(2); });
-//		}
-//
-//		[Specification]
-//		public void the_score_is_68()
-//		{
-//			_game.Score.should_equal(68);
-//		}
-//	}
+
+	public class when_rolling_2_strikes_followed_by_all_2s : concerns
+	{
+		private BowlingGame _game;
+
+		protected override void context()
+		{
+			_game = new BowlingGame();
+			_game.Roll(10);
+			_game.Roll(10);
+			16.times(() => { _game.Roll(2); });
+		}
+
+		[Specification]
+		public void the_score_is_68()
+		{
+			_game.Score.should_equal(68);
+		}
+	}
+
+	public class when_rolling_3_strikes_followed_by_all_2s : concerns
+	{
+		private BowlingGame _game;
+
+		protected override void context()
+		{
+			_game = new BowlingGame();
+			_game.Roll(10);
+			_game.Roll(10);
+			_game.Roll(10);
+			14.times(() => { _game.Roll(2); });
+		}
+
+		[Specification]
+		public void the_score_is_94()
+		{
+			_game.Score.should_equal(94);
+		}
+	}
+
+	public class when_rolling_a_perfect_game : concerns
+	{
+		private BowlingGame _game;
+
+		protected override void context()
+		{
+			_game = new BowlingGame();
+			12.times(() => _game.Roll(10));
+		}
+
+		[Specification]
+		public void the_score_is_300()
+		{
+			_game.Score.should_equal(300);
+		}
+	}
+
+	public class when_rolling_a_dutch_game : concerns
+	{
+		private BowlingGame _game;
+
+		protected override void context()
+		{
+			_game = new BowlingGame();
+			5.times(() =>
+				{_game.Roll(10); _game.Roll(5); _game.Roll(5); }
+			);
+			_game.Roll(10);
+		}
+
+		[Specification]
+		public void the_score_is_200()
+		{
+			_game.Score.should_equal(200);
+		}
+	}
 }

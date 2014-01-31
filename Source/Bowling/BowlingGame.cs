@@ -17,7 +17,7 @@ namespace Bowling
 
 				int score = 0;
 
-				for (int i = 0; i < frames.Count(); i++)
+				for (int i = 0; i < 10; i++)
 				{
 
 					score += frames[i].Get_First_Roll() + frames[i].Get_Second_Roll();
@@ -27,7 +27,15 @@ namespace Bowling
 					}
 					else if (frames[i].is_Strike())
 					{
-						score += frames[i+1].Get_First_Roll() + frames[i+1].Get_Second_Roll();
+						if (!frames[i + 1].is_Strike())
+						{
+							score += frames[i + 1].Get_First_Roll() + frames[i + 1].Get_Second_Roll();
+						}
+						else
+						{
+							score+= 10+frames[i + 2].Get_First_Roll();
+						}
+						
 					}
 
 
@@ -40,8 +48,9 @@ namespace Bowling
 		{
 			Frame currentFrame;
 
-			if (frames.Count(x => x.is_Closed()) >= 10)
+			if ((frames.Count(x => x.is_Closed()) >= 10))
 			{
+				if (!(frames.Last().is_Strike()||(frames.Last().is_Spare())))
 				throw new BowlingFrameException();
 			}
 			if (frames.Count > 0 && !frames.Last().is_Closed())
