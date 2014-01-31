@@ -6,6 +6,7 @@ Below are some scenarios we can use to drive the development of the game.
 
 * when rolling all gutter balls, the score is 0.
 * when rolling all 2s, the score is 40.
+* when rolling alternating 2s and 5s, the score 70.
 * when the first frame is a spare and the rest score 2, the score is 48.
 * when the first 2 frames are spare (as 2,8) and the rest score 2, the score is 56.
 * when 10 frames have been bowled, don't allow any more to be bowled.
