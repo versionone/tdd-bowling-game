@@ -120,6 +120,7 @@ namespace specs_for_bowling
 			_game.Score.should_equal(56);
 		}
 	}
+
 	public class when_10_frames_have_been_rolled : concerns
 	{
 		private BowlingGame _game;
@@ -134,6 +135,24 @@ namespace specs_for_bowling
 		public void no_more_frames_can_be_bowled()
 		{
 			typeof(BowlingFrameException).should_be_thrown_by(() => _game.Roll(2));
+		}
+	}
+
+	public class when_rolling_a_strike_followed_by_all_2s : concerns
+	{
+		private BowlingGame _game;
+
+		protected override void context()
+		{
+			_game = new BowlingGame();
+			_game.Roll(10);
+			18.times(() => { _game.Roll(2); });
+		}
+
+		[Specification]
+		public void the_score_is_50()
+		{
+			_game.Score.should_equal(50);
 		}
 	}
 }
