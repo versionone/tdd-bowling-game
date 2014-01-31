@@ -21,10 +21,15 @@ namespace Bowling
 				{
 
 					score += frames[i].Get_First_Roll() + frames[i].Get_Second_Roll();
-					if (frames[i].is_Spare() && frames[i] != frames.Last())
+					if (frames[i].is_Spare() )
 					{
 						score += frames[i + 1].Get_First_Roll();
 					}
+					else if (frames[i].is_Strike())
+					{
+						score += frames[i+1].Get_First_Roll() + frames[i+1].Get_Second_Roll();
+					}
+
 
 				}
 					return score;

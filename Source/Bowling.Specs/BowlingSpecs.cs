@@ -137,24 +137,24 @@ namespace specs_for_bowling
 			typeof(BowlingFrameException).should_be_thrown_by(() => _game.Roll(2));
 		}
 	}
-//
-//	public class when_rolling_a_strike_followed_by_all_2s : concerns
-//	{
-//		private BowlingGame _game;
-//
-//		protected override void context()
-//		{
-//			_game = new BowlingGame();
-//			_game.Roll(10);
-//			18.times(() => { _game.Roll(2); });
-//		}
-//
-//		[Specification]
-//		public void the_score_is_50()
-//		{
-//			_game.Score.should_equal(50);
-//		}
-//	}
+
+	public class when_rolling_a_strike_followed_by_all_2s : concerns
+	{
+		private BowlingGame _game;
+
+		protected override void context()
+		{
+			_game = new BowlingGame();
+			_game.Roll(10);
+			18.times(() => { _game.Roll(2); });
+		}
+
+		[Specification]
+		public void the_score_is_50()
+		{
+			_game.Score.should_equal(50);
+		}
+	}
 //
 //	public class when_rolling_2_strikes_followed_by_all_2s : concerns
 //	{
