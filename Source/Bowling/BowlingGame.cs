@@ -10,6 +10,7 @@ namespace Bowling
 		private int score = 0;
 		private int roll_count = 0;
 		private bool last_frame_was_spare = false;
+		private int frame_count = 0;
 
 		private int first_roll;
 
@@ -20,6 +21,11 @@ namespace Bowling
 
 		public void Roll(int value)
 		{
+			if (frame_count >= 10)
+			{
+				throw new BowlingFrameException();
+			}
+
 			if (last_frame_was_spare )
 			{
 				last_frame_was_spare = false;
@@ -34,6 +40,7 @@ namespace Bowling
 				}
 				
 				roll_count = 0;
+				frame_count++;
 			}
 			else
 			{
@@ -41,7 +48,9 @@ namespace Bowling
 				roll_count++;
 			}
 			
-			
 		}
+
 	}
+
+	public class BowlingFrameException : Exception {}
 }
