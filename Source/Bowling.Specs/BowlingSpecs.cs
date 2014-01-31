@@ -68,4 +68,21 @@ namespace specs_for_bowling
 			_game.Score.should_equal(70);
 		}
 	}
+	public class when_spare_and_twos : concerns
+	{
+		private BowlingGame _game;
+
+		protected override void context()
+		{
+			_game = new BowlingGame();
+			2.times(() => { _game.Roll(5); });
+			18.times(() => { _game.Roll(2); });
+		}
+
+		[Specification]
+		public void the_score_is_48()
+		{
+			_game.Score.should_equal(48);
+		}
+	}
 }
