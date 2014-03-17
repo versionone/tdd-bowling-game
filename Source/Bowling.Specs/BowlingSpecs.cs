@@ -14,7 +14,7 @@ namespace specs_for_bowling
 		[Specification]
 		public void it_works()
 		{
-			_itWorked.should_be_true("we're ready to roll!");
+			_itWorked.ShouldBeTrue();
 		}
 	}
 }

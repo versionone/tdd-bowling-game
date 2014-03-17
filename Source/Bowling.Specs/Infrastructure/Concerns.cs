@@ -1,5 +1,5 @@
 using System;
-using MbUnit.Framework;
+using NUnit.Framework;
 using Rhino.Mocks;
 using StructureMap.AutoMocking;
 
@@ -9,7 +9,7 @@ namespace Bowling.Specs.Infrastructure
 	{
 		private Exception ContextSetupException;
 
-		[FixtureSetUp]
+		[SetUp]
 		public virtual void main_setup()
 		{
 			try
@@ -33,7 +33,7 @@ namespace Bowling.Specs.Infrastructure
 		{
 		}
 
-		[FixtureTearDown]
+		[TearDown]
 		public virtual void main_teardown()
 		{
 			decontext();
@@ -66,14 +66,14 @@ namespace Bowling.Specs.Infrastructure
 	{
 		private RhinoAutoMocker<T> _amc;
 
-		[FixtureSetUp]
+		[SetUp]
 		public override void main_setup()
 		{
 			_amc = new RhinoAutoMocker<T>();
 			base.main_setup();
 		}
 
-		[FixtureTearDown]
+		[TearDown]
 		public override void main_teardown()
 		{
 			base.main_teardown();

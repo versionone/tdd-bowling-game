@@ -5,6 +5,7 @@
 *resharper.user
 _ReSharper.*/
 Source/*.ReSharper
+Source/packages
 *.orig
 *.sln.cache
 obj
