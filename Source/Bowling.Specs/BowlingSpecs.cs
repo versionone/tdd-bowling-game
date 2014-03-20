@@ -125,7 +125,7 @@ namespace specs_for_bowling
 		}
 	}
 
-	public class when_shenangins : concerns<BowlingGame>
+	public class cross_frame_balls_equal_ten_should_not_be_spare : concerns<BowlingGame>
 	{
 		private int _score;
 
@@ -150,7 +150,7 @@ namespace specs_for_bowling
 		}
 
 		[Specification]
-		public void score_should_be_fiftysix()
+		public void score_should_be_eleven()
 		{
 			_score.ShouldEqual(11);
 		}
