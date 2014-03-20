@@ -156,6 +156,20 @@ namespace specs_for_bowling
 		}
 	}
 
+	public class bowling_over_ten_frames : concerns<BowlingGame>
+	{
+		protected override void context()
+		{
+			var game = build_up();
+			20.times(() => game.Roll(0));
+		}
+
+		[Specification, ExpectedException(typeof(InvalidOperationException))]
+		public void ist_verbotten()
+		{
+			build_up().Roll(0);
+		}
+	}
 
 	public class open_frame : concerns<Frame>
 	{

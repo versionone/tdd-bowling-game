@@ -88,6 +88,11 @@ namespace Bowling
 			if (_frames[_currentFrame].IsFull)
 			{
 				_currentFrame++;
+
+				if (_currentFrame == _frames.Length)
+				{
+					throw new InvalidOperationException("Too many frames, ist verbotten.");
+				}
 			}
 
 			_frames[_currentFrame].Roll(pins);
