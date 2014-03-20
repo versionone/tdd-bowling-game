@@ -213,6 +213,25 @@ namespace specs_for_bowling
 			_score.ShouldEqual(68);
 		}
 	}
+
+	public class the_perfect_game : concerns<BowlingGame>
+	{
+		private int _score;
+
+		protected override void context()
+		{
+			var game = build_up();
+
+			12.times(() => game.Roll(10));
+			_score = game.Score;
+		}
+
+		[Specification]
+		public void score_should_be_three_boring_hundred()
+		{
+			_score.ShouldEqual(300);
+		}
+	}
 	public class open_frame : concerns<Frame>
 	{
 		protected override void context()

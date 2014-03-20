@@ -83,7 +83,7 @@ namespace Bowling
 
 		public void Roll(int pins)
 		{
-			if (_frames[_currentFrame].IsFull)
+			if (_currentFrame < _frames.Length - 1 && _frames[_currentFrame].IsFull)
 			{
 				_currentFrame++;
 
@@ -95,7 +95,6 @@ namespace Bowling
 
 			_frames[_currentFrame].Roll(pins);
 
-			// So far this handles spares
 			if (_currentFrame > 0 && !_frames[_currentFrame - 1].IsScorable)
 			{
 				_frames[_currentFrame - 1].Roll(pins);
