@@ -232,6 +232,33 @@ namespace specs_for_bowling
 			_score.ShouldEqual(300);
 		}
 	}
+
+	public class alternating_strikes_and_spares : concerns<BowlingGame>
+	{
+		private int _score;
+
+		protected override void context()
+		{
+			var game = build_up();
+
+			5.times(() =>
+			{
+				game.Roll(10);
+				game.Roll(5);
+				game.Roll(5);
+			});
+			game.Roll(10);
+
+			_score = game.Score;
+		}
+
+		[Specification]
+		public void score_should_be_two_hundred()
+		{
+			_score.ShouldEqual(200);
+		}
+	}
+
 	public class open_frame : concerns<Frame>
 	{
 		protected override void context()
