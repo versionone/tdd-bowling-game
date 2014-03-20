@@ -171,6 +171,27 @@ namespace specs_for_bowling
 		}
 	}
 
+	public class first_frame_strike_followed_by_all_twos : concerns<BowlingGame>
+	{
+		private int _score;
+
+		protected override void context()
+		{
+			var game = build_up();
+
+			game.Roll(10);
+
+			18.times(() => game.Roll(2));
+			_score = game.Score;
+		}
+
+		[Specification]
+		public void score_should_be_fifty()
+		{
+			_score.ShouldEqual(50);
+		}
+	}
+
 	public class open_frame : concerns<Frame>
 	{
 		protected override void context()
@@ -289,7 +310,7 @@ namespace specs_for_bowling
 			var frame = build_up();
 			frame.Roll(7);
 			frame.Roll(3);
-			frame.Bonus(4);
+			frame.Roll(4);
 		}
 
 		[Specification]
@@ -302,6 +323,126 @@ namespace specs_for_bowling
 		public void score_should_be_marked_spare()
 		{
 			build_up().IsSpare.ShouldBeTrue();
+		}
+
+		[Specification]
+		public void frame_should_be_full()
+		{
+			build_up().IsFull.ShouldBeTrue();
+		}
+
+		[Specification]
+		public void frame_should_be_scorable()
+		{
+			build_up().IsScorable.ShouldBeTrue();
+		}
+	}
+
+	public class unfinished_strike_with_no_bonus : concerns<Frame>
+	{
+		protected override void context()
+		{
+			var frame = build_up();
+			frame.Roll(10);
+		}
+
+		[Specification, ExpectedException(typeof(InvalidOperationException))]
+		public void score_should_throw_exception()
+		{
+			var score = build_up().Score;
+		}
+
+		[Specification]
+		public void should_not_be_marked_spare()
+		{
+			build_up().IsSpare.ShouldBeFalse();
+		}
+
+		[Specification]
+		public void should_be_marked_strike()
+		{
+			build_up().IsStrike.ShouldBeTrue();
+		}
+
+		[Specification]
+		public void frame_should_be_full()
+		{
+			build_up().IsFull.ShouldBeTrue();
+		}
+
+		[Specification]
+		public void frame_should_not_be_scorable()
+		{
+			build_up().IsScorable.ShouldBeFalse();
+		}
+	}
+
+	public class unfinished_strike_with_one_bonus : concerns<Frame>
+	{
+		protected override void context()
+		{
+			var frame = build_up();
+			frame.Roll(10);
+			frame.Roll(10);
+		}
+
+		[Specification, ExpectedException(typeof(InvalidOperationException))]
+		public void score_should_throw_exception()
+		{
+			var score = build_up().Score;
+		}
+
+		[Specification]
+		public void should_not_be_marked_spare()
+		{
+			build_up().IsSpare.ShouldBeFalse();
+		}
+
+		[Specification]
+		public void should_be_marked_strike()
+		{
+			build_up().IsStrike.ShouldBeTrue();
+		}
+
+		[Specification]
+		public void frame_should_be_full()
+		{
+			build_up().IsFull.ShouldBeTrue();
+		}
+
+		[Specification]
+		public void frame_should_not_be_scorable()
+		{
+			build_up().IsScorable.ShouldBeFalse();
+		}
+	}
+
+	public class unfinished_strike_with_two_bonuses : concerns<Frame>
+	{
+		protected override void context()
+		{
+			var frame = build_up();
+			frame.Roll(10);
+			frame.Roll(10);
+			frame.Roll(10);
+		}
+
+		[Specification]
+		public void score_should_be_30()
+		{
+			build_up().Score.ShouldEqual(30);
+		}
+
+		[Specification]
+		public void should_not_be_marked_spare()
+		{
+			build_up().IsSpare.ShouldBeFalse();
+		}
+
+		[Specification]
+		public void should_be_marked_strike()
+		{
+			build_up().IsStrike.ShouldBeTrue();
 		}
 
 		[Specification]

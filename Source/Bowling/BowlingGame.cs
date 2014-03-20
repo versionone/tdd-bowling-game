@@ -28,11 +28,10 @@ namespace Bowling
 		{
 			get
 			{
-				if (IsStrike || IsSpare)
+				if (IsSpare || IsStrike)
 				{
 					return _Bonus.HasValue;
 				}
-				
 				return IsFull;
 			}
 		}
@@ -44,7 +43,7 @@ namespace Bowling
 
 		public bool IsStrike
 		{
-			get { return false; }
+			get { return (_FirstBallPins == 10); }
 		}
 
 		public bool IsFull
@@ -58,15 +57,14 @@ namespace Bowling
 			{
 				_FirstBallPins = pins;
 			}
-			else
+			else if (_SecondBallPins ==  null)
 			{
 				_SecondBallPins = pins;
 			}
-		}
-
-		public void Bonus(int bonusScore)
-		{
-			_Bonus = bonusScore;
+			else
+			{
+				_Bonus = pins;
+			}
 		}
 	}
 
@@ -97,9 +95,16 @@ namespace Bowling
 
 			_frames[_currentFrame].Roll(pins);
 
-			if (_currentFrame > 0 && _frames[_currentFrame - 1].IsSpare && !_frames[_currentFrame].IsFull)
+			// So far this handles spares
+			if (_currentFrame > 0 && !_frames[_currentFrame - 1].IsScorable)
 			{
-				_frames[_currentFrame - 1].Bonus(pins);
+				_frames[_currentFrame - 1].Roll(pins);
+			}
+
+			// Make this handle strikes
+			if (_currentFrame > 0 && _frames[_currentFrame - 1].IsStrike && _frames[_currentFrame - 1].IsScorable && _frames[_currentFrame].IsFull)
+			{
+				_frames[_currentFrame - 1].Roll(pins);
 			}
 		}
 
