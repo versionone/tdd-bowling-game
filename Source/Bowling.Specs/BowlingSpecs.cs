@@ -192,6 +192,27 @@ namespace specs_for_bowling
 		}
 	}
 
+	public class first_two_frames_are_strike_followed_by_all_twos : concerns<BowlingGame>
+	{
+		private int _score;
+
+		protected override void context()
+		{
+			var game = build_up();
+
+			game.Roll(10);
+			game.Roll(10);
+
+			16.times(() => game.Roll(2));
+			_score = game.Score;
+		}
+
+		[Specification]
+		public void score_should_be_sixtyeight()
+		{
+			_score.ShouldEqual(68);
+		}
+	}
 	public class open_frame : concerns<Frame>
 	{
 		protected override void context()

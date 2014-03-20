@@ -101,10 +101,9 @@ namespace Bowling
 				_frames[_currentFrame - 1].Roll(pins);
 			}
 
-			// Make this handle strikes
-			if (_currentFrame > 0 && _frames[_currentFrame - 1].IsStrike && _frames[_currentFrame - 1].IsScorable && _frames[_currentFrame].IsFull)
+			if (_currentFrame > 1 && !_frames[_currentFrame - 2].IsScorable)
 			{
-				_frames[_currentFrame - 1].Roll(pins);
+				_frames[_currentFrame - 2].Roll(pins);
 			}
 		}
 
