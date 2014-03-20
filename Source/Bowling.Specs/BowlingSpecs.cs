@@ -1,3 +1,4 @@
+using System;
 using Bowling;
 using Bowling.Specs.Infrastructure;
 using NUnit.Framework;
@@ -79,6 +80,226 @@ namespace specs_for_bowling
 		public void score_should_be_fourtyeight()
 		{
 			_score.ShouldEqual(48);
+		}
+	}
+
+	public class when_the_first_two_rolls_are_two_and_the_rest_are_three : concerns<BowlingGame>
+	{
+		private int _score;
+
+		protected override void context()
+		{
+			var game = build_up();
+			game.Roll(2);
+			game.Roll(2);
+			18.times(() => game.Roll(3));
+			_score = game.Score;
+		}
+
+		[Specification]
+		public void score_should_be_fiftyeight()
+		{
+			_score.ShouldEqual(58);
+		}
+	}
+
+	public class when_the_first_two_frames_are_spare_and_the_rest_are_two : concerns<BowlingGame>
+	{
+		private int _score;
+
+		protected override void context()
+		{
+			var game = build_up();
+			game.Roll(2);
+			game.Roll(8);
+			game.Roll(2);
+			game.Roll(8);
+			16.times(() => game.Roll(2));
+			_score = game.Score;
+		}
+
+		[Specification]
+		public void score_should_be_fiftysix()
+		{
+			_score.ShouldEqual(56);
+		}
+	}
+
+	public class when_shenangins : concerns<BowlingGame>
+	{
+		private int _score;
+
+		protected override void context()
+		{
+			var game = build_up();
+
+			// Frame 1 
+			game.Roll(0);
+			game.Roll(0);
+
+			// Frame 2
+			game.Roll(0);
+			game.Roll(2);
+
+			// Frame 3
+			game.Roll(8);
+			game.Roll(1);
+			
+			14.times(() => game.Roll(0));
+			_score = game.Score;
+		}
+
+		[Specification]
+		public void score_should_be_fiftysix()
+		{
+			_score.ShouldEqual(11);
+		}
+	}
+
+
+	public class open_frame : concerns<Frame>
+	{
+		protected override void context()
+		{
+			var frame = build_up();
+			frame.Roll(0);
+			frame.Roll(5);
+		}
+
+		[Specification]
+		public void score_should_be_5()
+		{
+			build_up().Score.ShouldEqual(5);
+		}
+
+		[Specification]
+		public void frame_should_be_full()
+		{
+			build_up().IsFull.ShouldBeTrue();
+		}
+
+		[Specification]
+		public void frame_should_be_scorable()
+		{
+			build_up().IsScorable.ShouldBeTrue();
+		}
+	}
+
+	public class open_frame_reversed : concerns<Frame>
+	{
+		protected override void context()
+		{
+			var frame = build_up();
+			frame.Roll(5);
+			frame.Roll(0);
+		}
+
+		[Specification]
+		public void score_should_be_5()
+		{
+			build_up().Score.ShouldEqual(5);
+		}
+
+		[Specification]
+		public void frame_should_be_full()
+		{
+			build_up().IsFull.ShouldBeTrue();
+		}
+
+		[Specification]
+		public void frame_should_be_scorable()
+		{
+			build_up().IsScorable.ShouldBeTrue();
+		}
+	}
+
+	public class incomplete_frame : concerns<Frame>
+	{
+		protected override void context()
+		{
+			var frame = build_up();
+			frame.Roll(7);
+		}
+
+		[Specification]
+		public void it_is_not_scorable()
+		{
+			build_up().IsScorable.ShouldBeFalse();
+		}
+
+		[Specification]
+		public void frame_should_be_full()
+		{
+			build_up().IsFull.ShouldBeFalse();
+		}
+	}
+
+	public class spare_frame_unfinished : concerns<Frame>
+	{
+		protected override void context()
+		{
+			var frame = build_up();
+			frame.Roll(7);
+			frame.Roll(3);
+		}
+
+		[Specification, ExpectedException(typeof(InvalidOperationException))]
+		public void score_should_throw_exception()
+		{
+			var score = build_up().Score;
+		}
+
+		[Specification]
+		public void score_should_be_marked_spare()
+		{
+			build_up().IsSpare.ShouldBeTrue();
+		}
+
+		[Specification]
+		public void frame_should_be_full()
+		{
+			build_up().IsFull.ShouldBeTrue();
+		}
+
+		[Specification]
+		public void frame_should_be_scorable()
+		{
+			build_up().IsScorable.ShouldBeFalse();
+		}
+	}
+
+	public class spare_frame_finished : concerns<Frame>
+	{
+		protected override void context()
+		{
+			var frame = build_up();
+			frame.Roll(7);
+			frame.Roll(3);
+			frame.Bonus(4);
+		}
+
+		[Specification]
+		public void score_should_be_14()
+		{
+			build_up().Score.ShouldEqual(14);
+		}
+
+		[Specification]
+		public void score_should_be_marked_spare()
+		{
+			build_up().IsSpare.ShouldBeTrue();
+		}
+
+		[Specification]
+		public void frame_should_be_full()
+		{
+			build_up().IsFull.ShouldBeTrue();
+		}
+
+		[Specification]
+		public void frame_should_be_scorable()
+		{
+			build_up().IsScorable.ShouldBeTrue();
 		}
 	}
 }
