@@ -88,4 +88,22 @@ namespace specs_for_bowling
 			_game.Score().should_equal(48);
 		}
 	}
+
+	public class when_rolling_pair_of_2s_then_3s : concerns
+	{
+		private BowlingGame _game;
+
+		protected override void context()
+		{
+			_game = new BowlingGame();
+			2.times(() => _game.Roll(2));
+			18.times(() => _game.Roll(3));
+		}
+
+		[Specification]
+		public void the_score_is()
+		{
+			_game.Score().should_equal(58);
+		}
+	}
 }
