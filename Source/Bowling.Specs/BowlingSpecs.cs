@@ -83,4 +83,41 @@ namespace specs_for_bowling
 			_bowlingGame.Score.ShouldEqual(48);
 		}
 	}
+
+	public class when_the_first_2_frames_are_spares_and_the_rest_score_2 : concerns
+	{
+		private BowlingGame _bowlingGame;
+
+		protected override void context()
+		{
+			_bowlingGame = new BowlingGame();
+			_bowlingGame.Roll(8);
+			_bowlingGame.Roll(2);
+			_bowlingGame.Roll(6);
+			_bowlingGame.Roll(4);
+
+			16.times(() => _bowlingGame.Roll(2));
+		}
+
+		[Specification]
+		public void the_first_frame_is_a_spare()
+		{
+			_bowlingGame.IsSpare(8, 2);
+			_bowlingGame.CalculateScore();
+			_bowlingGame.Frames[0].ShouldEqual(16);
+		}
+		[Specification]
+		public void the_second_frame_is_a_spare()
+		{
+			_bowlingGame.IsSpare(6, 4);
+			_bowlingGame.CalculateScore();
+			_bowlingGame.Frames[1].ShouldEqual(12);
+		}
+		[Specification]
+		public void the_score_is_60()
+		{
+
+			_bowlingGame.Score.ShouldEqual(60);
+		}
+	}
 }

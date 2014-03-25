@@ -29,7 +29,7 @@ namespace Bowling
 
 				if (IsSpare(firstRoll, secondRoll))
 				{
-					frames.Add(firstRoll + secondRoll + rolls[1 + 2]);
+					frames.Add(firstRoll + secondRoll + rolls[i + 2]);
 				}
 				else
 				{
