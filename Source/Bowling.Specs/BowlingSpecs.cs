@@ -1,24 +1,9 @@
 using Bowling;
 using Bowling.Specs.Infrastructure;
+using NUnit.Framework;
 
 namespace specs_for_bowling
 {
-	public class when_everything_is_wired_up : concerns
-	{
-		private bool _itWorked;
-
-		protected override void context()
-		{
-			_itWorked = true;
-		}
-
-		[Specification]
-		public void it_works()
-		{
-			_itWorked.ShouldBeTrue();
-		}
-	}
-
 	public class when_its_all_gutter_balls : concerns
 	{
 		private BowlingGame _bowlingGame;
@@ -118,6 +103,54 @@ namespace specs_for_bowling
 		{
 
 			_bowlingGame.Score.ShouldEqual(60);
+		}
+	}
+
+	public class when_10_frames_have_been_bowled : concerns
+	{
+		private BowlingGame _bowlingGame;
+		protected override void context()
+		{
+			_bowlingGame = new BowlingGame();
+			_bowlingGame.Roll(8);
+			_bowlingGame.Roll(2);
+			_bowlingGame.Roll(6);
+			_bowlingGame.Roll(4);
+
+			16.times(() => _bowlingGame.Roll(2));
+		}
+
+		[Specification]
+		[ExpectedException(typeof(BowlingGame.GameOverException), ExpectedMessage = "The game is over!")]
+		public void cannot_play_after_the_game_is_over()
+		{
+			_bowlingGame.Roll(3);
+		}
+	}
+
+	public class when_the_first_frame_is_a_spike_and_the_rest_score_2 : concerns
+	{
+		private BowlingGame _bowlingGame;
+
+		protected override void context()
+		{
+			_bowlingGame = new BowlingGame();
+			_bowlingGame.Roll(10);
+			18.times(() => _bowlingGame.Roll(2));
+		}
+
+		[Specification]
+		public void the_first_frame_is_a_spike()
+		{
+			//_bowlingGame.IsSpare(8, 2);
+			//_bowlingGame.CalculateScore();
+			//_bowlingGame.Frames[0].ShouldEqual(12);
+		}
+		[Specification]
+		public void the_score_is_50()
+		{
+
+			_bowlingGame.Score.ShouldEqual(50);
 		}
 	}
 }
