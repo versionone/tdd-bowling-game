@@ -181,4 +181,29 @@ namespace specs_for_bowling
 			_bowlingGame.Score.ShouldEqual(68);
 		}
 	}
+
+	public class when_the_game_is_perfect : concerns
+	{
+		private BowlingGame _bowlingGame;
+
+		protected override void context()
+		{
+			_bowlingGame = new BowlingGame();
+			12.times(() => _bowlingGame.Roll(10));
+		}
+
+		[Specification]
+		public void the_score_is_300()
+		{
+			_bowlingGame.Score.ShouldEqual(300);
+		}
+
+		[Specification]
+		[ExpectedException(typeof(BowlingGame.GameOverException), ExpectedMessage = "The game is over!")]
+		public void the_game_is_over()
+		{
+			_bowlingGame.Roll(5);
+		}
+	}
+
 }
