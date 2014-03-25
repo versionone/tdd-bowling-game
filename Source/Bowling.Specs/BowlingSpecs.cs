@@ -88,7 +88,6 @@ namespace specs_for_bowling
 		public void the_first_frame_is_a_spare()
 		{
 			_bowlingGame.IsSpare(8, 2);
-			_bowlingGame.CalculateScore();
 			_bowlingGame.Frames[0].ShouldEqual(16);
 		}
 		[Specification]
@@ -128,7 +127,7 @@ namespace specs_for_bowling
 		}
 	}
 
-	public class when_the_first_frame_is_a_spike_and_the_rest_score_2 : concerns
+	public class when_the_first_frame_is_a_strike_and_the_rest_score_2 : concerns
 	{
 		private BowlingGame _bowlingGame;
 
@@ -140,17 +139,46 @@ namespace specs_for_bowling
 		}
 
 		[Specification]
-		public void the_first_frame_is_a_spike()
+		public void the_first_frame_is_a_strike()
 		{
-			//_bowlingGame.IsSpare(8, 2);
-			//_bowlingGame.CalculateScore();
-			//_bowlingGame.Frames[0].ShouldEqual(12);
+			_bowlingGame.IsStrike(10);
+			_bowlingGame.Frames[0].ShouldEqual(14);
 		}
 		[Specification]
 		public void the_score_is_50()
 		{
 
 			_bowlingGame.Score.ShouldEqual(50);
+		}
+	}
+	public class when_the_first_2_frames_are_strikes_and_the_rest_score_2 : concerns
+	{
+		private BowlingGame _bowlingGame;
+
+		protected override void context()
+		{
+			_bowlingGame = new BowlingGame();
+			_bowlingGame.Roll(10);
+			_bowlingGame.Roll(10);
+			16.times(() => _bowlingGame.Roll(2));
+		}
+
+		[Specification]
+		public void the_first_frame_is_a_strike()
+		{
+			_bowlingGame.IsStrike(10);
+			_bowlingGame.Frames[0].ShouldEqual(22);
+		}
+		[Specification]
+		public void the_second_frame_is_a_strike()
+		{
+			_bowlingGame.Frames[1].ShouldEqual(14);
+		}
+		[Specification]
+		public void the_score_is_68()
+		{
+
+			_bowlingGame.Score.ShouldEqual(68);
 		}
 	}
 }

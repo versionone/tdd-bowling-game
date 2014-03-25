@@ -41,10 +41,23 @@ namespace Bowling
 				int secondRoll = rolls[i + 1];
 
 				if (IsStrike(firstRoll)){
-					if (i + 3 < rolls.Count) // current frame score is unknown at this point
+					if (i + 2 < rolls.Count)
 					{
-						frames.Add(firstRoll + secondRoll + rolls[i + 2] + rolls[i + 3]);
-					}					
+						if (!IsStrike(rolls[i + 2]))
+						{
+							if (i + 3 < rolls.Count) // current frame score is unknown at this point
+							{
+								frames.Add(firstRoll + rolls[i + 2] + rolls[i + 3]);
+							}
+						}
+						else
+						{
+							if (i + 4 < rolls.Count) // current frame score is unknown at this point
+							{
+								frames.Add(firstRoll + rolls[i + 2] + rolls[i + 4]);
+							}
+						}
+					}
 				}else if (IsSpare(firstRoll, secondRoll)){
 					if (i + 2 < rolls.Count) // current frame score is unknown at this point
 					{
