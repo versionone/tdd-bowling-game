@@ -24,14 +24,16 @@ namespace Bowling
 		{
 			for (int i = 0; i < rolls.Count -1; i = i + 2)
 			{
-				
-				if (IsSpare(rolls[i], rolls[i + 1]))
+				int firstRoll = rolls[i];
+				int secondRoll = rolls[i + 1];
+
+				if (IsSpare(firstRoll, secondRoll))
 				{
-					frames.Add(rolls[i] + rolls[i + 1] + rolls[1 + 2]);
+					frames.Add(firstRoll + secondRoll + rolls[1 + 2]);
 				}
 				else
 				{
-					frames.Add(rolls[i] + rolls[i + 1]);	
+					frames.Add(firstRoll + secondRoll);	
 				}
 			}
 			return frames.Sum();
