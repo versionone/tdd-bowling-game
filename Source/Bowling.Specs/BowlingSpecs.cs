@@ -35,4 +35,24 @@ namespace specs_for_bowling
 			_bowlingGame.Score.ShouldEqual(0);
 		}
 	}
+	public class when_it_alternates_nines_and_gutters : concerns
+	{
+		private BowlingGame _bowlingGame;
+
+		protected override void context()
+		{
+			_bowlingGame = new BowlingGame();
+		}
+
+		[Specification]
+		public void the_score_is_ninety()
+		{
+			10.times(() =>
+			{
+				_bowlingGame.Roll(0);
+				_bowlingGame.Roll(9);
+			});
+			_bowlingGame.Score.ShouldEqual(90);
+		}
+	}
 }
