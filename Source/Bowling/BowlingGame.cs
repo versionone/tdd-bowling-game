@@ -10,40 +10,45 @@ namespace Bowling
 		private int _rolls = 0;
 		private int _score = 0;
 		private int _previousRollInFrame = -1;
-		private bool _spare = false;
+		private int _bonuses = 0;
 
 		public void Roll(int pins)
 		{
 			if (_rolls == 20) throw new Exception("Game is finished");
 			_rolls++;
 			_score += pins;
-			applySpare(pins);
-			checkSpare(pins);
+			applyBonuses(pins);
+			checkBonuses(pins);
 		}
 
-		public void checkSpare(int pins)
+		public void checkBonuses(int pins)
 		{
 			if (_previousRollInFrame >= 0)
 			{
 				if (pins + _previousRollInFrame == 10)
 				{
-					_spare = true;
+					_bonuses++;
 				}
 
 				_previousRollInFrame = -1;
 			}
 			else
 			{
+				if (pins == 10)
+				{
+					_bonuses += 2;
+					_rolls++;
+				}
 				_previousRollInFrame = pins;
 			}
 		}
 
-		public void applySpare(int pins)
+		public void applyBonuses(int pins)
 		{
-			if (_spare)
+			while (_bonuses > 0)
 			{
 				_score += pins;
-				_spare = false;
+				_bonuses--;
 			}
 		}
 
