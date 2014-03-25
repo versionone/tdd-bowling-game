@@ -16,12 +16,10 @@ msbuild :compile => :assemblyinfo do |msb|
 end
 
 desc "Runs specifications."
-exec :specs => :compile do |gallio|
-  gallio.command = @build[:gallio]
-  gallio.parameters(
-    "./Source/Bowling.Specs/bin/#{@build[:config]}/Bowling.Specs.dll",
-    '/report-name-format:specifications',
-    '/report-type:XML')
+nunit :specs => [:compile] do |t|
+  t.command = "..\\core\\lib\\nunit\\bin\\net-2.0\\nunit-console-x86.exe"
+  t.assemblies  "./Source/Bowling.Specs/bin/#{@build[:config]}/Bowling.Specs.dll"
+  t.options [ " /xml=nunit.results.xml" ]
 end
 
 assemblyinfo :assemblyinfo  do |asm|
@@ -29,7 +27,7 @@ assemblyinfo :assemblyinfo  do |asm|
   asm.description = @build[:config].to_s
   asm.product_name = "TDD Bowling Game"
   asm.copyright = "Copyright #{Time.now.year} VersionOne, Inc."
-  
+
   asm.output_file = "Source/Bowling.Specs/AssemblyInfoCommon.cs"
 end
 
