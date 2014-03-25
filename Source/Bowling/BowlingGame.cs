@@ -1,60 +1,105 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Bowling
 {
+	public class Frame
+	{
+		public List<int> rolls = new List<int>();
+
+
+		public int RequiredRolls
+		{
+			get
+			{
+				if (IsStrike() || IsSpare())
+				{
+					return 3;
+				}
+				else
+				{
+					return 2;
+				}
+			}
+		}
+
+		public bool IsStrike()
+		{
+			return rolls.Count == 1 && rolls.Sum() == 10;
+		}
+
+		public bool IsSpare()
+		{
+			return rolls.Count == 2 && rolls.Sum() == 10;
+		}
+
+		public bool IsOpen()
+		{
+			return rolls.Count < 2 && !IsStrike();
+		}
+
+		public void AddRoll(int roll)
+		{
+			rolls.Add(roll);
+		}
+	}
+
 	public class BowlingGame
 	{
-		private int _rolls = 0;
-		private int _score = 0;
-		private int _previousRollInFrame = -1;
-		private int _bonuses = 0;
+		private readonly List<Frame> _frames = new List<Frame>(); 
+		private Frame _bonus = new Frame();
 
 		public void Roll(int pins)
 		{
-			if (_rolls == 20) throw new Exception("Game is finished");
-			_rolls++;
-			_score += pins;
-			applyBonuses(pins);
-			checkBonuses(pins);
+			if (IsGameFinished()) throw new Exception("Game is finished");
+
+			CurrentFrame().AddRoll(pins);
 		}
 
-		public void checkBonuses(int pins)
+		public Frame CurrentFrame()
 		{
-			if (_previousRollInFrame >= 0)
-			{
-				if (pins + _previousRollInFrame == 10)
-				{
-					_bonuses++;
-				}
+			var firstOpen = _frames.FirstOrDefault(frame => frame.IsOpen());
+			if (firstOpen != null)
+				return firstOpen;
 
-				_previousRollInFrame = -1;
-			}
-			else
-			{
-				if (pins == 10)
-				{
-					_bonuses += 2;
-					_rolls++;
-				}
-				_previousRollInFrame = pins;
-			}
+			if (_frames.Count == 10)
+				return _bonus;
+
+			Frame newFrame = new Frame();
+			_frames.Add(newFrame);
+
+			return newFrame;
 		}
 
-		public void applyBonuses(int pins)
+		public int RequiredRolls
 		{
-			while (_bonuses > 0)
-			{
-				_score += pins;
-				_bonuses--;
-			}
+			get { return _frames.Select(frame => frame.RequiredRolls).Sum(); }
+		}
+
+		public int PerformedRolls
+		{
+			get { return _frames.SelectMany(frame => frame.rolls).Concat(_bonus.rolls).Count(); }
+		}
+
+		public bool IsGameFinished()
+		{
+			if (_frames.Count < 10)
+				return false;
+
+			var last = _frames.Last();
+
+			return last.rolls.Concat(_bonus.rolls).Count() == last.RequiredRolls;
+		}
+
+		public IEnumerable<int> getRolls(int frameIndex, int rolls)
+		{
+			return _frames.Skip(frameIndex).SelectMany(frame => frame.rolls).Concat(_bonus.rolls).Take(rolls);
 		}
 
 		public int Score()
 		{
-			return _score;
+			return _frames.SelectMany(frame => getRolls(_frames.IndexOf(frame), frame.RequiredRolls)).Sum();
 		}
 	}
 }
