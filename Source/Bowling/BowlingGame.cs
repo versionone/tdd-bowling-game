@@ -7,12 +7,15 @@ namespace Bowling
 {
 	public class BowlingGame
 	{
+		private int _rolls = 0;
 		private int _score = 0;
 		private int _previousRollInFrame = -1;
 		private bool _spare = false;
 
 		public void Roll(int pins)
 		{
+			if (_rolls == 20) throw new Exception("Game is finished");
+			_rolls++;
 			_score += pins;
 			applySpare(pins);
 			checkSpare(pins);
