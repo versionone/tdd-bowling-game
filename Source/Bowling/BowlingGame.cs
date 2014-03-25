@@ -40,31 +40,17 @@ namespace Bowling
 				int firstRoll = rolls[i];
 				int secondRoll = rolls[i + 1];
 
-				if (IsStrike(firstRoll)){
-					if (i + 2 < rolls.Count)
-					{
-						if (!IsStrike(rolls[i + 2]))
-						{
-							if (i + 3 < rolls.Count) // current frame score is unknown at this point
-							{
-								frames.Add(firstRoll + rolls[i + 2] + rolls[i + 3]);
-							}
-						}
-						else
-						{
-							if (i + 4 < rolls.Count) // current frame score is unknown at this point
-							{
-								frames.Add(firstRoll + rolls[i + 2] + rolls[i + 4]);
-							}
-						}
-					}
-				}else if (IsSpare(firstRoll, secondRoll)){
-					if (i + 2 < rolls.Count) // current frame score is unknown at this point
-					{
-						frames.Add(firstRoll + secondRoll + rolls[i + 2]);
-					}
-				}else{
-					frames.Add(firstRoll + secondRoll);	
+				if (IsStrike(firstRoll))
+				{
+					AddStrikeAndBonusToScore(i);
+				}
+				else if (IsSpare(firstRoll, secondRoll) && (i + 2 < rolls.Count))
+				{
+					frames.Add(firstRoll + secondRoll + rolls[i + 2]);
+				}
+				else
+				{
+					frames.Add(firstRoll + secondRoll);
 				}
 			}
 			if (frames.Count > 10 || (frames.Count == 10 && rolls.Count == 21))
@@ -72,6 +58,23 @@ namespace Bowling
 				throw new GameOverException("The game is over!");
 			}
 			Score = frames.Sum();
+		}
+
+		private void AddStrikeAndBonusToScore(int i)
+		{
+			if (RollExistsAt(i,2) && IsStrike(rolls[i + 2]))
+			{
+				if (RollExistsAt(i,4)) frames.Add(rolls[i] + rolls[i + 2] + rolls[i + 4]);
+			}
+			else if (RollExistsAt(i,3))
+			{
+				frames.Add(rolls[i] + rolls[i + 2] + rolls[i + 3]);
+			}
+		}
+
+		private bool RollExistsAt(int index, int offset)
+		{
+			return index + offset < rolls.Count;
 		}
 
 		public bool IsSpare(int first, int second)
