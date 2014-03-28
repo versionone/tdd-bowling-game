@@ -1,3 +1,4 @@
+using System;
 using Bowling;
 using Bowling.Specs.Infrastructure;
 
@@ -134,6 +135,24 @@ namespace specs_for_bowling
 		public void the_score_should_be()
 		{
 			_game.Score().ShouldEqual(56);
+		}
+	}
+
+	public class when_rolling_ten_frames : concerns
+	{
+		private BowlingGame _game;
+
+		protected override void context()
+		{
+			_game = new BowlingGame();
+
+			20.times(() => _game.Roll(2));
+		}
+
+		[Specification]
+		public void no_more_rolls_are_allowed()
+		{
+			typeof(Exception).ShouldBeThrownBy(() => _game.Roll(2));
 		}
 	}
 }
