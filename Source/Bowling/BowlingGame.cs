@@ -5,6 +5,15 @@ using System.Text;
 
 namespace Bowling
 {
+	public enum FrameType { Normal, Spare, Strike }
+
+	public class BowlingFrame
+	{
+		public FrameType Type { get; set; }
+		public int firstRoll = 0;
+		public int secondRoll = 0;
+	}
+
 	public class BowlingGame
 	{
 		private int _score = 0;
@@ -13,6 +22,7 @@ namespace Bowling
 		private bool _spare = false;
 		private int _frameCounter = 0;
 		private bool _strike = false;
+		private BowlingFrame[] _frames = new BowlingFrame[10];
 
 		public void Roll(int pins)
 		{
@@ -21,44 +31,61 @@ namespace Bowling
 				throw new Exception("More than 10 frames");
 			}
 
-			if (_strike)
+			BowlingFrame frame;
+			if (!_isSecondRoll)
 			{
-				_score += pins;
-			}
-
-			if (_isSecondRoll)
-			{
-				if (_previousScore + pins == 10)
-				{
-					_spare = true;
-				}
-
-				_isSecondRoll = false;
-				_strike = false;
-				_frameCounter++;
-			}
-			else
-			{
-				if (_spare)
-				{
-					_score += pins;
-					_spare = false;
-				}
+				frame = new BowlingFrame();
+				_frames[_frameCounter] = frame;
 
 				if (pins == 10)
 				{
-					_strike = true;
-					_frameCounter++;
+					frame.Type = FrameType.Strike;
 				}
-				else
+
+				frame.firstRoll = pins;
+			}
+			else
+			{
+				frame = _frames[_frameCounter];
+
+				if (frame.firstRoll + pins == 10)
 				{
-					_isSecondRoll = true;
+					frame.Type = FrameType.Spare;
 				}
 			}
 
 			_score += pins;
 
-			_previousScore = pins;
+			if (_frameCounter > 0)
+			{
+				BowlingFrame previousFrame = _frames[_frameCounter - 1];
+
+				if ((previousFrame.Type == FrameType.Spare && !_isSecondRoll) || previousFrame.Type == FrameType.Strike)
+				{
+					_score += pins;
+				}
+
+				if (_frameCounter > 1)
+				{
+					var previousPreviousFrame = _frames[_frameCounter - 2];
+
+					if (previousPreviousFrame.Type == FrameType.Strike && !_isSecondRoll && previousFrame.Type == FrameType.Strike)
+					{
+						_score += pins;
+					}
+				}
+			}
+
+
+			if (frame.Type == FrameType.Strike || _isSecondRoll == true)
+			{
+				_isSecondRoll = false;
+				_frameCounter++;
+			}
+			else
+			{
+				_isSecondRoll = true;
+			}
 		}
 
 		public int Score()
