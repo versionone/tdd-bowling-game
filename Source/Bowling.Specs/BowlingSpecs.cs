@@ -87,9 +87,30 @@ namespace specs_for_bowling
 		}
 
 		[Specification]
-		public void the_score_should_be_58()
+		public void the_score_should_be()
 		{
 			_game.Score().ShouldEqual(70);
+		}
+	}
+
+	public class when_rolling_a_spare_followed_by_2s : concerns
+	{
+		private BowlingGame _game;
+
+		protected override void context()
+		{
+			_game = new BowlingGame();
+
+			_game.Roll(7);
+			_game.Roll(3);
+	
+			18.times(() => _game.Roll(2));
+		}
+
+		[Specification]
+		public void the_score_should_be()
+		{
+			_game.Score().ShouldEqual(48);
 		}
 	}
 }
