@@ -4,30 +4,58 @@ using System.Linq;
 
 namespace Bowling
 {
+	public enum FrameType { Normal, Spare, Strike }
+
+	public class Frame
+	{
+		public int First { get; set; }
+		public int? Second { get; set; }
+
+		public int Sum
+		{
+			get { return First + Second.GetValueOrDefault(0); }
+		}
+		public FrameType Type
+		{
+			get
+			{
+				if (First == 10) return FrameType.Strike;
+				if (Sum == 10) return FrameType.Spare;
+				return FrameType.Normal;
+			}
+		}
+	}
+
 	public class BowlingGame
 	{
-		private readonly List<int> _rolls = new List<int>();
+		private readonly List<Frame> _frames = new List<Frame>();
 
 		private bool _isFirstRoll = true;
-		private int _frameCount = 0;
 		private int _allowedBonus = 0;
 
 		public void Roll(int pins)
 		{
+			Frame frame;
+
 			if (_isFirstRoll)
 			{
-				_frameCount++;
-				if (pins != 10)
-				{
+				frame = new Frame();
+				_frames.Add(frame);
+
+				frame.First = pins;
+
+				if (frame.Type != FrameType.Strike)
 					_isFirstRoll = false;
-				}
 			}
 			else
 			{
+				frame = _frames.Last();
+				frame.Second = pins;
+
 				_isFirstRoll = true;
 			}
 
-			if (_frameCount > 10)
+			if (_frames.Count > 10)
 			{
 				if (_allowedBonus == 0)
 					throw new Exception("Too many frames");
@@ -35,55 +63,36 @@ namespace Bowling
 				_allowedBonus--;
 			}
 
-			_rolls.Add(pins);
-
-			if (_frameCount == 10)
-				_allowedBonus = _rolls.Last() == 10 ? 2 : _rolls.Skip(_rolls.Count() - 2).Sum() == 10 ? 1 : 0;
+			if (_frames.Count == 10)
+				_allowedBonus = _frames.Last().Type == FrameType.Strike ? 2 : _frames.Last().Type == FrameType.Spare ? 1 : 0;
 		}
 
 		public int Score()
 		{
 			int score = 0;
-			bool isFirstRoll = true;
-			int frameCount = 0;
 
-			for (int i = 0; i < _rolls.Count && frameCount < 10; i++)
+			for (int i = 0; i < _frames.Count && i < 10; i++)
 			{
-				int first = _rolls[i];
-				int? second = null;
-				int? third = null;
+				var frame = _frames[i];
+				score += frame.Sum;
 
-				score += first;
-
-				if (i < _rolls.Count - 1)
-					second = _rolls[i + 1];
-
-				if (i < _rolls.Count - 2)
-					third = _rolls[i + 2];
-
-				if (isFirstRoll)
+				switch (frame.Type)
 				{
-					if (first == 10)
-					{
-						// Strike
-						score += second.GetValueOrDefault(0) + third.GetValueOrDefault(0);
-						frameCount++;
-					}
-					else
-					{
-						if (first + second == 10)
+					case FrameType.Normal:
+						// Do nothing
+						break;
+					case FrameType.Spare:
+						score += _frames[i + 1].First;
+						break;
+					case FrameType.Strike:
+						score += _frames[i + 1].Sum;
+						if (_frames[i + 1].Type == FrameType.Strike)
 						{
-							// Spare
-							score += third.GetValueOrDefault(0);
+							score += _frames[i + 2].First;
 						}
-
-						isFirstRoll = false;
-					}
-				}
-				else
-				{
-					isFirstRoll = true;
-					frameCount++;
+						break;
+					default:
+						throw new ArgumentOutOfRangeException();
 				}
 			}
 
