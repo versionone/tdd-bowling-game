@@ -1,139 +1,44 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Bowling
 {
-	public enum FrameType { Normal, Spare, Strike }
-
-	public class BowlingFrame
-	{
-		public FrameType Type { get; set; }
-		public int firstRoll = 0;
-		public int secondRoll = 0;
-	}
-
-	public class ClassicBowlingGame
-	{
-		private int _score = 0;
-		private bool _isSecondRoll = false;
-		private int _frameCounter = 0;
-		private BowlingFrame[] _frames = new BowlingFrame[10];
-		private int _bonus = 0;
-		private bool _bonusRolls = false;
-
-		public void Roll(int pins)
-		{
-			if (_bonusRolls)
-			{
-				if (_bonus > 0)
-				{
-					_score += pins;
-					_bonus--;
-
-					if (_bonus == 1)
-					{
-						var ninethFrame = _frames[8];
-						if (ninethFrame.Type == FrameType.Strike)
-						{
-							_score += 10;
-						}
-					}
-				}
-
-				return;
-			}
-
-			if (_frameCounter == 10)
-			{
-				throw new Exception("More than 10 frames");
-			}
-
-			BowlingFrame frame;
-			if (!_isSecondRoll)
-			{
-				frame = new BowlingFrame();
-				_frames[_frameCounter] = frame;
-
-				if (pins == 10)
-				{
-					frame.Type = FrameType.Strike;
-				}
-
-				frame.firstRoll = pins;
-			}
-			else
-			{
-				frame = _frames[_frameCounter];
-
-				if (frame.firstRoll + pins == 10)
-				{
-					frame.Type = FrameType.Spare;
-				}
-			}
-
-			_score += pins;
-
-			if (_frameCounter > 0)
-			{
-				BowlingFrame previousFrame = _frames[_frameCounter - 1];
-
-				if ((previousFrame.Type == FrameType.Spare && !_isSecondRoll) || previousFrame.Type == FrameType.Strike)
-				{
-					_score += pins;
-				}
-
-				if (_frameCounter > 1)
-				{
-					var previousPreviousFrame = _frames[_frameCounter - 2];
-
-					if (previousPreviousFrame.Type == FrameType.Strike && !_isSecondRoll && previousFrame.Type == FrameType.Strike)
-					{
-						_score += pins;
-					}
-				}
-			}
-
-			if (_frameCounter == 9)
-			{
-				if (frame.Type == FrameType.Strike && !_bonusRolls)
-				{
-					_bonus = 2;
-					_bonusRolls = true;
-				}
-
-				if (frame.Type == FrameType.Spare && !_bonusRolls)
-				{
-					_bonus = 1;
-					_bonusRolls = true;
-				}
-			}
-
-			if (frame.Type == FrameType.Strike || _isSecondRoll == true)
-			{
-				_isSecondRoll = false;
-				_frameCounter++;
-			}
-			else
-			{
-				_isSecondRoll = true;
-			}
-		}
-
-		public int Score()
-		{
-			return _score;
-		}
-	}
-
 	public class BowlingGame
 	{
 		private readonly List<int> _rolls = new List<int>();
 
+		private bool _isFirstRoll = true;
+		private int _frameCount = 0;
+		private int _allowedBonus = 0;
+
 		public void Roll(int pins)
 		{
+			if (_isFirstRoll)
+			{
+				_frameCount++;
+				if (pins != 10)
+				{
+					_isFirstRoll = false;
+				}
+			}
+			else
+			{
+				_isFirstRoll = true;
+			}
+
+			if (_frameCount > 10)
+			{
+				if (_allowedBonus == 0)
+					throw new Exception("Too many frames");
+
+				_allowedBonus--;
+			}
+
 			_rolls.Add(pins);
+
+			if (_frameCount == 10)
+				_allowedBonus = _rolls.Last() == 10 ? 2 : _rolls.Skip(_rolls.Count() - 2).Sum() == 10 ? 1 : 0;
 		}
 
 		public int Score()
