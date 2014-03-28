@@ -129,7 +129,7 @@ namespace Bowling
 
 	public class BowlingGame
 	{
-		private readonly List<int> _rolls = new List<int>(); 
+		private readonly List<int> _rolls = new List<int>();
 
 		public void Roll(int pins)
 		{
@@ -140,8 +140,9 @@ namespace Bowling
 		{
 			int score = 0;
 			bool isFirstRoll = true;
+			int frameCount = 0;
 
-			for (int i = 0; i < _rolls.Count; i++)
+			for (int i = 0; i < _rolls.Count && frameCount < 10; i++)
 			{
 				int first = _rolls[i];
 				int? second = null;
@@ -161,6 +162,7 @@ namespace Bowling
 					{
 						// Strike
 						score += second.GetValueOrDefault(0) + third.GetValueOrDefault(0);
+						frameCount++;
 					}
 					else
 					{
@@ -176,6 +178,7 @@ namespace Bowling
 				else
 				{
 					isFirstRoll = true;
+					frameCount++;
 				}
 			}
 
