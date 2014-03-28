@@ -215,4 +215,29 @@ namespace specs_for_bowling
 		}
 	}
 
+	public class when_rolling_a_dutch_200 : concerns
+	{
+		private BowlingGame _game;
+
+		protected override void context()
+		{
+			_game = new BowlingGame();
+
+			5.times(() =>
+				{
+					_game.Roll(10);
+					_game.Roll(5);
+					_game.Roll(5);
+				});
+
+			_game.Roll(10);
+		}
+
+		[Specification]
+		public void the_score_should_be()
+		{
+			_game.Score().ShouldEqual(200);
+		}
+	}
+
 }

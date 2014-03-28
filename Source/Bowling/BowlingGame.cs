@@ -102,6 +102,12 @@ namespace Bowling
 					_bonus = 2;
 					_bonusRolls = true;
 				}
+
+				if (frame.Type == FrameType.Spare && !_bonusRolls)
+				{
+					_bonus = 1;
+					_bonusRolls = true;
+				}
 			}
 
 			if (frame.Type == FrameType.Strike || _isSecondRoll == true)
