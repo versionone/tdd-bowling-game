@@ -14,7 +14,7 @@ namespace Bowling
 		public int secondRoll = 0;
 	}
 
-	public class BowlingGame
+	public class ClassicBowlingGame
 	{
 		private int _score = 0;
 		private bool _isSecondRoll = false;
@@ -124,6 +124,62 @@ namespace Bowling
 		public int Score()
 		{
 			return _score;
+		}
+	}
+
+	public class BowlingGame
+	{
+		private readonly List<int> _rolls = new List<int>(); 
+
+		public void Roll(int pins)
+		{
+			_rolls.Add(pins);
+		}
+
+		public int Score()
+		{
+			int score = 0;
+			bool isFirstRoll = true;
+
+			for (int i = 0; i < _rolls.Count; i++)
+			{
+				int first = _rolls[i];
+				int? second = null;
+				int? third = null;
+
+				score += first;
+
+				if (i < _rolls.Count - 1)
+					second = _rolls[i + 1];
+
+				if (i < _rolls.Count - 2)
+					third = _rolls[i + 2];
+
+				if (isFirstRoll)
+				{
+					if (first == 10)
+					{
+						// Strike
+						score += second.GetValueOrDefault(0) + third.GetValueOrDefault(0);
+					}
+					else
+					{
+						if (first + second == 10)
+						{
+							// Spare
+							score += third.GetValueOrDefault(0);
+						}
+
+						isFirstRoll = false;
+					}
+				}
+				else
+				{
+					isFirstRoll = true;
+				}
+			}
+
+			return score;
 		}
 	}
 }
