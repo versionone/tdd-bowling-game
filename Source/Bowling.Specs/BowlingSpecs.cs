@@ -155,4 +155,25 @@ namespace specs_for_bowling
 			typeof(Exception).ShouldBeThrownBy(() => _game.Roll(2));
 		}
 	}
+
+	public class when_rolling_a_strike_followed_by_2s : concerns
+	{
+		private BowlingGame _game;
+
+		protected override void context()
+		{
+			_game = new BowlingGame();
+
+			_game.Roll(10);
+
+			18.times(() => _game.Roll(2));
+		}
+
+		[Specification]
+		public void the_score_should_be()
+		{
+			_game.Score().ShouldEqual(50);
+		}
+	}
+
 }

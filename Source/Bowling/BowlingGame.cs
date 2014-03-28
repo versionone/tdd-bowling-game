@@ -12,6 +12,7 @@ namespace Bowling
 		private int _previousScore = 0;
 		private bool _spare = false;
 		private int _frameCounter = 0;
+		private bool _strike = false;
 
 		public void Roll(int pins)
 		{
@@ -19,6 +20,12 @@ namespace Bowling
 			{
 				throw new Exception("More than 10 frames");
 			}
+
+			if (_strike)
+			{
+				_score += pins;
+			}
+
 			if (_isSecondRoll)
 			{
 				if (_previousScore + pins == 10)
@@ -27,6 +34,7 @@ namespace Bowling
 				}
 
 				_isSecondRoll = false;
+				_strike = false;
 				_frameCounter++;
 			}
 			else
@@ -37,7 +45,15 @@ namespace Bowling
 					_spare = false;
 				}
 
-				_isSecondRoll = true;
+				if (pins == 10)
+				{
+					_strike = true;
+					_frameCounter++;
+				}
+				else
+				{
+					_isSecondRoll = true;
+				}
 			}
 
 			_score += pins;
