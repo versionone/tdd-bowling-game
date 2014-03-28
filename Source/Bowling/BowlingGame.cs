@@ -18,14 +18,33 @@ namespace Bowling
 	{
 		private int _score = 0;
 		private bool _isSecondRoll = false;
-		private int _previousScore = 0;
-		private bool _spare = false;
 		private int _frameCounter = 0;
-		private bool _strike = false;
 		private BowlingFrame[] _frames = new BowlingFrame[10];
+		private int _bonus = 0;
+		private bool _bonusRolls = false;
 
 		public void Roll(int pins)
 		{
+			if (_bonusRolls)
+			{
+				if (_bonus > 0)
+				{
+					_score += pins;
+					_bonus--;
+
+					if (_bonus == 1)
+					{
+						var ninethFrame = _frames[8];
+						if (ninethFrame.Type == FrameType.Strike)
+						{
+							_score += 10;
+						}
+					}
+				}
+
+				return;
+			}
+
 			if (_frameCounter == 10)
 			{
 				throw new Exception("More than 10 frames");
@@ -76,6 +95,14 @@ namespace Bowling
 				}
 			}
 
+			if (_frameCounter == 9)
+			{
+				if (frame.Type == FrameType.Strike && !_bonusRolls)
+				{
+					_bonus = 2;
+					_bonusRolls = true;
+				}
+			}
 
 			if (frame.Type == FrameType.Strike || _isSecondRoll == true)
 			{

@@ -197,4 +197,22 @@ namespace specs_for_bowling
 		}
 	}
 
+	public class when_rolling_a_perfect_game : concerns
+	{
+		private BowlingGame _game;
+
+		protected override void context()
+		{
+			_game = new BowlingGame();
+
+			12.times(() => _game.Roll(10));
+		}
+
+		[Specification]
+		public void the_score_should_be()
+		{
+			_game.Score().ShouldEqual(300);
+		}
+	}
+
 }
