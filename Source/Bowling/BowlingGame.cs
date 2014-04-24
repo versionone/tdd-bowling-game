@@ -48,6 +48,22 @@ namespace Bowling
 						previousFrame.Roll(pins);
 					}
 
+					if (Frames.Count == 10)
+					{
+						if (!currentFrame.FrameIsDoneScoring())
+							currentFrame.Roll(pins);
+						else
+							throw new GameOverException();
+					}
+					else
+					{
+						if (!currentFrame.FrameIsDoneScoring())
+							currentFrame.Roll(pins);
+
+						Frames.Add(new Frame(pins));
+					}
+
+/*
 					if (!currentFrame.FrameIsDoneScoring())
 					{
 						currentFrame.Roll(pins);
@@ -62,6 +78,7 @@ namespace Bowling
 					}
 
 					Frames.Add(new Frame(pins));
+*/
 				}
 			}
 		}
