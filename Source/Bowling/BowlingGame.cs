@@ -35,16 +35,32 @@ namespace Bowling
 			}
 			else
 			{
-				var lastFrame = Frames.Last();
-				if (!lastFrame.FrameIsFinished())
+				var currentFrame = Frames.Last();
+				if (!currentFrame.FrameIsDoneRolling())
 				{
-					lastFrame.Roll(pins);
+					currentFrame.Roll(pins);
+					
 				}
 				else
 				{
-					if (lastFrame.IsSpare())
+					//if (lastFrame.IsSpare())
+					//{
+					//    lastFrame.Roll(pins);
+					//}
+
+					//if (lastFrame.IsStrike())
+					//{
+					//    lastFrame.Roll(pins);
+					//}
+
+					var previousFrame = Frames.LastOrDefault(frame => frame != currentFrame);
+					if (previousFrame != null && !previousFrame.FrameIsDoneScoring())
 					{
-						lastFrame.Roll(pins);
+						previousFrame.Roll(pins);
+					}
+					if (!currentFrame.FrameIsDoneScoring())
+					{
+						currentFrame.Roll(pins);
 					}
 
 					if (Frames.Count == 10)
@@ -62,7 +78,7 @@ namespace Bowling
 		private int RollOne { get; set; }
 		private int? RollTwo { get; set; }
 		private int? RollThree { get; set; }
-
+		
 
 		public Frame(int pins)
 		{
@@ -70,12 +86,30 @@ namespace Bowling
 		}
 		public bool IsSpare()
 		{
-			return FrameScore == 10;
+			return FrameScore == 10 && RollTwo != null;
 		}
 
-		public bool FrameIsFinished()
+		public bool IsStrike()
 		{
-			return RollTwo != null;
+			return RollOne == 10;
+		}
+
+		public bool IsNormalFrame()
+		{
+			return !IsStrike() && !IsSpare();
+		}
+		public bool FrameIsDoneRolling()
+		{
+			return (IsStrike())
+			       || RollTwo != null;
+		}
+
+		
+		public bool FrameIsDoneScoring()
+		{
+			return (IsStrike() && RollTwo != null && RollThree != null)
+			       || (IsSpare() && RollThree != null)
+				   || (IsNormalFrame() && RollTwo != null);
 		}
 
 		public int FrameScore
