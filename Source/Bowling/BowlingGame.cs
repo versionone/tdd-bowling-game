@@ -51,12 +51,16 @@ namespace Bowling
 					if (!currentFrame.FrameIsDoneScoring())
 					{
 						currentFrame.Roll(pins);
+
+						if (Frames.Count == 10)
+							return;
 					}
 
 					if (Frames.Count == 10)
 					{
 						throw new GameOverException();
 					}
+
 					Frames.Add(new Frame(pins));
 				}
 			}

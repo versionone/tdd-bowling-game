@@ -158,7 +158,6 @@ namespace specs_for_bowling
 		}
 	}
 
-
 	public class first_two_frames_are_strikes_and_the_rest_are_twos : concerns<BowlingGame>
 	{
 		private BowlingGame _game;
@@ -175,6 +174,23 @@ namespace specs_for_bowling
 		public void the_score_should_be_sixty_eight()
 		{
 			_game.Score.ShouldEqual(68);
+		}
+	}
+
+	public class the_perfect_gane : concerns<BowlingGame>
+	{
+		private BowlingGame _game;
+
+		protected override void context()
+		{
+			_game = build_up();
+			12.times(index => _game.Roll(10));
+		}
+
+		[Specification]
+		public void the_score_should_be_three_hundred()
+		{
+			_game.Score.ShouldEqual(300);
 		}
 	}
 }
