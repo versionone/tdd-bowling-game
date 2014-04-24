@@ -8,7 +8,8 @@ namespace Bowling
 	{
 		private List<Frame> Frames { get; set; }
 
-		public int Score {
+		public int Score
+		{
 			get
 			{
 				int total = 0;
@@ -18,7 +19,6 @@ namespace Bowling
 				}
 				return total;
 			}
-
 		}
 
 		public BowlingGame()
@@ -43,16 +43,6 @@ namespace Bowling
 				}
 				else
 				{
-					//if (lastFrame.IsSpare())
-					//{
-					//    lastFrame.Roll(pins);
-					//}
-
-					//if (lastFrame.IsStrike())
-					//{
-					//    lastFrame.Roll(pins);
-					//}
-
 					var previousFrame = Frames.LastOrDefault(frame => frame != currentFrame);
 					if (previousFrame != null && !previousFrame.FrameIsDoneScoring())
 					{
@@ -78,33 +68,33 @@ namespace Bowling
 		private int RollOne { get; set; }
 		private int? RollTwo { get; set; }
 		private int? RollThree { get; set; }
-		
 
 		public Frame(int pins)
 		{
 			RollOne = pins;
 		}
-		public bool IsSpare()
+
+		private bool IsSpare()
 		{
 			return FrameScore == 10 && RollTwo != null;
 		}
 
-		public bool IsStrike()
+		private bool IsStrike()
 		{
 			return RollOne == 10;
 		}
 
-		public bool IsNormalFrame()
+		private bool IsNormalFrame()
 		{
 			return !IsStrike() && !IsSpare();
 		}
+
 		public bool FrameIsDoneRolling()
 		{
 			return (IsStrike())
 			       || RollTwo != null;
 		}
 
-		
 		public bool FrameIsDoneScoring()
 		{
 			return (IsStrike() && RollTwo != null && RollThree != null)
