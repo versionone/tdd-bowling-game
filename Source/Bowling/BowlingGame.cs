@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Dynamic;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -10,8 +12,9 @@ namespace Bowling
 {
 	public class BowlingGame
 	{
-		public List<int>Rolls { get; set; }
-		public List<Frame> Frames { get; set; }
+		private List<int>Rolls { get; set; }
+		private List<Frame> Frames { get; set; }
+
 		public int Score {
 			get
 			{
@@ -35,62 +38,57 @@ namespace Bowling
 		{
 			if (Frames.Count == 0)
 			{
-				var frame = new Frame();
-				frame.Roll(pins);
-				Frames.Add(frame);
+				Frames.Add(new Frame(pins));
 			}
 			else
 			{
 				var lastFrame = Frames.Last();
-				if (lastFrame.RollTwo == null)
+				if (!lastFrame.FrameIsFinished())
+				{
 					lastFrame.Roll(pins);
+				}
 				else
 				{
-					if (lastFrame.FrameScore == 10)
+					if (lastFrame.IsSpare())
 					{
 						lastFrame.Roll(pins);
 					}
 
-					var frame = new Frame();
-					frame.Roll(pins);
-					Frames.Add(frame);
+					Frames.Add(new Frame(pins));
 				}
 			}
-
-			//if (Rolls.Count == 2 && Rolls[0] + Rolls[1] == 10)
-			//{
-			//    Rolls.Add(pins*2);
-			//}
-			//else
-			//{
-
-			//    Rolls.Add(pins);
-			//}
 		}
 	}
 
 	public class Frame
 	{
-		public int? RollOne { get; private set; }
-		public int? RollTwo { get; private set; }
-		public int? RollThree { get; private set; }
+		private int RollOne { get; set; }
+		private int? RollTwo { get; set; }
+		private int? RollThree { get; set; }
+
+
+		public Frame(int pins)
+		{
+			RollOne = pins;
+		}
+		public bool IsSpare()
+		{
+			return FrameScore == 10;
+		}
+
+		public bool FrameIsFinished()
+		{
+			return RollTwo != null;
+		}
+
 		public int FrameScore
 		{
-			get { return (RollOne ?? 0) + (RollTwo ?? 0) + (RollThree ?? 0); }
+			get { return RollOne + (RollTwo ?? 0) + (RollThree ?? 0); }
 		}
-
-		public Frame()
-		{
-		}
-
 
 		public void Roll(int pins)
 		{
-			if (RollOne == null)
-			{
-				RollOne = pins;
-			}
-			else if(RollTwo == null)
+			if(RollTwo == null)
 			{
 				RollTwo = pins;
 			}
