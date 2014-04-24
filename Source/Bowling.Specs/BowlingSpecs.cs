@@ -1,5 +1,6 @@
 using Bowling;
 using Bowling.Specs.Infrastructure;
+using NUnit.Framework;
 
 namespace specs_for_bowling
 {
@@ -120,4 +121,23 @@ namespace specs_for_bowling
 			_game.Score.ShouldEqual(56);
 		}
 	}
+
+	public class trying_to_roll_more_than_ten_frames : concerns<BowlingGame>
+	{
+		private BowlingGame _game;
+
+		protected override void context()
+		{
+			_game = build_up();
+			20.times(index => _game.Roll(0));
+		}
+
+		[Specification]
+		[ExpectedException(typeof(TooManyFrames))]
+		public void is_not_allowed()
+		{
+			_game.Roll(0);
+		}
+	}
+
 }

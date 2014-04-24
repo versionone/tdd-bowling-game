@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Bowling
@@ -27,6 +28,7 @@ namespace Bowling
 
 		public void Roll(int pins)
 		{
+
 			if (Frames.Count == 0)
 			{
 				Frames.Add(new Frame(pins));
@@ -45,6 +47,10 @@ namespace Bowling
 						lastFrame.Roll(pins);
 					}
 
+					if (Frames.Count == 10)
+					{
+						throw new TooManyFrames();
+					}
 					Frames.Add(new Frame(pins));
 				}
 			}
@@ -89,4 +95,6 @@ namespace Bowling
 			}
 		}
 	}
+
+	public class TooManyFrames : Exception { }
 }
