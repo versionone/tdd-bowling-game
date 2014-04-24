@@ -158,4 +158,23 @@ namespace specs_for_bowling
 		}
 	}
 
+
+	public class first_two_frames_are_strikes_and_the_rest_are_twos : concerns<BowlingGame>
+	{
+		private BowlingGame _game;
+
+		protected override void context()
+		{
+			_game = build_up();
+			_game.Roll(10);
+			_game.Roll(10);
+			16.times(index => _game.Roll(2));
+		}
+
+		[Specification]
+		public void the_score_should_be_sixty_eight()
+		{
+			_game.Score.ShouldEqual(68);
+		}
+	}
 }
