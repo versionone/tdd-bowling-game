@@ -133,7 +133,7 @@ namespace specs_for_bowling
 		}
 
 		[Specification]
-		[ExpectedException(typeof(TooManyFrames))]
+		[ExpectedException(typeof(GameOverException))]
 		public void is_not_allowed()
 		{
 			_game.Roll(0);

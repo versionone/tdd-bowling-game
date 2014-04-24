@@ -39,7 +39,6 @@ namespace Bowling
 				if (!currentFrame.FrameIsDoneRolling())
 				{
 					currentFrame.Roll(pins);
-					
 				}
 				else
 				{
@@ -48,6 +47,7 @@ namespace Bowling
 					{
 						previousFrame.Roll(pins);
 					}
+
 					if (!currentFrame.FrameIsDoneScoring())
 					{
 						currentFrame.Roll(pins);
@@ -55,7 +55,7 @@ namespace Bowling
 
 					if (Frames.Count == 10)
 					{
-						throw new TooManyFrames();
+						throw new GameOverException();
 					}
 					Frames.Add(new Frame(pins));
 				}
@@ -91,14 +91,12 @@ namespace Bowling
 
 		public bool FrameIsDoneRolling()
 		{
-			return (IsStrike())
-			       || RollTwo != null;
+			return IsStrike() || RollTwo != null;
 		}
 
 		public bool FrameIsDoneScoring()
 		{
-			return (IsStrike() && RollTwo != null && RollThree != null)
-			       || (IsSpare() && RollThree != null)
+			return ((IsStrike() || IsSpare()) && RollThree != null)
 				   || (IsNormalFrame() && RollTwo != null);
 		}
 
@@ -120,5 +118,5 @@ namespace Bowling
 		}
 	}
 
-	public class TooManyFrames : Exception { }
+	public class GameOverException : Exception { }
 }
