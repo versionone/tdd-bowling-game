@@ -75,4 +75,25 @@ namespace specs_for_bowling
 			_game.Score.ShouldEqual(70);
 		}
 	}
+
+	public class when_rolling_a_spare_followed_by_all_twos : concerns<BowlingGame>
+	{
+		private BowlingGame _game;
+
+		protected override void context()
+		{
+			_game = build_up();
+
+			_game.Roll(5);
+			_game.Roll(5);
+
+			18.times(index => _game.Roll(2));
+		}
+
+		[Specification]
+		public void the_score_should_be_fourty_eight()
+		{
+			_game.Score.ShouldEqual(48);
+		}
+	}
 }

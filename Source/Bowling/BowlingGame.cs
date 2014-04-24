@@ -7,11 +7,27 @@ namespace Bowling
 {
 	public class BowlingGame
 	{
-		public int Score { get; set; }
+		public List<int>Rolls { get; set; } 
+		public int Score {
+			get { return Rolls.Sum(); }
+		}
+
+		public BowlingGame()
+		{
+			Rolls = new List<int>();
+		}
 
 		public void Roll(int pins)
 		{
-			Score += pins;
+			if (Rolls.Count == 2 && Rolls[0] + Rolls[1] == 10)
+			{
+				Rolls.Add(pins*2);
+			}
+			else
+			{
+
+				Rolls.Add(pins);
+			}
 		}
 	}
 }
