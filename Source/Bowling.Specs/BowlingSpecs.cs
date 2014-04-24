@@ -54,4 +54,25 @@ namespace specs_for_bowling
 			_game.Score.ShouldEqual(58);
 		}
 	}
+
+	public class when_rolling_alternating_twos_and_fives : concerns<BowlingGame>
+	{
+		private BowlingGame _game;
+
+		protected override void context()
+		{
+			_game = build_up();
+			10.times(index =>
+			{
+				_game.Roll(2);
+				_game.Roll(5);
+			});
+		}
+
+		[Specification]
+		public void the_score_should_be_seventy()
+		{
+			_game.Score.ShouldEqual(70);
+		}
+	}
 }
