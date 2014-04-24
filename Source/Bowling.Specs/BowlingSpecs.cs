@@ -36,4 +36,22 @@ namespace specs_for_bowling
 			_game.Score.ShouldEqual(40);
 		}
 	}
+
+	public class when_rolling_two_twos_followed_by_all_threes : concerns<BowlingGame>
+	{
+		private BowlingGame _game;
+
+		protected override void context()
+		{
+			_game = build_up();
+			2.times(index => _game.Roll(2));
+			18.times(index => _game.Roll(3));
+		}
+
+		[Specification]
+		public void the_score_should_be_fifty_eight()
+		{
+			_game.Score.ShouldEqual(58);
+		}
+	}
 }
