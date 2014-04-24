@@ -1,18 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Dynamic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
-using System.Security.Cryptography;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
 
 namespace Bowling
 {
 	public class BowlingGame
 	{
-		private List<int>Rolls { get; set; }
 		private List<Frame> Frames { get; set; }
 
 		public int Score {
@@ -30,7 +22,6 @@ namespace Bowling
 
 		public BowlingGame()
 		{
-			Rolls = new List<int>();
 			Frames = new List<Frame>();
 		}
 
