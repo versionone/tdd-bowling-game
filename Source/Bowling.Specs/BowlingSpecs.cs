@@ -149,6 +149,24 @@ namespace specs_for_bowling
 		}
 	}
 
+	public class when_rolling_more_than_ten_frames_with_all_strikes : concerns<BowlingGame>
+	{
+		private BowlingGame _game;
+
+		protected override void context()
+		{
+			_game = build_up();
+			12.times(() => _game.Roll(10));
+		}
+
+		[Specification]
+		[ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "Game Over")]
+		public void throw_an_exception()
+		{
+			_game.Roll(0);
+		}
+	}
+
 	public class when_rolling_strike_followed_by_all_twos : concerns<BowlingGame>
 	{
 		private BowlingGame _game;
