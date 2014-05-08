@@ -53,7 +53,6 @@ namespace specs_for_bowling
 		}
 	}
 
-
 	public class when_rolling_two_twos_followed_by_all_threes : concerns<BowlingGame>
 	{
 		private BowlingGame _game;
@@ -69,6 +68,27 @@ namespace specs_for_bowling
 		public void score_should_be_fifty_eight()
 		{
 			_game.Score.ShouldEqual(58);
+		}
+	}
+
+	public class when_rolling_alternating_twos_and_fives : concerns<BowlingGame>
+	{
+		private BowlingGame _game;
+
+		protected override void context()
+		{
+			_game = build_up();
+			10.times(() =>
+			{
+				_game.Roll(2);
+				_game.Roll(5);
+			});
+		}
+
+		[Specification]
+		public void score_should_be_seventy()
+		{
+			_game.Score.ShouldEqual(70);
 		}
 	}
 }
