@@ -1,3 +1,4 @@
+using Bowling;
 using Bowling.Specs.Infrastructure;
 
 namespace specs_for_bowling
@@ -17,4 +18,22 @@ namespace specs_for_bowling
 			_itWorked.ShouldBeTrue();
 		}
 	}
+
+	public class when_rolling_all_gutter_balls : concerns<BowlingGame>
+	{
+		private BowlingGame _game;
+
+		protected override void context()
+		{
+			_game = build_up();
+			20.times(() => _game.Roll(0));
+		}
+
+		[Specification]
+		public void score_should_be_zero()
+		{
+			_game.Score.ShouldEqual(0);
+		}
+	}
+
 }
