@@ -15,24 +15,14 @@ namespace Bowling
 			Strike
 		};
 		public int Score { get; set; }
-		private readonly Queue<FrameType> _previousFrameTypes = new Queue<FrameType>(new [] { FrameType.Normal, FrameType.Normal });
+		private readonly Queue<FrameType> _previousFrameTypes = new Queue<FrameType>();
 		private int? _firstRollPins = null;
-		private int _rollCount = 0;
 
 		public void Roll(int pins)
 		{
-			CheckGameOver();
 			UpdateScore(pins);
 			UpdatePreviousFrameTypes(pins);
 			UpdateFirstRollPins(pins);
-		}
-
-		private void CheckGameOver()
-		{
-			// Check to make sure we only allow 20 rolls
-			_rollCount++;
-			if (_rollCount > 20)
-				throw new InvalidOperationException("Game Over");
 		}
 
 		private void UpdateFirstRollPins(int pins)
@@ -49,6 +39,8 @@ namespace Bowling
 				EnqueueFrame(FrameType.Spare);
 			else if (!IsFirstRoll)
 				EnqueueFrame(FrameType.Normal);
+			else if (_previousFrameTypes.Count == 10) // Check to make sure we only allow ten frames
+				throw new InvalidOperationException("Game Over");
 		}
 
 		private bool IsFirstRoll
@@ -63,11 +55,16 @@ namespace Bowling
 		{
 			var multiplier = 1;
 			var previousFrameTypesArray = _previousFrameTypes.ToArray();
-			if (previousFrameTypesArray[1] == FrameType.Spare && IsFirstRoll || previousFrameTypesArray[1] == FrameType.Strike)
+			var frameCount = _previousFrameTypes.Count;
+
+			var lastFrameType = frameCount > 0 ? previousFrameTypesArray[frameCount - 1] : FrameType.Normal;
+			var secondToLastFrameType = frameCount > 1 ? previousFrameTypesArray[frameCount - 2] : FrameType.Normal;
+
+			if (lastFrameType == FrameType.Spare && IsFirstRoll || lastFrameType == FrameType.Strike)
 			{
 				multiplier++;
 			}
-			if (previousFrameTypesArray[0] == FrameType.Strike && previousFrameTypesArray[1] == FrameType.Strike && IsFirstRoll)
+			if (secondToLastFrameType == FrameType.Strike && lastFrameType == FrameType.Strike && IsFirstRoll)
 			{
 				multiplier++;
 			}
@@ -78,7 +75,6 @@ namespace Bowling
 
 		private void EnqueueFrame(FrameType frameType)
 		{
-			_previousFrameTypes.Dequeue();
 			_previousFrameTypes.Enqueue(frameType);
 		}
 	}
