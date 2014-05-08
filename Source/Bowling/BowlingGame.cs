@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -15,40 +16,64 @@ namespace Bowling
 		};
 		public int Score { get; set; }
 		private readonly Queue<FrameType> _previousFrameTypes = new Queue<FrameType>(new [] { FrameType.Normal, FrameType.Normal });
-		private int _firstBallPins = -1;
+		private int? _firstRollPins = null;
 		private int _rollCount = 0;
 
 		public void Roll(int pins)
+		{
+			CheckGameOver();
+			UpdateScore(pins);
+			UpdatePreviousFrameTypes(pins);
+			UpdateFirstRollPins(pins);
+		}
+
+		private void CheckGameOver()
 		{
 			// Check to make sure we only allow 20 rolls
 			_rollCount++;
 			if (_rollCount > 20)
 				throw new InvalidOperationException("Game Over");
+		}
 
-			// Check for spare/strike - add current pins to score and decrement number of future balls to add variable
+		private void UpdateFirstRollPins(int pins)
+		{
+			// Save the number of pins if this is the first roll
+			_firstRollPins = (IsFirstRoll && pins != 10) ? pins : (int?) null;
+		}
+
+		private void UpdatePreviousFrameTypes(int pins)
+		{
+			if (IsFirstRoll && pins == 10) // Strike
+				EnqueueFrame(FrameType.Strike);
+			else if (_firstRollPins + pins == 10) // Spare
+				EnqueueFrame(FrameType.Spare);
+			else if (!IsFirstRoll)
+				EnqueueFrame(FrameType.Normal);
+		}
+
+		private bool IsFirstRoll
+		{
+			get
+			{
+				return !_firstRollPins.HasValue;
+			}
+		}
+
+		private void UpdateScore(int pins)
+		{
 			var multiplier = 1;
 			var previousFrameTypesArray = _previousFrameTypes.ToArray();
-			if (previousFrameTypesArray[1] == FrameType.Spare && _firstBallPins == -1 || previousFrameTypesArray[1] == FrameType.Strike)
+			if (previousFrameTypesArray[1] == FrameType.Spare && IsFirstRoll || previousFrameTypesArray[1] == FrameType.Strike)
 			{
 				multiplier++;
 			}
-			if (previousFrameTypesArray[0] == FrameType.Strike && previousFrameTypesArray[1] == FrameType.Strike && _firstBallPins == -1)
+			if (previousFrameTypesArray[0] == FrameType.Strike && previousFrameTypesArray[1] == FrameType.Strike && IsFirstRoll)
 			{
 				multiplier++;
 			}
 
 			// Always add current pins to score
-			Score += multiplier * pins;
-
-			if (_firstBallPins == -1 && pins == 10) // Strike
-				EnqueueFrame(FrameType.Strike);
-			else if (_firstBallPins + pins == 10) // Spare
-				EnqueueFrame(FrameType.Spare);
-			else if (_firstBallPins != -1)
-				EnqueueFrame(FrameType.Normal);
-
-			// Save the number of pins if this is the first ball
-			_firstBallPins = (_firstBallPins == -1 && pins != 10) ? pins : -1;
+			Score += multiplier*pins;
 		}
 
 		private void EnqueueFrame(FrameType frameType)
