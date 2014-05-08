@@ -8,7 +8,7 @@ namespace Bowling
 	public class BowlingGame
 	{
 		public int Score { get; set; }
-		private bool _spare = false;
+		private int _numberOfFutureBallsToAdd = 0;
 		private int _firstBallPins = -1;
 		private int _rollCount = 0;
 
@@ -18,22 +18,23 @@ namespace Bowling
 			if (_rollCount > 20)
 				throw new InvalidOperationException("Game Over");
 
-			// Check for spare - add current pins to score and reset spare flag
-			if (_spare)
+			// Check for spare/strike - add current pins to score and decrement number of future balls to add variable
+			if (_numberOfFutureBallsToAdd > 0)
 			{
 				Score += pins;
-				_spare = false;
+				_numberOfFutureBallsToAdd--;
 			}
 
 			// Always add current pins to score
 			Score += pins;
 
-			// If this is a spare, set the flag for the next frame
-			if(_firstBallPins + pins == 10)
-				_spare = true;
+			if (_firstBallPins == -1 && pins == 10) // Strike
+				_numberOfFutureBallsToAdd = 2;
+			else if (_firstBallPins + pins == 10) // Spare
+				_numberOfFutureBallsToAdd = 1;
 
 			// Save the number of pins if this is the first ball
-			_firstBallPins = (_firstBallPins == -1) ? pins : -1;
+			_firstBallPins = (_firstBallPins == -1 && pins != 10) ? pins : -1;
 		}
 	}
 }
