@@ -166,4 +166,38 @@ namespace specs_for_bowling
 			_game.Score.ShouldEqual(50);
 		}
 	}
+
+	// x_ x_ 22 22 22 ...
+	// 22 14 4  4  4
+	// 22 36 40 44 48
+	public class when_rolling_two_strikes_followed_by_all_twos : concerns<BowlingGame>
+	{
+		private BowlingGame _game;
+
+		protected override void context()
+		{
+			_game = build_up();
+			2.times(() => _game.Roll(10));
+			16.times(() => _game.Roll(2));
+		}
+
+		[Specification]
+		public void score_should_be_sixty_eight()
+		{
+			_game.Score.ShouldEqual(68);
+		}
+	}
 }
+
+/*
+ * X-2 X-1 X
+ *  N   N  n
+ *  /   N  n
+ *  X   N  n
+ *  N   /  2*n
+ *  N   X  2*n
+ *  /   /  2*n
+ *  X   /  2*n
+ *  /   X  2*n
+ *  X   X  3*n
+ */
