@@ -1,5 +1,7 @@
+using System;
 using Bowling;
 using Bowling.Specs.Infrastructure;
+using NUnit.Framework;
 
 namespace specs_for_bowling
 {
@@ -129,4 +131,21 @@ namespace specs_for_bowling
 		}
 	}
 
+	public class when_rolling_more_than_ten_frames : concerns<BowlingGame>
+	{
+		private BowlingGame _game;
+
+		protected override void context()
+		{
+			_game = build_up();
+			20.times(() => _game.Roll(0));
+		}
+
+		[Specification]
+		[ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "Game Over")]
+		public void throw_an_exception()
+		{
+			_game.Roll(0);
+		}
+	}
 }

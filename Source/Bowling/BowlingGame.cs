@@ -10,9 +10,14 @@ namespace Bowling
 		public int Score { get; set; }
 		private bool _spare = false;
 		private int _firstBallPins = -1;
+		private int _rollCount = 0;
 
 		public void Roll(int pins)
 		{
+			_rollCount++;
+			if (_rollCount > 20)
+				throw new InvalidOperationException("Game Over");
+
 			// Check for spare - add current pins to score and reset spare flag
 			if (_spare)
 			{
