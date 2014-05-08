@@ -110,4 +110,23 @@ namespace specs_for_bowling
 			_game.Score.ShouldEqual(48);
 		}
 	}
+
+	public class when_rolling_two_spares_followed_by_all_twos : concerns<BowlingGame>
+	{
+		private BowlingGame _game;
+
+		protected override void context()
+		{
+			_game = build_up();
+			2.times(() => { _game.Roll(2); _game.Roll(8); });
+			16.times(() => _game.Roll(2));
+		}
+
+		[Specification]
+		public void score_should_be_fifty_six()
+		{
+			_game.Score.ShouldEqual(56);
+		}
+	}
+
 }
