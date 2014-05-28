@@ -195,4 +195,78 @@ namespace specs_for_bowling
 			_theScore.ShouldEqual(50);
 		}
 	}
+	public class when_rolling_10s_then_2s: concerns
+	{
+		private int _theScore;
+		private Game game;
+		protected override void context()
+		{
+			game = new Game();
+			game.Roll(10);
+			game.Roll(10);
+			for (int i = 3; i < 19; i++)
+			{
+				game.Roll(2);
+			}
+			_theScore = game.score;
+		}
+
+		[Specification]
+		public void the_score_is_sixty_eight()
+		{
+			_theScore.ShouldEqual(68);
+		}
+	}
+	public class when_rolling_10s: concerns
+	{
+		private int _theScore;
+		private Game game;
+		protected override void context()
+		{
+			game = new Game();
+			for (int i = 1; i < 13; i++)
+			{
+				game.Roll(10);
+			}
+			_theScore = game.score;
+		}
+
+		[Specification]
+		public void the_score_is_three_hundred()
+		{
+			_theScore.ShouldEqual(300);
+		}
+	}
+	public class when_alternating_strikes_and_spares: concerns
+	{
+		private int _theScore;
+		private Game game;
+		protected override void context()
+		{
+			game = new Game();
+			game.Roll(10);
+			game.Roll(5);
+			game.Roll(5);
+			game.Roll(10);
+			game.Roll(5);
+			game.Roll(5);
+			game.Roll(10);
+			game.Roll(5);
+			game.Roll(5);
+			game.Roll(10);
+			game.Roll(5);
+			game.Roll(5);
+			game.Roll(10);
+			game.Roll(5);
+			game.Roll(5);
+			game.Roll(10);
+			_theScore = game.score;
+		}
+
+		[Specification]
+		public void the_score_is_two_hundred()
+		{
+			_theScore.ShouldEqual(200);
+		}
+	}
 }
