@@ -1,5 +1,7 @@
+using System;
 using Bowling;
 using Bowling.Specs.Infrastructure;
+using NUnit.Framework;
 
 namespace specs_for_bowling
 {
@@ -121,6 +123,24 @@ namespace specs_for_bowling
 		public void the_score_is_fifty_six()
 		{
 			_game.Score.ShouldEqual(56);
+		}
+	}
+
+	public class when_ten_frames_are_bowled : concerns<BowlingGame>
+	{
+		private BowlingGame _game;
+
+		protected override void context()
+		{
+			_game = build_up();
+			20.times(() => { _game.Roll(2);});
+		}
+
+		[Specification]
+		[ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "game over")]
+		public void prevent_further_frames()
+		{
+			_game.Roll(2);
 		}
 	}
 }
