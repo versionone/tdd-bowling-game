@@ -69,4 +69,40 @@ namespace specs_for_bowling
 			_game.Score.ShouldEqual(58);
 		}
 	}
+
+	public class when_rolling_alternating_twos_and_fives : concerns<BowlingGame>
+	{
+		private BowlingGame _game;
+
+		protected override void context()
+		{
+			_game = build_up();
+			10.times(() => { _game.Roll(2); _game.Roll(5); });
+		}
+
+		[Specification]
+		public void the_score_is_seventy()
+		{
+			_game.Score.ShouldEqual(70);
+		}
+	}
+
+	public class when_rolling_first_frame_is_spare_all_other_rolls_are_two : concerns<BowlingGame>
+	{
+		private BowlingGame _game;
+
+		protected override void context()
+		{
+			_game = build_up();
+			2.times(() => { _game.Roll(5); });
+			18.times(() => { _game.Roll(2);});
+
+		}
+
+		[Specification]
+		public void the_score_is_forty_eight()
+		{
+			_game.Score.ShouldEqual(48);
+		}
+	}
 }
