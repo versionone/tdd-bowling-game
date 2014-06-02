@@ -105,4 +105,22 @@ namespace specs_for_bowling
 			_game.Score.ShouldEqual(48);
 		}
 	}
+
+	public class when_rolling_first_two_frames_are_two_eight_split_all_other_rolls_are_two : concerns<BowlingGame>
+	{
+		private BowlingGame _game;
+
+		protected override void context()
+		{
+			_game = build_up();
+			2.times(() => { _game.Roll(2); _game.Roll(8); });
+			16.times(() => { _game.Roll(2); });
+		}
+
+		[Specification]
+		public void the_score_is_fifty_six()
+		{
+			_game.Score.ShouldEqual(56);
+		}
+	}
 }
