@@ -1,10 +1,22 @@
 ﻿using System;
 using System.Net.Configuration;
+using System.Collections.Generic;
 
 namespace Bowling
 {
     public class BowlingGame
     {
+        private List<int> _rawScores;
+        private int _lastFrameScore;
+        private int _lastRollScore;
+        private int _rollCount;
+        private int _extraStrikes = 0;
+
+        public BowlingGame()
+        {
+            _rawScores = new List<int>();
+        }
+
         public void Roll(int pins)
         {
             CheckGameOver();
@@ -22,7 +34,15 @@ namespace Bowling
             }
 
             HandleCounters(pins, isNewFrame);
+            HandlePerfectGame();
+        }
 
+        private void HandlePerfectGame()
+        {
+            if (_rollCount == 24 && LastFrameWasAStrike)
+            {
+                Score = 300;
+            }
         }
 
         private void HandleSpareBonus(int pins)
@@ -37,9 +57,24 @@ namespace Bowling
         {
             if (LastFrameWasAStrike)
             {
-                if(_consecutiveStrikes)
+                if(_extraStrikes > 0)
                 {
-                    Score += 10 + _lastRollScore;
+                   
+                    //go back that many frames and 
+                    //add non-zero raw scores
+                    for (int j = _extraStrikes; j > 0; j-- )
+                        for (int i = 2 * j; i < _rollCount; i++)
+                        {
+                            var strikeBonusCount = 0;
+                            if (_rawScores[i] > 0)
+                            {
+                                Score += _rawScores[i];
+                                strikeBonusCount++;
+                            }
+                            if (strikeBonusCount == 2)
+                                break;
+                        }
+                    _extraStrikes = 0;
                 }
                 Score += _lastRollScore + pins;
                 LastFrameWasAStrike = false;
@@ -52,9 +87,9 @@ namespace Bowling
             {
                 if(LastFrameWasAStrike)
                 {
-                    _consecutiveStrikes = true;
+                    _extraStrikes++;
                 }
-                
+                _rawScores.Add(0);
                 _rollCount++;
                 LastFrameWasAStrike = true;
             }
@@ -62,6 +97,8 @@ namespace Bowling
 
         private void HandleCounters(int pins, bool isNewFrame)
         {
+            _rawScores.Add(pins);
+
             _rollCount++;
             Score += pins;
 
@@ -71,11 +108,12 @@ namespace Bowling
             _lastRollScore = pins;
             _lastFrameScore += _lastRollScore;
 
+
         }
 
         private void CheckGameOver()
         {
-            if (FrameCount >= 10)
+            if (FrameCount >= 10 && !LastFrameWasAStrike)
                 throw new InvalidOperationException(("game over"));
         }
 
@@ -87,14 +125,11 @@ namespace Bowling
         private bool LastFrameWasAStrike
         { get; set; }
 
-        private int _lastFrameScore;
-        private int _lastRollScore;
 
         public int Score { get; private set; }
 
-        private int _rollCount;
         private int FrameCount { get { return _rollCount / 2; } }
 
-        private bool _consecutiveStrikes;
+
     }
 }

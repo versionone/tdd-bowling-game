@@ -178,5 +178,23 @@ namespace specs_for_bowling
                 _game.Score.ShouldEqual(68);
             }
         }
+
+        public class when_bowling_a_perfect_game : concerns<BowlingGame>
+        {
+            private BowlingGame _game;
+
+            protected override void context()
+            {
+                _game = build_up();
+                12.times(() => _game.Roll(10));
+
+            }
+
+            [Specification]
+            public void the_score_is_three_hundred()
+            {
+                _game.Score.ShouldEqual(300);
+            }
+        }
     }
 }
