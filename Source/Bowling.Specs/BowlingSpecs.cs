@@ -216,4 +216,22 @@ namespace specs_for_bowling
             _game.Score.ShouldEqual(200);
         }
     }
+
+	public class after_bowling_a_perfect_game : concerns<BowlingGame>
+	{
+		private BowlingGame _game;
+
+		protected override void context()
+		{
+			_game = build_up();
+			12.times(() => _game.Roll(10));
+		}
+
+		[Specification]
+		[ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "game over")]
+		public void prevent_further_frames()
+		{
+			_game.Roll(2);
+		}
+	}
 }
