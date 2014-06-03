@@ -142,78 +142,78 @@ namespace specs_for_bowling
         {
             _game.Roll(2);
         }
+    }
 
-        public class when_rolling_first_frame_is_a_strike_other_rolls_are_two : concerns<BowlingGame>
+    public class when_rolling_first_frame_is_a_strike_other_rolls_are_two : concerns<BowlingGame>
+    {
+        private BowlingGame _game;
+
+        protected override void context()
         {
-            private BowlingGame _game;
-
-            protected override void context()
-            {
-                _game = build_up();
-                _game.Roll(10);
-                18.times(() => _game.Roll(2));
-            }
-
-            [Specification]
-            public void the_score_is_fifty()
-            {
-                _game.Score.ShouldEqual(50);
-            }
+            _game = build_up();
+            _game.Roll(10);
+            18.times(() => _game.Roll(2));
         }
 
-        public class when_rolling_first_two_frames_are_strikes_other_rolls_are_two : concerns<BowlingGame>
+        [Specification]
+        public void the_score_is_fifty()
         {
-            private BowlingGame _game;
+            _game.Score.ShouldEqual(50);
+        }
+    }
 
-            protected override void context()
-            {
-                _game = build_up();
-                2.times(() => _game.Roll(10));
-                16.times(() => _game.Roll(2));
-            }
+    public class when_rolling_first_two_frames_are_strikes_other_rolls_are_two : concerns<BowlingGame>
+    {
+        private BowlingGame _game;
 
-            [Specification]
-            public void the_score_is_sixty_eight()
-            {
-                _game.Score.ShouldEqual(68);
-            }
+        protected override void context()
+        {
+            _game = build_up();
+            2.times(() => _game.Roll(10));
+            16.times(() => _game.Roll(2));
         }
 
-        public class when_bowling_a_perfect_game : concerns<BowlingGame>
+        [Specification]
+        public void the_score_is_sixty_eight()
         {
-            private BowlingGame _game;
+            _game.Score.ShouldEqual(68);
+        }
+    }
 
-            protected override void context()
-            {
-                _game = build_up();
-                12.times(() => _game.Roll(10));
+    public class when_bowling_a_perfect_game : concerns<BowlingGame>
+    {
+        private BowlingGame _game;
 
-            }
+        protected override void context()
+        {
+            _game = build_up();
+            12.times(() => _game.Roll(10));
 
-            [Specification]
-            public void the_score_is_three_hundred()
-            {
-                _game.Score.ShouldEqual(300);
-            }
         }
 
-        public class when_bowling_alternate_strikes_and_spares : concerns<BowlingGame>
+        [Specification]
+        public void the_score_is_three_hundred()
         {
-            private BowlingGame _game;
+            _game.Score.ShouldEqual(300);
+        }
+    }
 
-            protected override void context()
-            {
-                _game = build_up();
-                5.times(() => { _game.Roll(10);  _game.Roll(4); _game.Roll(6); });
-                _game.Roll(10);
+    public class when_bowling_alternate_strikes_and_spares : concerns<BowlingGame>
+    {
+        private BowlingGame _game;
 
-            }
+        protected override void context()
+        {
+            _game = build_up();
+            5.times(() => { _game.Roll(10);  _game.Roll(4); _game.Roll(6); });
+            _game.Roll(10);
 
-            [Specification]
-            public void the_score_is_two_hundred()
-            {
-                _game.Score.ShouldEqual(200);
-            }
+        }
+
+        [Specification]
+        public void the_score_is_two_hundred()
+        {
+            _game.Score.ShouldEqual(200);
         }
     }
 }
