@@ -151,4 +151,23 @@ namespace specs_for_bowling
 			_game.GetScore().ShouldEqual(50);
 		}
 	}
+
+	public class when_rolling_two_strikes_followed_by_all_2s : concerns<BowlingGame>
+	{
+		private BowlingGame _game;
+
+		protected override void context()
+		{
+			_game = build_up();
+			_game.Roll(10);
+			_game.Roll(10);
+			16.times(() => _game.Roll(2));
+		}
+
+		[Specification]
+		public void the_score_is_68()
+		{
+			_game.GetScore().ShouldEqual(68);
+		}
+	}
 }
