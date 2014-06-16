@@ -23,7 +23,7 @@ namespace Bowling
 
 		public int GetFrameScore()
 		{
-			if (IsSpare)
+			if (IsSpare || IsStrike)
 			{
 				return FrameScore + _ball3.Value;
 			}
@@ -38,6 +38,11 @@ namespace Bowling
 		public bool IsSpare
 		{
 			get { return FrameScore == 10; }
+		}
+
+		public bool IsStrike
+		{
+			get { return (_ball1 == 10); }
 		}
 	}
 	public class BowlingGame
@@ -59,9 +64,11 @@ namespace Bowling
 					break;
 
 				var frame = new Frame(_rolls[i], _rolls[i + 1]);
-				if(frame.IsSpare)
+				if (frame.IsSpare || frame.IsStrike)
 				{
 					frame.ThirdBall(_rolls[i + 2]);
+					if(frame.IsStrike) i--;
+
 				}
 				frames.Add(frame);
 
