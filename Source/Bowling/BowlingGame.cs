@@ -5,9 +5,40 @@ using NUnit.Framework;
 
 namespace Bowling
 {
-	
 	public class Frame
 	{
+		private int _ball1, _ball2;
+		private int? _ball3;
+
+		public Frame(int ball1, int ball2)
+		{
+			_ball1 = ball1;
+			_ball2 = ball2;
+		}
+
+		public void ThirdBall(int ball3)
+		{
+			_ball3 = ball3;
+		}
+
+		public int GetFrameScore()
+		{
+			if (IsSpare)
+			{
+				return FrameScore + _ball3.Value;
+			}
+			return FrameScore;
+		}
+
+		private int FrameScore
+		{
+			get { return _ball1 + _ball2; }
+		}
+
+		public bool IsSpare
+		{
+			get { return FrameScore == 10; }
+		}
 	}
 	public class BowlingGame
 	{
@@ -27,17 +58,14 @@ namespace Bowling
 				if (IsGameOver(frames))
 					break;
 
-				var frame = new Frame();
+				var frame = new Frame(_rolls[i], _rolls[i + 1]);
+				if(frame.IsSpare)
+				{
+					frame.ThirdBall(_rolls[i + 2]);
+				}
 				frames.Add(frame);
 
-				if(i + 2 < _rolls.Count)
-				{
-					score += GetFrameScore(_rolls[i], _rolls[i + 1], _rolls[i + 2]);
-				}
-				else
-				{
-					score += GetFrameScore(_rolls[i], _rolls[i + 1],null);
-				}
+				score += frame.GetFrameScore();
 			}
 			return score;
 		}
@@ -45,21 +73,6 @@ namespace Bowling
 		private static bool IsGameOver(List<Frame> frames)
 		{
 			return frames.Count >= 10;
-		}
-
-		protected int GetFrameScore(int roll1, int roll2, int? roll3)
-		{
-			var framescore = roll1 + roll2;
-			if (IsSpare(framescore) && roll3.HasValue)
-			{
-				return framescore + roll3.Value;
-			}
-			return framescore;
-		}
-
-		private static bool IsSpare(int framescore)
-		{
-			return framescore == 10;
 		}
 	}
 }
