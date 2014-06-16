@@ -64,12 +64,12 @@ namespace Bowling
 					break;
 
 				var frame = new Frame(_rolls[i], _rolls[i + 1]);
-				if (frame.IsSpare || frame.IsStrike)
-				{
-					frame.ThirdBall(_rolls[i + 2]);
-					if(frame.IsStrike) i--;
 
-				}
+				if (frame.IsSpare || frame.IsStrike)
+					frame.ThirdBall(_rolls[i + 2]);
+
+				if (frame.IsStrike) i--;
+
 				frames.Add(frame);
 
 				score += frame.GetFrameScore();
