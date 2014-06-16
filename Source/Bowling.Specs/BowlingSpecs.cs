@@ -114,4 +114,23 @@ namespace specs_for_bowling
 			_game.GetScore().ShouldEqual(56);
 		}
 	}
+
+	public class after_rolling_10_frames : concerns<BowlingGame>
+	{
+		private BowlingGame _game;
+
+		protected override void context()
+		{
+			_game = build_up();
+			20.times(() => _game.Roll(2));
+		}
+
+		[Specification]
+		public void rolling_extra_balls_does_not_change_the_score()
+		{
+			_game.GetScore().ShouldEqual(40);
+			_game.Roll(2);
+			_game.GetScore().ShouldEqual(40);
+		}
+	}
 }
