@@ -186,4 +186,29 @@ namespace specs_for_bowling
             typeof(GameOverException).ShouldBeThrownBy(() => _game.Bowl(2));
         }
     }
+
+    public class when_the_first_roll_is_a_strike_and_the_rest_are_2 : concerns
+    {
+        private BowlingGame _game;
+
+        protected override void context()
+        {
+            _game = new BowlingGame();
+
+            _game.Bowl(10);
+            9.times(() =>
+            {
+                _game.Bowl(2);
+                _game.Bowl(2);
+            });
+
+
+        }
+
+        [Specification]
+        public void score_is_50()
+        {
+            _game.Score.ShouldEqual(50);
+        }
+    }
 }

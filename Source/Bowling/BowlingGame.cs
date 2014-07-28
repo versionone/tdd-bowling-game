@@ -8,15 +8,17 @@ namespace Bowling
     public class BowlingGame
     {
         private const int SPARE = 10;
-        private const int MAX_NUM_ROLLS = 20;
-        private int numOfRolls = 0;
+        private const int STRIKE = 10;
+        private const int MAX_NUM_FRAMES = 10;
+        private int numOfRollsInFrame = 0;
+        private int numOfFrames = 0;
         private int previousFrameScore = 0;
         private int lastRollScore = 0;
 
         public void Bowl(int pins)
         {
-            numOfRolls++;
-            if (numOfRolls > MAX_NUM_ROLLS)
+            numOfRollsInFrame++;
+            if (numOfFrames >= MAX_NUM_FRAMES)
             {
                 throw new GameOverException();
             }
@@ -27,19 +29,31 @@ namespace Bowling
                 previousFrameScore = 0;
             }
            
-            if (numOfRolls % 2 == 1)
+            if (IsFirstRollOfFrame())
             {
                 // first roll in current frame
                 lastRollScore = pins;
+                if (pins == STRIKE)
+                {
+                    numOfFrames++;
+                    numOfRollsInFrame = 0;
+                    previousFrameScore = pins;
+                }
             }
             else
             {
+                numOfFrames++;
+                numOfRollsInFrame = 0;
                 previousFrameScore = pins + lastRollScore;
             }
             Score = Score + pins;
         }
 
         public int Score { get; set; }
+
+        private bool IsFirstRollOfFrame() {
+            return numOfRollsInFrame % 2 == 1;
+        }
     }
 
     public class GameOverException : Exception { 
