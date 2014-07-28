@@ -151,7 +151,11 @@ namespace Bowling
 				{
 					return false;
 				}
-				if (!IsStrike() && Roll2.HasValue)
+				if (!IsStrike() && !IsSpare() && Roll2.HasValue)
+				{
+					return false;
+				}
+				if (IsSpare() && Roll3.HasValue)
 				{
 					return false;
 				}

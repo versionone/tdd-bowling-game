@@ -177,7 +177,7 @@ namespace specs_for_bowling
                 _game.Bowl(2);
             });
 
-            
+
         }
 
         [Specification]
@@ -260,4 +260,55 @@ namespace specs_for_bowling
             _game.Score.ShouldEqual(300);
         }
     }
+
+	public class when_rolling_alternating_strikes_and_spares_starting_with_strikes : concerns
+	{
+		private BowlingGame _game;
+
+		protected override void context()
+		{
+			_game = new BowlingGame();
+
+			5.times(() =>
+			{
+			    _game.Bowl(10);
+			    _game.Bowl(5);
+			    _game.Bowl(5);
+			});
+
+			_game.Bowl(10);
+		}
+
+		[Specification]
+		public void score_is_200()
+		{
+			_game.Score.ShouldEqual(200);
+		}
+	}
+
+	public class when_rolling_alternating_strikes_and_spares_starting_with_spares : concerns
+	{
+		private BowlingGame _game;
+
+		protected override void context()
+		{
+			_game = new BowlingGame();
+
+			5.times(() =>
+			{
+				_game.Bowl(5);
+				_game.Bowl(5);
+				_game.Bowl(10);
+			});
+
+			_game.Bowl(5);
+			_game.Bowl(5);
+		}
+
+		[Specification]
+		public void score_is_200()
+		{
+			_game.Score.ShouldEqual(200);
+		}
+	}
 }
