@@ -211,4 +211,30 @@ namespace specs_for_bowling
             _game.Score.ShouldEqual(50);
         }
     }
+
+    public class when_the_first_two_rolls_are_a_strike_and_the_rest_are_2 : concerns
+    {
+        private BowlingGame _game;
+
+        protected override void context()
+        {
+            _game = new BowlingGame();
+
+            _game.Bowl(10);
+            _game.Bowl(10);
+            8.times(() =>
+            {
+                _game.Bowl(2);
+                _game.Bowl(2);
+            });
+
+
+        }
+
+        [Specification]
+        public void score_is_68()
+        {
+            _game.Score.ShouldEqual(68);
+        }
+    }
 }
