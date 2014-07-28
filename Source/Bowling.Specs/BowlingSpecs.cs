@@ -57,7 +57,31 @@ namespace specs_for_bowling
         {
             _game.Score.ShouldEqual(40);
         }
-
-
     }
+
+    public class when_rolling_two_2s_and_then_all_3s : concerns
+    {
+        private BowlingGame _game;
+
+        protected override void context()
+        {
+            _game = new BowlingGame();
+
+            _game.Bowl(2);
+            _game.Bowl(2);
+
+            9.times(() =>
+            {
+                _game.Bowl(3);
+                _game.Bowl(3);
+            });
+        }
+
+        [Specification]
+        public void the_score_is_58()
+        {
+            _game.Score.ShouldEqual(58);
+        }
+    }
+
 }
