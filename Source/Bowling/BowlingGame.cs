@@ -9,8 +9,9 @@ namespace Bowling
     {
         public void Bowl(int pins)
         {
+            Score = Score + pins;
         }
 
-        public int Score { get { return 0; } }
+        public int Score { get; set; }
     }
 }
