@@ -84,4 +84,26 @@ namespace specs_for_bowling
         }
     }
 
+    public class when_alternating_2s_and_5s : concerns
+    {
+        private BowlingGame _game;
+
+        protected override void context()
+        {
+            _game = new BowlingGame();
+
+            10.times(() =>
+            {
+                _game.Bowl(2);
+                _game.Bowl(5);
+            });
+        }
+
+        [Specification]
+        public void the_score_is_70()
+        {
+            _game.Score.ShouldEqual(70);
+        }
+    }
+
 }
