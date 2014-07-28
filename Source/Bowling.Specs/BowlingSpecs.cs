@@ -1,3 +1,4 @@
+using System;
 using Bowling.Specs.Infrastructure;
 using Bowling;
 
@@ -134,4 +135,55 @@ namespace specs_for_bowling
         }
     }
 
+    public class when_the_first_2_frames_are_spares_and_the_rest_are_2s : concerns
+    {
+        private BowlingGame _game;
+
+        protected override void context()
+        {
+            _game = new BowlingGame();
+
+            2.times(() =>
+            {
+                _game.Bowl(2);
+                _game.Bowl(8);
+            });
+
+            8.times(() =>
+            {
+                _game.Bowl(2);
+                _game.Bowl(2);
+            });
+        }
+
+        [Specification]
+        public void the_score_is_56()
+        {
+            _game.Score.ShouldEqual(56);
+        }
+    }
+
+    public class when_10_frames_have_been_bowled_game_over : concerns
+    {
+        private BowlingGame _game;
+
+        protected override void context()
+        {
+            _game = new BowlingGame();
+
+            10.times(() =>
+            {
+                _game.Bowl(2);
+                _game.Bowl(2);
+            });
+
+            
+        }
+
+        [Specification]
+        public void throw_an_exception()
+        {
+            typeof(GameOverException).ShouldBeThrownBy(() => _game.Bowl(2));
+        }
+    }
 }
