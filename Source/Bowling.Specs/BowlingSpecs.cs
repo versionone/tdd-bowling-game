@@ -261,4 +261,66 @@ namespace specs_for_bowling
 		}
 	}
 
+    public class when_rolling_a_strike_in_the_9th_followed_by_regular_frame : concerns
+    {
+        private BowlingGame _game;
+
+        protected override void context()
+        {
+            _game = new BowlingGame();
+
+            8.times(() =>
+            {
+                _game.Roll(2);
+                _game.Roll(2);
+            });
+
+            _game.Roll(10);
+
+            _game.Roll(3);
+            _game.Roll(6);
+        }
+
+        [Specification]
+        public void the_score_should_be()
+        {
+            _game.Score().ShouldEqual(60);
+        }
+    }
+
+    public class when_rolling_a_crazy_game : concerns
+    {
+        private BowlingGame _game;
+
+        protected override void context()
+        {
+            _game = new BowlingGame();
+
+            _game.Roll(0);
+            _game.Roll(6);
+            _game.Roll(10);
+            _game.Roll(3);
+            _game.Roll(7);
+            _game.Roll(2);
+            _game.Roll(8);
+            _game.Roll(0);
+            _game.Roll(2);
+            _game.Roll(2);
+            _game.Roll(6);
+            _game.Roll(10);
+            _game.Roll(10);
+            _game.Roll(5);
+            _game.Roll(0);
+            _game.Roll(5);
+            _game.Roll(5);
+            _game.Roll(0);
+        }
+
+        [Specification]
+        public void the_score_should_be()
+        {
+            _game.Score().ShouldEqual(113);
+        }
+    }
+
 }
