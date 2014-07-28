@@ -237,4 +237,27 @@ namespace specs_for_bowling
             _game.Score.ShouldEqual(68);
         }
     }
+
+    public class when_all_rolls_are_strikes : concerns
+    {
+        private BowlingGame _game;
+
+        protected override void context()
+        {
+            _game = new BowlingGame();
+
+            12.times(() =>
+            {
+                _game.Bowl(10);
+            });
+
+
+        }
+
+        [Specification]
+        public void score_is_300()
+        {
+            _game.Score.ShouldEqual(300);
+        }
+    }
 }

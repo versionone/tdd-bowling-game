@@ -13,52 +13,77 @@ namespace Bowling
         public void Bowl(int pins)
         {
             Frame lastFrame = frames.LastOrDefault();
-
-            if (frames.Count >= MAX_NUM_FRAMES && lastFrame != null && !lastFrame.AllowMoreRolls())
+	        var lastFrameIndex = frames.IndexOf(lastFrame);
+            if (frames.Count >= MAX_NUM_FRAMES && lastFrame != null && !lastFrame.AllowMoreRolls(lastFrameIndex))
             {
                 throw new GameOverException();
             }
 
-           
-            if (lastFrame != null && lastFrame.AllowMoreRolls())
-            {
-                    lastFrame.Roll2 = pins;                 
-            }
-            else
+
+            if (lastFrame == null || !lastFrame.AllowMoreRolls(lastFrameIndex))
             {
                 var frame = new Frame();
                 frames.Add(frame);
                 frame.Roll1 = pins;
             }
 
+            else
+            {
+                // special case if we're on the 10th frame
+                if (frames.Count == 10 && lastFrame.IsStrike()) {
+                    if (!lastFrame.Roll2.HasValue)
+                    {
+                        lastFrame.Roll2 = pins;
+                    }
+                    else
+                    {
+                        lastFrame.Roll3 = pins;
+                    }
+                }
+
+                else if (lastFrame.AllowMoreRolls(lastFrameIndex))
+                {
+                    lastFrame.Roll2 = pins;
+                }
+            }
         }
 
-        public int Score 
+        public int Score
         {
             get
             {
                 for (int i = 0; i < frames.Count; i++)
                 {
                     var currentFrame = frames[i];
-                    
+
+                    //if we are not on the first frame grab the previous frame and compute the score
                     if (i > 0)
                     {
                         var previousFrame = frames[i - 1];
                         if (previousFrame.IsSpare())
                         {
-                            var roll1 = currentFrame.Roll1;
-                            previousFrame.Bonus = roll1;
+                            previousFrame.Bonus = currentFrame.Roll1;
                         }
                         else if (previousFrame.IsStrike())
                         {
                             var bonus = currentFrame.Roll1;
 
                             if (currentFrame.IsStrike()) {
-                                //look ahead and grab score from next roll
-                                if (i != frames.Count)
+                                Frame nextFrame = null;
+
+                                if (i < frames.Count - 1)
                                 {
-                                    var nextFrame = frames[i + 1];
+                                    nextFrame = frames[i + 1];
+                                }
+
+                                //if we are not on the last frame
+                                if (nextFrame != null && i < frames.Count - 1)
+                                {
                                     bonus += nextFrame.Roll1;
+                                }
+								else //we are on the last frame
+                                {
+	                                bonus += currentFrame.Roll2.Value;
                                 }
 
                             }
@@ -67,7 +92,7 @@ namespace Bowling
                             previousFrame.Bonus = bonus;
                         }
 
-                       
+
                     }
                 }
 
@@ -77,7 +102,7 @@ namespace Bowling
         }
     }
 
-    public class GameOverException : Exception { 
+    public class GameOverException : Exception {
     }
 
     public class Frame
@@ -85,6 +110,7 @@ namespace Bowling
 
         public int Roll1 { get; set; }
         public int? Roll2 { get; set; }
+        public int? Roll3 { get; set; }
         public int? Bonus { get; set; }
 
 
@@ -97,7 +123,7 @@ namespace Bowling
         }
         public bool IsStrike()
         {
-            return Roll1 == 10 && !Roll2.HasValue;
+            return Roll1 == 10;
         }
 
         public bool IsSpare()
@@ -107,17 +133,33 @@ namespace Bowling
 
         public int GetNumOfPins()
         {
-            return Roll1 + Roll2.GetValueOrDefault();
+            return Roll1 + Roll2.GetValueOrDefault() + Roll3.GetValueOrDefault();
         }
 
-        public bool AllowMoreRolls()
+        public bool AllowMoreRolls(int frameIndex)
         {
-            if (IsStrike() || Roll2.HasValue) 
-            {
-                return false;
-            }
+			if (frameIndex < 9)
+			{
+				if ((IsStrike() || Roll2.HasValue))
+				{
+					return false;
+				}
+			}
+			else
+			{
+				if (IsStrike() && Roll3.HasValue)
+				{
+					return false;
+				}
+				if (!IsStrike() && Roll2.HasValue)
+				{
+					return false;
+				}
+			}
 
             return true;
         }
+
+
     }
 }
