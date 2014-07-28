@@ -106,4 +106,32 @@ namespace specs_for_bowling
         }
     }
 
+    public class when_first_frame_is_spare_and_remaining_rolls_are_2: concerns
+    {
+        private BowlingGame _game;
+
+        protected override void context()
+        {
+            _game = new BowlingGame();
+
+            1.times(() =>
+            {
+                _game.Bowl(3);
+                _game.Bowl(7);
+            });
+
+            9.times(() =>
+            {
+                _game.Bowl(2);
+                _game.Bowl(2);
+            });
+        }
+
+        [Specification]
+        public void the_score_is_48()
+        {
+            _game.Score.ShouldEqual(48);
+        }
+    }
+
 }
