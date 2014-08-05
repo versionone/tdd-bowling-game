@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Runtime.Remoting.Messaging;
 using NUnit.Framework;
@@ -22,7 +23,7 @@ namespace Bowling
 					score += roll;
 					isSpare = false;
 				}
-				
+
 				if (odd)
 				{
 					odd = false;
@@ -48,6 +49,10 @@ namespace Bowling
 
 		public void Roll(int pins)
 		{
+			if(_rolls.Count == 20)
+			{
+				throw new InvalidOperationException("Game Over");
+			}
 			_rolls.Add(pins);
 		}
 	}

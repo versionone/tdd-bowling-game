@@ -1,5 +1,7 @@
+using System;
 using Bowling;
 using Bowling.Specs.Infrastructure;
+using NUnit.Framework;
 
 namespace specs_for_bowling
 {
@@ -106,5 +108,62 @@ namespace specs_for_bowling
 			_game.Score.ShouldEqual(48);
 		}
 	}
-	
+	public class when_first_2_frames_are_spares_and_remaining_rolls_are_2s : concerns<Game>
+	{
+		private Game _game;
+		protected override void context()
+		{
+			_game = build_up();
+
+			2.times(() =>
+			{
+				_game.Roll(2);
+				_game.Roll(8);
+			});
+			
+			16.times(() => _game.Roll(2));
+		}
+
+		[Specification]
+		public void the_score_is_fifty_six()
+		{
+			_game.Score.ShouldEqual(56);
+		}
+	}
+	public class when_10_frames_have_been_bowled : concerns<Game>
+	{
+		private Game _game;
+		protected override void context()
+		{
+			_game = build_up();
+
+			20.times(() => _game.Roll(1));
+		}
+
+		[Specification]
+		[ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "Game Over")]
+		public void do_not_allow_anymore_to_be_bowled()
+		{
+			_game.Roll(1);
+		}
+	}
+/*
+	public class when_10_frames_have_been_bowled_in_a_different_way : concerns<Game>
+	{
+		private Game _game;
+		protected override void context()
+		{
+			_game = build_up();
+
+			12.times(() => _game.Roll(10));
+		}
+
+		[Specification]
+		[ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "Game Over")]
+		public void do_not_allow_anymore_to_be_bowled()
+		{
+			_game.Roll(1);
+		}
+	}
+*/
 }
