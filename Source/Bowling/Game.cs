@@ -16,26 +16,25 @@ namespace Bowling
 			var isSpare = false;
 			foreach (var roll in rolls)
 			{
-				if(odd)
+				score += roll;
+				if (isSpare)
+				{
+					score += roll;
+					isSpare = false;
+				}
+				
+				if (odd)
 				{
 					odd = false;
 					firstRollInFrame = roll;
-					score += roll;
-					if (isSpare)
-					{
-						score += roll;
-						isSpare = false;
-					}
-					continue;
-				}
-				if(firstRollInFrame + roll == 10)
-				{
-					isSpare = true;
-					score += roll;
 					continue;
 				}
 
-				score += roll;
+				if(firstRollInFrame + roll == 10)
+				{
+					isSpare = true;
+				}
+
 				odd = true;
 			}
 
