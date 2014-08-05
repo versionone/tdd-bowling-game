@@ -68,4 +68,43 @@ namespace specs_for_bowling
 			_game.Score.ShouldEqual(58);
 		}
 	}
+	public class when_rolling_alternating_2s_and_5s : concerns<Game>
+	{
+		private Game _game;
+		protected override void context()
+		{
+			_game = build_up();
+
+			10.times(() =>
+			{
+				_game.Roll(2);
+				_game.Roll(5);
+			});
+		}
+
+		[Specification]
+		public void the_score_is_seventy()
+		{
+			_game.Score.ShouldEqual(70);
+		}
+	}
+	public class when_first_frame_is_a_spare_and_remaining_rolls_are_2s : concerns<Game>
+	{
+		private Game _game;
+		protected override void context()
+		{
+			_game = build_up();
+
+			_game.Roll(5);
+			_game.Roll(5);
+			18.times(() => _game.Roll(2));
+		}
+
+		[Specification]
+		public void the_score_is_forty_eight()
+		{
+			_game.Score.ShouldEqual(48);
+		}
+	}
+	
 }
