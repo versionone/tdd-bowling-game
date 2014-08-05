@@ -166,4 +166,22 @@ namespace specs_for_bowling
 		}
 	}
 */
+
+	public class when_first_frame_is_a_strike_and_the_rest_are_2s : concerns<Game>
+	{
+		private Game _game;
+		protected override void context()
+		{
+			_game = build_up();
+
+			_game.Roll(10);
+			18.times(() => _game.Roll(2));
+		}
+
+		[Specification]
+		public void the_score_is_fifty()
+		{
+			_game.Score.ShouldEqual(50);
+		}
+	}
 }
