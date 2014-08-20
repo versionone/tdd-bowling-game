@@ -237,4 +237,23 @@ namespace specs_for_bowling
 			_game.Score.ShouldEqual(300);
 		}
 	}
+
+	public class when_rolling_a_dutch_200 : concerns
+	{
+		private readonly Game _game = new Game();
+
+		protected override void context()
+		{
+			5.times(() => { _game.Roll(10); _game.Roll(5); _game.Roll(5); });
+
+			_game.Roll(10);
+		}
+
+		[Specification]
+		public void the_score_is_200()
+		{
+			_game.Score.ShouldEqual(200);
+		}
+	}
+
 }
