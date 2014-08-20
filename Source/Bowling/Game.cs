@@ -31,11 +31,15 @@ namespace Bowling
 				CurrentFrame.AddRoll(pins);
 			}
 
-			if (lastFinishedFrame != null)
+			if (lastFinishedFrame != null && CurrentFrame.IsFinished())
 			{
-				if (lastFinishedFrame.IsSpare() && !CurrentFrame.IsFinished())
+				if (lastFinishedFrame.IsSpare())
 				{
-					_score += pins;
+					_score += CurrentFrame.FirstRoll;
+				}
+				else if(lastFinishedFrame.IsStrike())
+				{
+					_score += CurrentFrame.FirstRoll + CurrentFrame.SecondRoll;
 				}
 			}
 
@@ -68,18 +72,23 @@ namespace Bowling
 
 		public bool IsSpare()
 		{
-			return FirstRoll + SecondRoll == 10;
+			return !IsStrike() && FirstRoll + SecondRoll == 10;
 		}
 
 		public bool IsFinished()
 		{
-			return !_isFirstRoll;
+			return IsStrike() || !_isFirstRoll;
 		}
 
 		public void AddRoll(int pins)
 		{
 			_isFirstRoll = false;
 			SecondRoll = pins;
+		}
+
+		public bool IsStrike()
+		{
+			return FirstRoll == 10;
 		}
 	}
 }

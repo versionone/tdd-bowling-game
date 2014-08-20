@@ -147,4 +147,22 @@ namespace specs_for_bowling
 			typeof (Exception).ShouldBeThrownBy(() => _game.Roll(2));
 		}
 	}
+
+	//when the first frame is a strike and the rest score 2, the score is 50.
+	public class when_the_first_roll_is_a_strike_and_the_remaining_rolls_are_2s : concerns
+	{
+		private readonly Game _game = new Game();
+
+		protected override void context()
+		{
+			_game.Roll(10);
+			18.times(() => _game.Roll(2));
+		}
+
+		[Specification]
+		public void the_score_is_50()
+		{
+			_game.Score.ShouldEqual(50);
+		}
+	}
 }
