@@ -165,4 +165,24 @@ namespace specs_for_bowling
 			_game.Score.ShouldEqual(50);
 		}
 	}
+
+	//when the first two frames are strikes and the rest score 2, the score is 68.
+	public class when_the_first_two_rolls_are_strikes_and_the_remaining_rolls_are_2s : concerns
+	{
+		private readonly Game _game = new Game();
+
+		protected override void context()
+		{
+			_game.Roll(10);
+			_game.Roll(10);
+
+			16.times(() => _game.Roll(2));
+		}
+
+		[Specification]
+		public void the_score_is_68()
+		{
+			_game.Score.ShouldEqual(68);
+		}
+	}
 }

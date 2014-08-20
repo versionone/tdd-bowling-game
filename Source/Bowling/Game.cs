@@ -31,19 +31,19 @@ namespace Bowling
 				CurrentFrame.AddRoll(pins);
 			}
 
-			if (lastFinishedFrame != null && CurrentFrame.IsFinished())
-			{
-				if (lastFinishedFrame.IsSpare())
-				{
-					_score += CurrentFrame.FirstRoll;
-				}
-				else if(lastFinishedFrame.IsStrike())
-				{
-					_score += CurrentFrame.FirstRoll + CurrentFrame.SecondRoll;
-				}
-			}
+			//if (lastFinishedFrame != null && CurrentFrame.IsFinished())
+			//{
+			//    if (lastFinishedFrame.IsSpare())
+			//    {
+			//        _score += CurrentFrame.FirstRoll;
+			//    }
+			//    else if(lastFinishedFrame.IsStrike())
+			//    {
+			//        _score += CurrentFrame.FirstRoll + CurrentFrame.SecondRoll;
+			//    }
+			//}
 
-			_score += pins;
+			//_score += pins;
 		}
 
 		public bool IsOver
@@ -54,7 +54,34 @@ namespace Bowling
 
 		public int Score
 		{
-			get { return _score; }
+			get
+			{
+				var score = 0;
+				for (var frameIndex = 0; frameIndex < _frames.Count; frameIndex++)
+				{
+					var frame = _frames[frameIndex];
+					score += frame.FirstRoll + frame.SecondRoll;
+
+					var isStrike = frame.IsStrike();
+					if (frame.IsSpare() || isStrike)
+					{
+						var nextFrame = _frames[frameIndex + 1];
+						score += nextFrame.FirstRoll;
+
+						if (isStrike)
+						{
+							if (nextFrame.IsStrike())
+							{
+								var nextNextFrame = _frames[frameIndex + 2];
+								score += nextNextFrame.FirstRoll;
+							}
+							else
+								score += nextFrame.SecondRoll;
+						}
+					}
+				}
+				return score;
+			}
 		}
 	}
 
