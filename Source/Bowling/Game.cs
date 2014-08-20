@@ -16,6 +16,10 @@ namespace Bowling
 
 		public void Roll(int pins)
 		{
+			if (IsOver)
+			{
+				throw new Exception("Game is over.");
+			}
 			var lastFinishedFrame = _frames.LastOrDefault(f => f.IsFinished());
 
 			if (CurrentFrame == null || CurrentFrame.IsFinished())
@@ -36,6 +40,11 @@ namespace Bowling
 			}
 
 			_score += pins;
+		}
+
+		public bool IsOver
+		{
+			get { return _frames.Count(f=>f.IsFinished()) == 10; }
 		}
 
 

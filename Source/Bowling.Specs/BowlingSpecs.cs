@@ -1,3 +1,4 @@
+using System;
 using Bowling;
 using Bowling.Specs.Infrastructure;
 
@@ -127,6 +128,23 @@ namespace specs_for_bowling
 		public void the_score_is_56()
 		{
 			_game.Score.ShouldEqual(56);
+		}
+	}
+
+	// when 10 frames have been bowled, don't allow any more to be bowled
+	public class when_10_frames_have_been_bowled : concerns
+	{
+		private readonly Game _game = new Game();
+
+		protected override void context()
+		{
+			20.times(() => _game.Roll(2));
+		}
+
+		[Specification]
+		public void the_game_is_over()
+		{
+			typeof (Exception).ShouldBeThrownBy(() => _game.Roll(2));
 		}
 	}
 }
