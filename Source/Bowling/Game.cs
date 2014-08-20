@@ -8,27 +8,69 @@ namespace Bowling
 	public class Game
 	{
 		private int _score;
-		private bool _isSpare;
-		private int _previousScore;
-		private bool _isFirstRoll = true;
+		private IList<Frame> _frames = new List<Frame>();
+
+		private Frame CurrentFrame {
+			get { return _frames.LastOrDefault(); }
+		}
 
 		public void Roll(int pins)
 		{
-			_score += pins;
+			var lastFinishedFrame = _frames.LastOrDefault(f => f.IsFinished());
 
-			if (_isSpare)
+			if (CurrentFrame == null || CurrentFrame.IsFinished())
 			{
-				_score += pins;
+				_frames.Add(new Frame(pins));
+			}
+			else
+			{
+				CurrentFrame.AddRoll(pins);
 			}
 
-			_isSpare = !_isFirstRoll && (_previousScore + pins == 10);
-			_previousScore = pins;
-			_isFirstRoll = !_isFirstRoll;
+			if (lastFinishedFrame != null)
+			{
+				if (lastFinishedFrame.IsSpare() && !CurrentFrame.IsFinished())
+				{
+					_score += pins;
+				}
+			}
+
+			_score += pins;
 		}
+
 
 		public int Score
 		{
 			get { return _score; }
+		}
+	}
+
+	public class Frame
+	{
+		private bool _isFirstRoll = true;
+
+		public int FirstRoll { get; private set; }
+		public int SecondRoll { get; private set; }
+
+		public Frame(int pins)
+		{
+			FirstRoll = pins;
+		}
+
+		public bool IsSpare()
+		{
+			return FirstRoll + SecondRoll == 10;
+		}
+
+		public bool IsFinished()
+		{
+			return !_isFirstRoll;
+		}
+
+		public void AddRoll(int pins)
+		{
+			_isFirstRoll = false;
+			SecondRoll = pins;
 		}
 	}
 }
