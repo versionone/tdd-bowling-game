@@ -21,19 +21,10 @@ namespace Bowling
 			{
 				throw new Exception("Game is over.");
 			}
-			var lastFinishedFrame = _frames.LastOrDefault(f => f.IsFinished());
 
 			if (CurrentFrame == null || CurrentFrame.IsFinished())
 			{
-				Frame frame = new Frame(pins);
-				if (_frames.Count == 9)
-				{
-					_frames.Add(new TenthFrame(frame));
-				}
-				else
-				{
-					_frames.Add(frame);
-				}
+				_frames.Add(_frames.Count == 9 ? new TenthFrame(pins) : new Frame(pins));
 			}
 			else
 			{
@@ -65,58 +56,29 @@ namespace Bowling
 		}
 	}
 
-	public class TenthFrame : IFrame
+	public class TenthFrame : Frame
 	{
-		private readonly Frame _frame;
-
-		public TenthFrame(Frame frame)
+		public TenthFrame(int pins) : base(pins)
 		{
-			_frame = frame;
 		}
 
-		public int FirstRoll { get { return _frame.FirstRoll; } }
-		public int? SecondRoll { get { return _frame.SecondRoll; } }
-		public int? FirstBonusRole { get; private set; }
-		private int? _secondBonusRole;
-
-		public bool IsSpare()
+		public override bool IsFinished()
 		{
-			return _frame.IsSpare();
+			var finished = !(IsSpare() || IsStrike()) && base.IsFinished();
+			return finished || _rolls.Count == 3;
 		}
 
-		public bool IsStrike()
+		public override void AddRoll(int pins)
 		{
-			return _frame.IsStrike();
+			if (IsFinished())
+				throw new Exception("Frame is already full.");
+
+			base.AddRoll(pins);
 		}
 
-		public bool IsFinished()
+		public override int Score(IEnumerable<IFrame> extraFrames)
 		{
-			var finished = !(IsSpare() || IsStrike()) && _frame.IsFinished();
-			return finished || (IsSpare() && FirstBonusRole.HasValue) || (IsStrike() && _secondBonusRole.HasValue);
-		}
-
-		public void AddRoll(int pins)
-		{
-			if (_frame.IsStrike())
-			{
-				if (!FirstBonusRole.HasValue)
-					FirstBonusRole = pins;
-				else
-					_secondBonusRole = pins;
-			}
-			else if (_frame.IsSpare())
-			{
-				FirstBonusRole = pins;
-			}
-			else if (!SecondRoll.HasValue)
-			{
-				_frame.AddRoll(pins);
-			}
-		}
-
-		public int Score(IEnumerable<IFrame> extraFrames)
-		{
-			return FirstRoll + SecondRoll.GetValueOrDefault() + FirstBonusRole.GetValueOrDefault() + _secondBonusRole.GetValueOrDefault();
+			return _rolls.Sum();
 		}
 	}
 
@@ -133,35 +95,34 @@ namespace Bowling
 
 	public class Frame : IFrame
 	{
-		private bool _isFirstRoll = true;
-
-		public int FirstRoll { get; private set; }
-		public int? SecondRoll { get; private set; }
+		protected readonly List<int> _rolls = new List<int>();
 
 		public Frame(int pins)
 		{
-			FirstRoll = pins;
+			_rolls.Add(pins);
 		}
+
+		public int FirstRoll { get { return _rolls.First(); } }
+		public int? SecondRoll { get { return _rolls.ElementAtOrDefault(1); } }
 
 		public bool IsSpare()
 		{
-			return !IsStrike() && FirstRoll + SecondRoll == 10;
+			return !IsStrike() && _rolls.Take(2).Sum() == 10;
 		}
 
-		public bool IsFinished()
+		public virtual bool IsFinished()
 		{
-			return IsStrike() || !_isFirstRoll;
+			return IsStrike() || _rolls.Count == 2;
 		}
 
-		public void AddRoll(int pins)
+		public virtual void AddRoll(int pins)
 		{
-			_isFirstRoll = false;
-			SecondRoll = pins;
+			_rolls.Add(pins);
 		}
 
-		public int Score(IEnumerable<IFrame> extraFrames)
+		public virtual int Score(IEnumerable<IFrame> extraFrames)
 		{
-			var score = FirstRoll + SecondRoll.GetValueOrDefault();
+			var score = _rolls.Sum();
 			var nextRoll = extraFrames.First();
 
 			if (IsSpare())
@@ -175,7 +136,7 @@ namespace Bowling
 				if (nextRoll.IsStrike())
 				{
 					if (nextRoll is TenthFrame)
-						score += ((TenthFrame)nextRoll).FirstBonusRole.Value;
+						score += ((TenthFrame) nextRoll).SecondRoll.Value;
 					else
 						score += extraFrames.ElementAt(1).FirstRoll;
 				}
@@ -187,7 +148,7 @@ namespace Bowling
 
 		public bool IsStrike()
 		{
-			return FirstRoll == 10;
+			return _rolls.First() == 10;
 		}
 	}
 }
