@@ -50,4 +50,21 @@ namespace specs_for_bowling
 			_game.Score.ShouldEqual(40);
 		}
 	}
+
+	public class when_rolling_two_twos_followed_by_threes : concerns
+	{
+		private readonly Game _game = new Game();
+
+		protected override void context()
+		{
+			2.times(() => _game.Roll(2));
+			18.times(()=> _game.Roll(3));
+		}
+
+		[Specification]
+		public void the_score_is_58()
+		{
+			_game.Score.ShouldEqual(58);
+		}
+	}
 }
