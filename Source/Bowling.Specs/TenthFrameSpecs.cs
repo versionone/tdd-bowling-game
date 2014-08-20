@@ -1,15 +1,15 @@
 using Bowling;
 using Bowling.Specs.Infrastructure;
 
-namespace specs_for_frames
+namespace specs_for_tenth_frames
 {
 	public class when_the_first_roll_has_occurred : concerns
 	{
-		private Frame _frame;
+		private TenthFrame _frame;
 
 		protected override void context()
 		{
-			_frame = new Frame(5);
+			_frame = new TenthFrame(5);
 		}
 
 		[Specification]
@@ -21,11 +21,11 @@ namespace specs_for_frames
 
 	public class when_the_second_roll_has_occurred : concerns
 	{
-		private Frame _frame;
+		private TenthFrame _frame;
 
 		protected override void context()
 		{
-			_frame = new Frame(5);
+			_frame = new TenthFrame(5);
 			_frame.AddRoll(1);
 		}
 
@@ -38,12 +38,13 @@ namespace specs_for_frames
 
 	public class when_two_rolls_sum_to_10 : concerns
 	{
-		private Frame _frame;
+		private TenthFrame _frame;
 
 		protected override void context()
 		{
-			_frame = new Frame(5);
+			_frame = new TenthFrame(5);
 			_frame.AddRoll(5);
+			_frame.AddRoll(2);
 		}
 
 		[Specification]
@@ -67,11 +68,13 @@ namespace specs_for_frames
 
 	public class when_the_first_roll_is_a_10 : concerns
 	{
-		private Frame _frame;
+		private TenthFrame _frame;
 
 		protected override void context()
 		{
-			_frame = new Frame(10);
+			_frame = new TenthFrame(10);
+			_frame.AddRoll(5);
+			_frame.AddRoll(5);
 		}
 
 		[Specification]
@@ -91,7 +94,5 @@ namespace specs_for_frames
 		{
 			_frame.IsFinished().ShouldBeTrue();
 		}
-
-
 	}
 }

@@ -132,7 +132,7 @@ namespace specs_for_bowling
 	}
 
 	// when 10 frames have been bowled, don't allow any more to be bowled
-	public class when_10_frames_have_been_bowled : concerns
+	public class when_10_regular_frames_have_been_bowled : concerns
 	{
 		private readonly Game _game = new Game();
 
@@ -145,6 +145,42 @@ namespace specs_for_bowling
 		public void the_game_is_over()
 		{
 			typeof (Exception).ShouldBeThrownBy(() => _game.Roll(2));
+		}
+	}
+
+	public class when_the_10th_frame_is_a_strike_and_the_bonuses_have_not_been_rolled : concerns
+	{
+		private readonly Game _game = new Game();
+
+		protected override void context()
+		{
+			18.times(() => _game.Roll(2));
+			_game.Roll(10);
+		}
+
+		[Specification]
+		public void the_game_is_not_over()
+		{
+			_game.IsOver.ShouldBeFalse();
+		}
+	}
+
+	public class when_the_10th_frame_is_a_strike_and_the_bonuses_have_been_rolled : concerns
+	{
+		private readonly Game _game = new Game();
+
+		protected override void context()
+		{
+			18.times(() => _game.Roll(2));
+			_game.Roll(10);
+			_game.Roll(2);
+			_game.Roll(2);
+		}
+
+		[Specification]
+		public void the_game_is_over()
+		{
+			_game.IsOver.ShouldBeTrue();
 		}
 	}
 
@@ -183,6 +219,22 @@ namespace specs_for_bowling
 		public void the_score_is_68()
 		{
 			_game.Score.ShouldEqual(68);
+		}
+	}
+
+	public class when_rolling_a_perfect_game : concerns
+	{
+		private readonly Game _game = new Game();
+
+		protected override void context()
+		{
+			12.times(() => _game.Roll(10));
+		}
+
+		[Specification]
+		public void the_score_is_300()
+		{
+			_game.Score.ShouldEqual(300);
 		}
 	}
 }
