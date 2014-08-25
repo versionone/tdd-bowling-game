@@ -44,7 +44,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bowling.cs" />
+    <Compile Include="Extends.cs" />
+    <Compile Include="Frame.cs" />
+    <Compile Include="Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Roll.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
