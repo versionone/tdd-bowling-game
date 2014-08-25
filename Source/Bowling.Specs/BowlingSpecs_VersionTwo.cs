@@ -37,7 +37,7 @@ namespace Bowling.Specs
                 yield return new TestCaseData("0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0")
                     .SetName("Rolled Extra ball, not allowed").Throws(typeof (ApplicationException));
                 yield return new TestCaseData("10;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0")
-                    .SetName("First ball a strike, followed by all gutters, and one extra invalid roll").Throws(typeof(ApplicationException));
+                    .SetName("First roll a strike, followed by 18 gutters, and one extra exception generating roll").Throws(typeof(ApplicationException));
             }
         }
     }
