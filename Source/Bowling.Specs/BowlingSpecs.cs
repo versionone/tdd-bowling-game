@@ -168,6 +168,31 @@ Below are some scenarios we can use to drive the development of the game.
 		}
 	}
 
+	public class when_rolling_two_spares_with_first_roll_two_second_roll_eight_and_rolling_twos_for_the_remaing_frames : concerns
+	{
+		private int? _score;
+		private ScoreSheet scoreSheet;
+
+		protected override void context()
+		{
+			scoreSheet = new ScoreSheet();
+			scoreSheet.AddFrame(new Frame() { FirstRoll = 2, SecondRoll = 8 });
+			scoreSheet.AddFrame(new Frame() { FirstRoll = 2, SecondRoll = 8 });
+
+			for (var i = 2; i < 10; i++)
+			{
+				scoreSheet.AddFrame(new Frame() { FirstRoll = 2, SecondRoll = 2 });
+			}
+			_score = scoreSheet.CalculateScore();
+		}
+
+		[Specification]
+		public void the_score_should_be_fifty_six()
+		{
+			_score.ShouldEqual(56);
+		}
+	}
+
 
 
 }
