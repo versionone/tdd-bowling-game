@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScoreSheetReader.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
