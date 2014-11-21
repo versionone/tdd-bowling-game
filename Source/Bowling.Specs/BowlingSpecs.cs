@@ -145,6 +145,29 @@ Below are some scenarios we can use to drive the development of the game.
 		}
 	}
 
+	public class when_rolling_a_spare_and_the_twos_for_the_remaing_frames : concerns
+	{
+		private int? _score;
+		private ScoreSheet scoreSheet;
+
+		protected override void context()
+		{
+			scoreSheet = new ScoreSheet();
+			scoreSheet.AddFrame(new Frame(){FirstRoll = 3, SecondRoll = 7});
+			for (var i = 1; i < 10; i++)
+			{
+				scoreSheet.AddFrame(new Frame(){FirstRoll = 2, SecondRoll = 2});
+			}
+			_score = scoreSheet.CalculateScore();
+		}
+
+		[Specification]
+		public void the_score_should_be_forty_eight()
+		{
+			_score.ShouldEqual(48);
+		}
+	}
+
 
 
 }
