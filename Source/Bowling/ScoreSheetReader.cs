@@ -77,6 +77,11 @@ namespace Bowling
 						//TODO what happens if spare is in last frame?
 						result += (CalculateScore(Frames[i]) + Frames[i + 1].FirstRoll);
 						break;
+					case Frame.FrameType.Strike:
+						//TODO what happens if strike is in last frame?
+						//TODO what happens the next frame is also a strike
+						result += (CalculateScore(Frames[i]) + CalculateScore(Frames[i + 1]));
+						break;
 				}
 
 			}

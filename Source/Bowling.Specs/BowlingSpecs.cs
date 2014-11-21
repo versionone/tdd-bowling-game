@@ -128,14 +128,7 @@ Below are some scenarios we can use to drive the development of the game.
 			scoreSheet = new ScoreSheet();
 			for (var i = 0; i < 10; i++)
 			{
-				if (i%2 != 0)
-				{
-					scoreSheet.AddFrame(new Frame() {FirstRoll = 2, SecondRoll = 2});
-				}
-				else
-				{
-					scoreSheet.AddFrame(new Frame() {FirstRoll = 5, SecondRoll = 5});
-				}
+				scoreSheet.AddFrame(new Frame() {FirstRoll = 2, SecondRoll = 5});
 			}
 			_score = scoreSheet.CalculateScore();
 		}
@@ -221,6 +214,29 @@ Below are some scenarios we can use to drive the development of the game.
 				Assert.Pass();
 			}
 			Assert.Fail();
+		}
+	}
+
+	public class when_rolling_a_strike_and_then_twos_for_the_remaing_frames : concerns
+	{
+		private int? _score;
+		private ScoreSheet scoreSheet;
+
+		protected override void context()
+		{
+			scoreSheet = new ScoreSheet();
+			scoreSheet.AddFrame(new Frame() { FirstRoll = 10 });
+			for (var i = 1; i < 10; i++)
+			{
+				scoreSheet.AddFrame(new Frame() { FirstRoll = 2, SecondRoll = 2 });
+			}
+			_score = scoreSheet.CalculateScore();
+		}
+
+		[Specification]
+		public void the_score_should_be_fifty()
+		{
+			_score.ShouldEqual(50);
 		}
 	}
 }
