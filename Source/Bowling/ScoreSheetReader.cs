@@ -34,6 +34,11 @@ namespace Bowling
 
 	}
 
+	public class TooManyFramesException : Exception
+	{
+
+	}
+
 	public class ScoreSheet
 	{
 		public List<Frame> Frames { get; set; }

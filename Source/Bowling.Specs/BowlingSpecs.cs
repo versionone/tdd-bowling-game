@@ -1,5 +1,7 @@
+using System;
 using Bowling;
 using Bowling.Specs.Infrastructure;
+using NUnit.Framework;
 using StructureMap.Pipeline;
 
 namespace specs_for_bowling
@@ -193,6 +195,36 @@ Below are some scenarios we can use to drive the development of the game.
 		}
 	}
 
+	public class when_ten_frames_have_been_bowled_dont_allow_another_frame : concerns
+	{
+		private int? _score;
+		private ScoreSheet scoreSheet;
 
+		protected override void context()
+		{
+			scoreSheet = new ScoreSheet();
+			scoreSheet.AddFrame(new Frame() { FirstRoll = 2, SecondRoll = 8 });
+			scoreSheet.AddFrame(new Frame() { FirstRoll = 2, SecondRoll = 8 });
 
+			for (var i = 2; i < 10; i++)
+			{
+				scoreSheet.AddFrame(new Frame() { FirstRoll = 2, SecondRoll = 2 });
+			}
+			_score = scoreSheet.CalculateScore();
+		}
+
+		[Specification]
+		public void the_add_frame_method_throws_an_exception()
+		{
+			try
+			{
+				scoreSheet.AddFrame(new Frame());
+			}
+			catch(TooManyFramesException e)
+			{
+				Assert.Pass();
+			}
+			Assert.Fail();
+		}
+	}
 }
