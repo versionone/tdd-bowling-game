@@ -50,6 +50,10 @@ namespace Bowling
 
 		public void AddFrame(Frame frame)
 		{
+			if (Frames.Count == 10)
+			{
+				throw new TooManyFramesException();
+			}
 			Frames.Add(frame);
 		}
 
