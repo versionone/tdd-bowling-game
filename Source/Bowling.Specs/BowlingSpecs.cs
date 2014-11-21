@@ -197,20 +197,16 @@ Below are some scenarios we can use to drive the development of the game.
 
 	public class when_ten_frames_have_been_bowled_dont_allow_another_frame : concerns
 	{
-		private int? _score;
 		private ScoreSheet scoreSheet;
 
 		protected override void context()
 		{
 			scoreSheet = new ScoreSheet();
-			scoreSheet.AddFrame(new Frame() { FirstRoll = 2, SecondRoll = 8 });
-			scoreSheet.AddFrame(new Frame() { FirstRoll = 2, SecondRoll = 8 });
 
-			for (var i = 2; i < 10; i++)
+			for (var i = 0; i < 10; i++)
 			{
-				scoreSheet.AddFrame(new Frame() { FirstRoll = 2, SecondRoll = 2 });
+				scoreSheet.AddFrame(new Frame() );
 			}
-			_score = scoreSheet.CalculateScore();
 		}
 
 		[Specification]
