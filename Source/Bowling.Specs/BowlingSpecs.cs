@@ -1,3 +1,4 @@
+using Bowling;
 using Bowling.Specs.Infrastructure;
 
 namespace specs_for_bowling
@@ -15,6 +16,60 @@ namespace specs_for_bowling
 		public void it_works()
 		{
 			_itWorked.ShouldBeTrue();
+		}
+	}
+
+	public class when_rolling_all_gutter_balls : concerns
+	{
+		private Game _game;
+		protected override void context()
+		{
+			_game = new Game();
+			for (int i = 0; i < 20; i++)
+			{
+				_game.Roll(0);
+			}
+		}
+
+		[Specification]
+		public void the_score_is_0()
+		{
+			_game.GetScore().ShouldEqual(0);
+		}
+	}
+
+	public class when_rolling_all_twos : concerns
+	{
+		private Game _game;
+		protected override void context()
+		{
+			_game = new Game();
+			for (int i = 0; i < 20; i++)
+			{
+				_game.Roll(2);
+			}
+		}
+
+		[Specification]
+		public void the_score_is_40()
+		{
+			_game.GetScore().ShouldEqual(40);
+		}
+	}
+}
+
+namespace Bowling
+{
+	public class Game
+	{
+		private int score;
+		public void Roll(int pins)
+		{
+			score = score + pins;
+		}
+		public int GetScore()
+		{
+			return score;
 		}
 	}
 }
