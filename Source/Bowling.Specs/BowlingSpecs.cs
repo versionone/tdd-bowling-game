@@ -188,6 +188,21 @@ namespace specs_for_bowling
 			_game.GetScore().ShouldEqual(68);
 		}
 	}
+	public class when_rolling_perfect_game : concerns
+	{
+		private Game _game;
+		protected override void context()
+		{
+			_game = new Game();
+			12.times(() => _game.Roll(10));
+		}
+
+		[Specification]
+		public void the_score_is_300()
+		{
+			_game.GetScore().ShouldEqual(300);
+		}
+	}
 }
 
 namespace Bowling
@@ -211,14 +226,19 @@ namespace Bowling
 			var score = 0;
 			int lastRoll = 0;
 			var newFrame = true;
+			var frameCount = 0;
 
 			for (int i = 0; i < _rolls.Count; i++)
 			{
 				if (IsStrike(_rolls[i]))
 				{
-					var frameScore = _rolls[i] + _rolls[i + 1] + _rolls[i + 2];
-					score = score + frameScore;
-					newFrame = true;
+					if(frameCount < 10)
+					{
+						var frameScore = _rolls[i] + _rolls[i + 1] + _rolls[i + 2];
+						score = score + frameScore;
+						newFrame = true;
+						frameCount++;
+					}
 				}
 				else if (newFrame)
 				{
@@ -232,6 +252,7 @@ namespace Bowling
 						score = score + _rolls[i+1];
 					}
 					newFrame = true;
+					frameCount++;
 					score = score + frameScore;
 				}
 			}
