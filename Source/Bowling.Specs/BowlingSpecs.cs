@@ -170,6 +170,24 @@ namespace specs_for_bowling
 			_game.GetScore().ShouldEqual(50);
 		}
 	}
+
+	public class when_first_two_frames_are_strikes_followed_by_all_twos : concerns
+	{
+		private Game _game;
+		protected override void context()
+		{
+			_game = new Game();
+			_game.Roll(10);
+			_game.Roll(10);
+			16.times(() => _game.Roll(2));
+		}
+
+		[Specification]
+		public void the_score_is_68()
+		{
+			_game.GetScore().ShouldEqual(68);
+		}
+	}
 }
 
 namespace Bowling
