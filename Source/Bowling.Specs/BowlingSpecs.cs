@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Bowling;
 using Bowling.Specs.Infrastructure;
@@ -135,6 +136,23 @@ namespace specs_for_bowling
 			_game.GetScore().ShouldEqual(56);
 		}
 	}
+
+	public class rolling_more_than_ten_frames : concerns
+	{
+		private Game _game;
+		protected override void context()
+		{
+			_game = new Game();
+			20.times(() => _game.Roll(0));
+		}
+
+		[Specification]
+		[ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "Game Over")]
+		public void is_not_allowed()
+		{
+			_game.Roll(0);
+		}
+	}
 }
 
 namespace Bowling
@@ -144,6 +162,11 @@ namespace Bowling
 		private List<int> _rolls = new List<int>();
 		public void Roll(int pins)
 		{
+			if (_rolls.Count >= 20)
+			{
+				throw new InvalidOperationException("Game Over");
+			}
+
 			_rolls.Add(pins);
 		}
 		public int GetScore()
