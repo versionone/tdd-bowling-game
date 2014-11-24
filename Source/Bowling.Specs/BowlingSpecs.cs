@@ -56,6 +56,24 @@ namespace specs_for_bowling
 			_game.GetScore().ShouldEqual(40);
 		}
 	}
+
+	public class when_rolling_two_twos_followed_by_all_threes : concerns
+	{
+		private Game _game;
+		protected override void context()
+		{
+			_game = new Game();
+			_game.Roll(2);
+			_game.Roll(2);
+			18.times(() => _game.Roll(3));
+		}
+
+		[Specification]
+		public void the_score_is_58()
+		{
+			_game.GetScore().ShouldEqual(58);
+		}
+	}
 }
 
 namespace Bowling
