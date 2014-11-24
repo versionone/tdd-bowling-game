@@ -177,6 +177,7 @@ namespace Bowling
 	public class Game
 	{
 		private List<int> _rolls = new List<int>();
+
 		public void Roll(int pins)
 		{
 			if (_rolls.Count >= 20)
@@ -186,14 +187,16 @@ namespace Bowling
 
 			_rolls.Add(pins);
 		}
+
 		public int GetScore()
 		{
 			var score = 0;
 			int lastRoll = 0;
 			var newFrame = true;
+
 			for (int i = 0; i < _rolls.Count; i++)
 			{
-				if (_rolls[i] == 10)
+				if (IsStrike(_rolls[i]))
 				{
 					var frameScore = _rolls[i] + _rolls[i + 1] + _rolls[i + 2];
 					score = score + frameScore;
@@ -206,7 +209,7 @@ namespace Bowling
 				} else 
 				{
 					var frameScore = lastRoll + _rolls[i];
-					if (frameScore == 10)
+					if (IsSpare(lastRoll, _rolls[i]))
 					{
 						score = score + _rolls[i+1];
 					}
@@ -216,6 +219,16 @@ namespace Bowling
 			}
 
 			return score;
+		}
+
+		private bool IsStrike(int rolls)
+		{
+			return rolls == 10;
+		}
+
+		private bool IsSpare(int roll1, int roll2)
+		{
+			return roll1 + roll2 == 10;
 		}
 	}
 }
