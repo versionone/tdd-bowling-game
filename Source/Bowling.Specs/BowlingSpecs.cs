@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using Bowling;
 using Bowling.Specs.Infrastructure;
+using NUnit.Framework;
 
 namespace specs_for_bowling
 {
@@ -74,6 +76,7 @@ namespace specs_for_bowling
 			_game.GetScore().ShouldEqual(58);
 		}
 	}
+
 	public class when_rolling_alternating_twos_and_fives : concerns
 	{
 		private Game _game;
@@ -93,19 +96,56 @@ namespace specs_for_bowling
 			_game.GetScore().ShouldEqual(70);
 		}
 	}
+
+	public class when_rolling_a_spare_followed_by_all_twos : concerns
+	{
+		private Game _game;
+		protected override void context()
+		{
+			_game = new Game();
+			_game.Roll(1);
+			_game.Roll(9);
+			18.times(() => _game.Roll(2));
+		}
+
+		[Specification]
+		public void the_score_is_48()
+		{
+			_game.GetScore().ShouldEqual(48);
+		}
+	}
 }
 
 namespace Bowling
 {
 	public class Game
 	{
-		private int score;
+		private List<int> _rolls = new List<int>();
 		public void Roll(int pins)
 		{
-			score = score + pins;
+			_rolls.Add(pins);
 		}
 		public int GetScore()
 		{
+			var score = 0;
+			int lastRoll = 0;
+
+			for (int i = 0; i < _rolls.Count; i++)
+			{
+				if (i % 2 == 0)
+				{
+					lastRoll = _rolls[i];
+				} else
+				{
+					var frameScore = lastRoll + _rolls[i];
+					if (frameScore == 10)
+					{
+						score = score + _rolls[i+1];
+					}
+					score = score + frameScore;
+				}
+			}
+
 			return score;
 		}
 	}
