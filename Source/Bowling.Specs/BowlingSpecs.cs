@@ -154,6 +154,23 @@ namespace specs_for_bowling
 		}
 	}
 
+	public class rolling_more_than_ten_frames_for_real_now : concerns
+	{
+		private Game _game;
+		protected override void context()
+		{
+			_game = new Game();
+			12.times(() => _game.Roll(10));
+		}
+
+		[Specification]
+		[ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "Game Over")]
+		public void is_not_allowed()
+		{
+			_game.Roll(10);
+		}
+	}
+
 	public class when_first_frame_is_strike_followed_by_all_twos : concerns
 	{
 		private Game _game;
@@ -188,6 +205,7 @@ namespace specs_for_bowling
 			_game.GetScore().ShouldEqual(68);
 		}
 	}
+
 	public class when_rolling_perfect_game : concerns
 	{
 		private Game _game;
@@ -231,16 +249,40 @@ namespace Bowling
 {
 	public class Game
 	{
+		private int _frameCount = 0;
 		private List<int> _rolls = new List<int>();
+		private bool _newFrame = true;
 
 		public void Roll(int pins)
 		{
-			if (_rolls.Count >= 20)
+			if (IsStrike(pins))
 			{
-				throw new InvalidOperationException("Game Over");
+				if (_frameCount < 10)
+				{
+					StartNewFrame();
+				}
+			}
+			else if (_newFrame)
+			{
+				_newFrame = false;
+			}
+			else
+			{
+				StartNewFrame();
 			}
 
 			_rolls.Add(pins);
+		}
+
+		private void StartNewFrame()
+		{
+			_newFrame = true;
+			_frameCount++;
+
+			if (_frameCount > 10)
+			{
+				throw new InvalidOperationException("Game Over");
+			}
 		}
 
 		public int GetScore()
