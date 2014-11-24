@@ -153,6 +153,23 @@ namespace specs_for_bowling
 			_game.Roll(0);
 		}
 	}
+
+	public class when_first_frame_is_strike_followed_by_all_twos : concerns
+	{
+		private Game _game;
+		protected override void context()
+		{
+			_game = new Game();
+			_game.Roll(10);
+			18.times(() => _game.Roll(2));
+		}
+
+		[Specification]
+		public void the_score_is_50()
+		{
+			_game.GetScore().ShouldEqual(50);
+		}
+	}
 }
 
 namespace Bowling
@@ -173,19 +190,27 @@ namespace Bowling
 		{
 			var score = 0;
 			int lastRoll = 0;
-
+			var newFrame = true;
 			for (int i = 0; i < _rolls.Count; i++)
 			{
-				if (i % 2 == 0)
+				if (_rolls[i] == 10)
+				{
+					var frameScore = _rolls[i] + _rolls[i + 1] + _rolls[i + 2];
+					score = score + frameScore;
+					newFrame = true;
+				}
+				else if (newFrame)
 				{
 					lastRoll = _rolls[i];
-				} else
+					newFrame = false;
+				} else 
 				{
 					var frameScore = lastRoll + _rolls[i];
 					if (frameScore == 10)
 					{
 						score = score + _rolls[i+1];
 					}
+					newFrame = true;
 					score = score + frameScore;
 				}
 			}
