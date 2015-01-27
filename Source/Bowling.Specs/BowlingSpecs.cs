@@ -118,4 +118,29 @@ namespace specs_for_bowling
 			_score.ShouldEqual(48);
 		}
 	}
+
+	public class when_the_first_2_frames_are_spare_as_2_8_and_the_rest_score_2 : concerns
+	{
+		private int _score;
+
+		protected override void context()
+		{
+			var _game = new BowlingGame();
+
+			2.times(() =>
+			{
+				_game.Roll(2);
+				_game.Roll(8);
+			});
+			16.times(() => _game.Roll(2));
+
+			_score = _game.Score;
+		}
+
+		[Specification]
+		public void the_score_is_56()
+		{
+			_score.ShouldEqual(56);
+		}
+	}
 }
