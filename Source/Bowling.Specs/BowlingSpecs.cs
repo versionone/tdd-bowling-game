@@ -143,4 +143,39 @@ namespace specs_for_bowling
 			_score.ShouldEqual(56);
 		}
 	}
+
+	public class when_10_frames_have_been_bowled_dont_allow_any_more_to_be_bowled : concerns
+	{
+		private bool _moreRollsAvailable;
+
+		protected override void context()
+		{
+			var _game = new BowlingGame();
+			20.times(() => _game.Roll(0));
+			_moreRollsAvailable = _game.MoreRollsAvailable;
+		}
+
+		[Specification]
+		public void additional_rolls_should_not_be_allowed()
+		{
+			_moreRollsAvailable.ShouldBeFalse();
+		}
+	}
+
+	public class when_less_than_10_frames_have_been_bowled_allow_more_to_be_bowled : concerns
+	{
+		private bool _moreRollsAvailable;
+
+		protected override void context()
+		{
+			var _game = new BowlingGame();
+			_moreRollsAvailable = _game.MoreRollsAvailable;
+		}
+
+		[Specification]
+		public void additional_rolls_should_be_allowed()
+		{
+			_moreRollsAvailable.ShouldBeTrue();
+		}
+	}
 }

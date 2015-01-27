@@ -7,9 +7,17 @@ namespace Bowling
 	    private bool _firstRoll = true;
 
 		private int FrameScore { get; set; }
+
+		public bool MoreRollsAvailable
+		{
+			get { return TotalRollsMade < 20; }
+		}
+
+		private int TotalRollsMade { get; set; }
 		
 		public void Roll(int pins)
 		{
+			TotalRollsMade += 1;
 			if (_firstRoll)
 			{
 				if (FrameScore == 10)
@@ -23,6 +31,7 @@ namespace Bowling
 			Score += pins;
 			
 			_firstRoll = !_firstRoll;
+
 		}
 		
 	}
