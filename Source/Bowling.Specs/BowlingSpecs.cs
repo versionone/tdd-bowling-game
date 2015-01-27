@@ -36,4 +36,22 @@ namespace specs_for_bowling
 			_score.ShouldEqual(0);
 		}
 	}
+
+	public class when_rolling_all_twos : concerns
+	{
+		private int _score;
+
+		protected override void context()
+		{
+			var _game = new BowlingGame();
+			20.times(() => _game.Roll(2));
+			_score = _game.Score;
+		}
+
+		[Specification]
+		public void the_score_is_40()
+		{
+			_score.ShouldEqual(40);
+		}
+	}
 }
