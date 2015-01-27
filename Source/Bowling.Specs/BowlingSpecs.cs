@@ -73,4 +73,28 @@ namespace specs_for_bowling
 			_score.ShouldEqual(58);
 		}
 	}
+
+	public class when_rolling_alternating_2s_and_5s : concerns
+	{
+		private int _score;
+
+		protected override void context()
+		{
+			var _game = new BowlingGame();
+			
+			10.times(() =>
+			{
+				_game.Roll(2);
+				_game.Roll(5);
+			});
+
+			_score = _game.Score;
+		}
+
+		[Specification]
+		public void the_score_is_70()
+		{
+			_score.ShouldEqual(70);
+		}
+	}
 }
