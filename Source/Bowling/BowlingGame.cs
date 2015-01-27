@@ -2,15 +2,15 @@ namespace Bowling
 {
 	public class BowlingGame
 	{
-		public int Score { get; set; }
+		public int Score { get; private set; }
 		
-		public bool FirstRoll = true;
+	    private bool _firstRoll = true;
 
-		public int FrameScore { get; set; }
+		private int FrameScore { get; set; }
 		
 		public void Roll(int pins)
 		{
-			if (FirstRoll)
+			if (_firstRoll)
 			{
 				if (FrameScore == 10)
 					Score += pins;
@@ -22,7 +22,7 @@ namespace Bowling
 
 			Score += pins;
 			
-			FirstRoll = !FirstRoll;
+			_firstRoll = !_firstRoll;
 		}
 		
 	}
