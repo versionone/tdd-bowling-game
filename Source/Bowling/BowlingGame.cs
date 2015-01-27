@@ -1,38 +1,84 @@
+using System.Collections.Generic;
+using System.Linq;
+
 namespace Bowling
 {
 	public class BowlingGame
 	{
-		public int Score { get; private set; }
-		
-	    private bool _firstRoll = true;
-
-		private int FrameScore { get; set; }
+		public int Score
+		{
+			get { return _frames.Sum(f => f.Score); }
+		}
 
 		public bool MoreRollsAvailable
 		{
-			get { return TotalRollsMade < 20; }
+			get { return _frames.Count < 10; }
 		}
 
-		private int TotalRollsMade { get; set; }
+		private readonly List<Frame> _frames = new List<Frame>();
 		
 		public void Roll(int pins)
 		{
-			TotalRollsMade += 1;
-			if (_firstRoll)
+			if (_frames.Count == 0)
+				_frames.Add(new Frame(pins));
+			else
 			{
-				if (FrameScore == 10)
-					Score += pins;
-	
-				FrameScore = 0;
+				var currentFrame = _frames[_frames.Count - 1];
+				var previousFrame = _frames.Count > 1 ? _frames[_frames.Count - 2] : null;
+
+				if (currentFrame.IsComplete)
+					_frames.Add(new Frame(pins));
+
+				if (currentFrame.NeedsAnotherRoll)
+				{
+					currentFrame.AddRoll(pins);
+				}
+
+				if (previousFrame != null && previousFrame.NeedsAnotherRoll)
+				{
+					previousFrame.AddRoll(pins);
+				}
+			}
+		}
+
+		internal class Frame
+		{
+			private readonly int FirstRollPins;
+			private int? SecondRollPins;
+			private int? ThirdRollPins;
+
+			public Frame(int firstRollPins)
+			{
+				FirstRollPins = firstRollPins;
 			}
 
-			FrameScore += pins;
+			public int Score { get { return FirstRollPins + (SecondRollPins ?? 0) + (ThirdRollPins ?? 0); }}
 
-			Score += pins;
-			
-			_firstRoll = !_firstRoll;
+			private bool IsStrike { get { return FirstRollPins == 10; }}
+			private bool IsSpare { get { return (FirstRollPins + (SecondRollPins ?? 0)) == 10; }}
 
+			public bool NeedsAnotherRoll
+			{
+				get
+				{
+					if (IsStrike) return !(SecondRollPins.HasValue && ThirdRollPins.HasValue);
+					if (IsSpare) return !ThirdRollPins.HasValue;
+					return !SecondRollPins.HasValue;
+				}
+			}
+
+			public bool IsComplete
+			{
+				get { return IsStrike || SecondRollPins.HasValue; }
+			}
+
+			public void AddRoll(int pins)
+			{
+				if (SecondRollPins.HasValue)
+					ThirdRollPins = pins;
+				else
+					SecondRollPins = pins;
+			}
 		}
-		
 	}
 }
