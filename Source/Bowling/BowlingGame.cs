@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
@@ -18,12 +19,18 @@ namespace Bowling
 
 		public void Roll(int pins)
 		{
+			if (!CanRoll)
+			{
+				throw new Exception("Cannot Roll");
+			}
+
 			Score += pins* RollMultipliers.First();
 			RollMultipliers.RemoveAt(0);
-			RollMultipliers.Add(1);
 
 			if (TotalFrames < 9)
 			{
+				RollMultipliers.Add(1);
+
 				if (TotalFrameRolls == 0 && pins == 10)
 				{
 					RollMultipliers[0] += 1;
@@ -37,11 +44,21 @@ namespace Bowling
 
 			if (TotalFrameRolls == 1)
 			{
+				if (TotalFrames == 9 && LastRoll + pins == 10)
+				{
+					RollMultipliers.Add(1);
+				}
+
 				TotalFrameRolls = 0;
 				TotalFrames++;
 			}
 			else if (pins == 10)
 			{
+				if (TotalFrames == 9)
+				{
+					RollMultipliers.Add(1);
+				}
+
 				TotalFrames++;
 			}
 			else
@@ -56,7 +73,7 @@ namespace Bowling
 
 		public bool CanRoll
 		{
-			get { return TotalFrames < 10; }
+			get { return TotalFrames < 10 || RollMultipliers.Any(); }
 		}
 	}
 }

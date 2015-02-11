@@ -218,12 +218,14 @@ namespace specs_for_bowling
 	public class when_rolling_a_perfect_game : concerns
 	{
 		private int _score;
+		private bool _canRoll;
 
 		protected override void context()
 		{
 			var game = new BowlingGame();
 			12.times(() => game.Roll(10));
 			_score = game.Score;
+			_canRoll = game.CanRoll;
 		}
 
 		[Specification]
@@ -231,8 +233,31 @@ namespace specs_for_bowling
 		{
 			_score.ShouldEqual(300);
 		}
+
+		[Specification]
+		public void cannot_roll_any_more()
+		{
+			_canRoll.ShouldBeFalse();
+		}
 	}
-	
+
+	public class while_rolling_a_perfect_game : concerns
+	{
+		private bool _canRoll;
+
+		protected override void context()
+		{
+			var game = new BowlingGame();
+			10.times(() => game.Roll(10));
+			_canRoll = game.CanRoll;
+		}
+
+		[Specification]
+		public void can_roll_after_10_strikes()
+		{
+			_canRoll.ShouldBeTrue();
+		}
+	}
 	public class when_rolling_alternate_strikes_and_spares : concerns
 	{
 		private int _score;
