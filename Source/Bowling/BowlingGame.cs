@@ -1,9 +1,15 @@
+using System;
+
 namespace Bowling
 {
 	public class BowlingGame
 	{
 		public void Roll(int pins)
 		{
+			if (totalFramesBowled >= 10)
+			{
+				throw new InvalidOperationException("Game over! Max number of frames already bowled.");
+			}
 			Score += pins;
 
 			if (previousFrameIsSpare)
@@ -16,7 +22,11 @@ namespace Bowling
 			{
 				previousFrameIsSpare = true;
 			}
-
+			
+			if (!startOfFrame)
+			{
+				totalFramesBowled++;
+			}
 			startOfFrame = !startOfFrame;
 			lastRoll = pins;
 		}
@@ -29,6 +39,8 @@ namespace Bowling
 		private bool startOfFrame = true;
 		private int lastRoll;
 		private bool previousFrameIsSpare = false;
+		private int totalFramesBowled = 0;
+
 		public int Score { get; private set; }
 	}
 }
