@@ -244,4 +244,29 @@ namespace specs_for_bowling
 		}
 
 	}
+
+	public class when_rolling_alternate_strikes_and_spares : concerns
+	{
+		private int _score;
+
+		protected override void context()
+		{
+			var game = new BowlingGame();
+			5.times(() => {
+				game.Roll(10);
+				game.Roll(0);
+				game.Roll(10);
+			});
+			game.Roll(10);
+			_score = game.Score;
+		}
+
+		[Specification]
+		public void the_score_should_be_200()
+		{
+			_score.ShouldEqual(200);
+		}
+
+	}
+
 }
