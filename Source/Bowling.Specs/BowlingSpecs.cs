@@ -192,4 +192,25 @@ namespace specs_for_bowling
 			_score.ShouldEqual(50);
 		}
 	}
+
+
+	public class when_the_first_2_frames_are_strikes_and_the_rest_score_2 : concerns
+	{
+		private int _score;
+
+		protected override void context()
+		{
+			var game = new BowlingGame();
+			game.Roll(10);
+			game.Roll(10);
+			16.times(() => game.Roll(2));
+			_score = game.Score;
+		}
+
+		[Specification]
+		public void the_score_is_68()
+		{
+			_score.ShouldEqual(68);
+		}
+	}
 }
