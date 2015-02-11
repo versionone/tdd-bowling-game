@@ -12,15 +12,20 @@ namespace Bowling
 			}
 			Score += pins;
 
-			if (previousFrameIsSpare)
+			if (remainingRollsToAdd > 0)
 			{
 				Score += pins;
-				previousFrameIsSpare = false;
+				remainingRollsToAdd--;
 			}
-
-			if (IsCurrentSpare(pins))
+			
+			if (IsCurrentStrike(pins))
 			{
-				previousFrameIsSpare = true;
+				startOfFrame = false;
+				remainingRollsToAdd = 2;
+			}
+			else if (IsCurrentSpare(pins))
+			{
+				remainingRollsToAdd = 1;
 			}
 			
 			if (!startOfFrame)
@@ -36,10 +41,15 @@ namespace Bowling
 			return !startOfFrame && pins + lastRoll == 10;
 		}
 
+		private bool IsCurrentStrike(int pins)
+		{
+			return startOfFrame && pins == 10;
+		}
+
 		private bool startOfFrame = true;
 		private int lastRoll;
-		private bool previousFrameIsSpare = false;
 		private int totalFramesBowled = 0;
+		private int remainingRollsToAdd = 0;
 
 		public int Score { get; private set; }
 	}
