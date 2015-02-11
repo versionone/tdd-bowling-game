@@ -114,4 +114,63 @@ namespace specs_for_bowling
 			_score.ShouldEqual(48);
 		}
 	}
+
+	public class when_the_first_2_frames_are_spare_as_2_8_and_the_rest_score_2 : concerns
+	{
+		private int _score;
+
+		protected override void context()
+		{
+			var game = new BowlingGame();
+			2.times(() =>
+			{
+				game.Roll(2);
+				game.Roll(8);
+			});
+			16.times(() => game.Roll(2));
+			_score = game.Score;
+		}
+
+		[Specification]
+		public void the_score_is_56()
+		{
+			_score.ShouldEqual(56);
+		}
+	}
+
+	public class when_10_frames_have_been_bowled : concerns
+	{
+		private bool _canRoll;
+
+		protected override void context()
+		{
+			var game = new BowlingGame();
+			20.times(() => game.Roll(2));
+			_canRoll = game.CanRoll;
+		}
+
+		[Specification]
+		public void dont_allow_any_more_to_be_bowled()
+		{
+			_canRoll.ShouldBeFalse();
+		}
+	}
+
+	public class when_less_than_10_frames_have_been_bowled : concerns
+	{
+		private bool _canRoll;
+
+		protected override void context()
+		{
+			var game = new BowlingGame();
+			19.times(() => game.Roll(2));
+			_canRoll = game.CanRoll;
+		}
+
+		[Specification]
+		public void allow_any_more_to_be_bowled()
+		{
+			_canRoll.ShouldBeTrue();
+		}
+	}
 }

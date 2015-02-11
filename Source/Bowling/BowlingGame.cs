@@ -29,5 +29,10 @@ namespace Bowling
 		}
 
 		public int Score { get; private set; }
+
+		public bool CanRoll
+		{
+			get { return TotalRolls < 20; }
+		}
 	}
 }
