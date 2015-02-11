@@ -24,28 +24,21 @@ namespace Bowling
 				})
 				.ToList();
 			
-			currentFrame.addRoll(pins);
-			scorableRollCounters.Add(currentFrame.getScorableRollCounter());
+			currentFrame.AddRoll(pins);
+			scorableRollCounters.Add(currentFrame.GetScorableRollCounter());
 			
-			if (currentFrame.isComplete())
+			if (currentFrame.IsComplete)
 			{
 				totalFramesBowled++;
-				if (totalFramesBowled < 9)
-				{
-					currentFrame = new NormalFrame();
-				}
-				else
-				{
-					currentFrame = new LastFrame();
-				}
+				currentFrame = totalFramesBowled < 9 ? (Frame) new NormalFrame() : new LastFrame();
 			}
 		}
 		
 		private interface Frame
 		{
-			void addRoll(int pins);
-			int getScorableRollCounter();
-			bool isComplete();
+			void AddRoll(int pins);
+			int GetScorableRollCounter();
+			bool IsComplete { get; }
 		}
 
 		private class NormalFrame : Frame
@@ -53,54 +46,57 @@ namespace Bowling
 			private int totalPins;
 			private int numberOfRolls = 0;
 
-			public void addRoll(int pins)
+			public void AddRoll(int pins)
 			{
 				totalPins += pins;
 				numberOfRolls++;
 			}
 			
-			public int getScorableRollCounter()
+			public int GetScorableRollCounter()
 			{
-				if (numberOfRolls == 1 && totalPins == 10)
+				if (IsStrike)
 				{
 					return 2;
 				}
-				else if (numberOfRolls == 2 && totalPins == 10)
+				if (IsSpare)
 				{
 					return 1;
 				}
-				else
-				{
-					return 0;
-				}
+				return 0;
 			}
 
-			public bool isComplete()
+			private bool IsSpare
 			{
-				return totalPins == 10 || numberOfRolls == 2;
+				get { return numberOfRolls == 2 && totalPins == 10; }
+			}
+
+			private bool IsStrike
+			{
+				get { return numberOfRolls == 1 && totalPins == 10; }
+			}
+
+			public bool IsComplete
+			{
+				get { return totalPins == 10 || numberOfRolls == 2; }
 			}
 		}
 
 		private class LastFrame : Frame
 		{
 			List<int> rolls = new List<int>();
-			public void addRoll(int pins)
+			public void AddRoll(int pins)
 			{
 				rolls.Add(pins);
 			}
 
-			public int getScorableRollCounter()
+			public int GetScorableRollCounter()
 			{
 				return 0;
 			}
 
-			public bool isComplete()
+			public bool IsComplete
 			{
-				if (rolls.Count == 3)
-				{
-					return true;
-				}
-				return rolls.Count == 2 && (rolls[0] + rolls[1] < 10);
+				get { return rolls.Count == 3 || rolls.Count == 2 && (rolls[0] + rolls[1] < 10); }
 			}
 		}
 
