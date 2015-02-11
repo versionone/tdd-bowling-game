@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 
 namespace Bowling
@@ -14,14 +15,14 @@ namespace Bowling
 			}
 			Score += pins;
 
-			for (int i = 0; i < scorableRollCounters.Count; i++)
-			{
-				if (scorableRollCounters[i] > 0)
+			scorableRollCounters = scorableRollCounters
+				.Where(value => value > 0)
+				.Select(value =>
 				{
 					Score += pins;
-					scorableRollCounters[i] = scorableRollCounters[i] - 1;
-				}
-			}
+					return value - 1;
+				})
+				.ToList();
 			
 			if (IsCurrentStrike(pins))
 			{
