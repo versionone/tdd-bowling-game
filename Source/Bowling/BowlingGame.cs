@@ -2,29 +2,44 @@ namespace Bowling
 {
 	public class BowlingGame
 	{
-		private int TotalRolls;
+		private int TotalFrames;
+		private int TotalFrameRolls;
+		private int DoubleCountRolls;
 		private int LastRoll;
-		private bool IsLastFrameSpare;
 
 		public void Roll(int pins)
 		{
 			Score += pins;
 
-			if (TotalRolls % 2 == 0)
+			if (DoubleCountRolls > 0)
 			{
-				if (IsLastFrameSpare)
-				{
-					Score += pins;
-				}
-
-				IsLastFrameSpare = false;
-			}
-			else if (LastRoll + pins == 10)
-			{
-				IsLastFrameSpare = true;
+				Score += pins;
+				DoubleCountRolls--;
 			}
 
-			TotalRolls++;
+			if(TotalFrameRolls == 0 && pins == 10)
+			{
+				DoubleCountRolls = 2;
+			}
+			else if (TotalFrameRolls == 1 && LastRoll + pins == 10)
+			{
+				DoubleCountRolls = 1;
+			}
+
+			if (TotalFrameRolls == 1)
+			{
+				TotalFrameRolls = 0;
+				TotalFrames++;
+			}
+			else if (pins == 10)
+			{
+				TotalFrames++;
+			}
+			else
+			{
+				TotalFrameRolls++;
+			}
+
 			LastRoll = pins;
 		}
 
@@ -32,7 +47,7 @@ namespace Bowling
 
 		public bool CanRoll
 		{
-			get { return TotalRolls < 20; }
+			get { return TotalFrames < 10; }
 		}
 	}
 }

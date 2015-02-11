@@ -173,4 +173,23 @@ namespace specs_for_bowling
 			_canRoll.ShouldBeTrue();
 		}
 	}
+
+	public class when_the_first_frame_is_a_strike_and_the_rest_score_2 : concerns
+	{
+		private int _score;
+
+		protected override void context()
+		{
+			var game = new BowlingGame();
+			game.Roll(10);
+			18.times(() => game.Roll(2));
+			_score = game.Score;
+		}
+
+		[Specification]
+		public void the_score_is_50()
+		{
+			_score.ShouldEqual(50);
+		}
+	}
 }
