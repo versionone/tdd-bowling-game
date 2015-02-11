@@ -184,4 +184,24 @@ namespace specs_for_bowling
 		}
 
 	}
+
+	public class when_rolling_two_strikes_followed_by_all_twos : concerns
+	{
+		private int _score;
+
+		protected override void context()
+		{
+			var game = new BowlingGame();
+			2.times(() => game.Roll(10));
+			16.times(() => game.Roll(2));
+			_score = game.Score;
+		}
+
+		[Specification]
+		public void the_score_should_be_68()
+		{
+			_score.ShouldEqual(68);
+		}
+
+	}
 }

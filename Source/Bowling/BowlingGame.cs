@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using NUnit.Framework;
 
 namespace Bowling
 {
@@ -12,20 +14,23 @@ namespace Bowling
 			}
 			Score += pins;
 
-			if (remainingRollsToAdd > 0)
+			for (int i = 0; i < scorableRollCounters.Count; i++)
 			{
-				Score += pins;
-				remainingRollsToAdd--;
+				if (scorableRollCounters[i] > 0)
+				{
+					Score += pins;
+					scorableRollCounters[i] = scorableRollCounters[i] - 1;
+				}
 			}
 			
 			if (IsCurrentStrike(pins))
 			{
 				startOfFrame = false;
-				remainingRollsToAdd = 2;
+				scorableRollCounters.Add(2);
 			}
 			else if (IsCurrentSpare(pins))
 			{
-				remainingRollsToAdd = 1;
+				scorableRollCounters.Add(1);
 			}
 			
 			if (!startOfFrame)
@@ -49,7 +54,7 @@ namespace Bowling
 		private bool startOfFrame = true;
 		private int lastRoll;
 		private int totalFramesBowled = 0;
-		private int remainingRollsToAdd = 0;
+		private List<int> scorableRollCounters = new List<int>();
 
 		public int Score { get; private set; }
 	}
