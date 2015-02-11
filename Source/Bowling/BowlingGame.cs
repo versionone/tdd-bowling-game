@@ -6,29 +6,29 @@ namespace Bowling
 		{
 			Score += pins;
 
-			if (lastFrameIsSpare)
+			if (previousFrameIsSpare)
 			{
 				Score += pins;
-				lastFrameIsSpare = false;
+				previousFrameIsSpare = false;
 			}
 
-			if (IsSpare(pins))
+			if (IsCurrentSpare(pins))
 			{
-				lastFrameIsSpare = true;
+				previousFrameIsSpare = true;
 			}
 
 			startOfFrame = !startOfFrame;
 			lastRoll = pins;
 		}
 
-		private bool IsSpare(int pins)
+		private bool IsCurrentSpare(int pins)
 		{
 			return !startOfFrame && pins + lastRoll == 10;
 		}
 
 		private bool startOfFrame = true;
-		private int? lastRoll;
-		private bool lastFrameIsSpare = false;
+		private int lastRoll;
+		private bool previousFrameIsSpare = false;
 		public int Score { get; private set; }
 	}
 }

@@ -120,4 +120,28 @@ namespace specs_for_bowling
 		}
 
 	}
+
+	public class when_rolling_two_spares_followed_by_all_twos : concerns
+	{
+		private int _score;
+
+		protected override void context()
+		{
+			var game = new BowlingGame();
+			game.Roll(2);
+			game.Roll(8);
+			game.Roll(2);
+			game.Roll(8);
+			16.times(() => game.Roll(2));
+			_score = game.Score;
+		}
+
+		[Specification]
+		public void the_score_should_be_56()
+		{
+			_score.ShouldEqual(56);
+		}
+
+	}
+
 }
