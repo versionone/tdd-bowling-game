@@ -24,38 +24,89 @@ namespace Bowling
 				})
 				.ToList();
 			
-			if (IsCurrentStrike(pins))
-			{
-				startOfFrame = false;
-				scorableRollCounters.Add(2);
-			}
-			else if (IsCurrentSpare(pins))
-			{
-				scorableRollCounters.Add(1);
-			}
+			currentFrame.addRoll(pins);
+			scorableRollCounters.Add(currentFrame.getScorableRollCounter());
 			
-			if (!startOfFrame)
+			if (currentFrame.isComplete())
 			{
 				totalFramesBowled++;
+				if (totalFramesBowled < 9)
+				{
+					currentFrame = new NormalFrame();
+				}
+				else
+				{
+					currentFrame = new LastFrame();
+				}
 			}
-			startOfFrame = !startOfFrame;
-			lastRoll = pins;
 		}
-
-		private bool IsCurrentSpare(int pins)
+		
+		private interface Frame
 		{
-			return !startOfFrame && pins + lastRoll == 10;
+			void addRoll(int pins);
+			int getScorableRollCounter();
+			bool isComplete();
 		}
 
-		private bool IsCurrentStrike(int pins)
+		private class NormalFrame : Frame
 		{
-			return startOfFrame && pins == 10;
+			private int totalPins;
+			private int numberOfRolls = 0;
+
+			public void addRoll(int pins)
+			{
+				totalPins += pins;
+				numberOfRolls++;
+			}
+			
+			public int getScorableRollCounter()
+			{
+				if (numberOfRolls == 1 && totalPins == 10)
+				{
+					return 2;
+				}
+				else if (numberOfRolls == 2 && totalPins == 10)
+				{
+					return 1;
+				}
+				else
+				{
+					return 0;
+				}
+			}
+
+			public bool isComplete()
+			{
+				return totalPins == 10 || numberOfRolls == 2;
+			}
 		}
 
-		private bool startOfFrame = true;
-		private int lastRoll;
+		private class LastFrame : Frame
+		{
+			List<int> rolls = new List<int>();
+			public void addRoll(int pins)
+			{
+				rolls.Add(pins);
+			}
+
+			public int getScorableRollCounter()
+			{
+				return 0;
+			}
+
+			public bool isComplete()
+			{
+				if (rolls.Count == 3)
+				{
+					return true;
+				}
+				return rolls.Count == 2 && (rolls[0] + rolls[1] < 10);
+			}
+		}
+
 		private int totalFramesBowled = 0;
 		private List<int> scorableRollCounters = new List<int>();
+		private Frame currentFrame = new NormalFrame();
 
 		public int Score { get; private set; }
 	}

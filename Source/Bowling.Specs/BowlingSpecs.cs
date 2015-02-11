@@ -204,4 +204,44 @@ namespace specs_for_bowling
 		}
 
 	}
+
+	public class when_rolling_perfect_but_last_frame : concerns
+	{
+		private int _score;
+
+		protected override void context()
+		{
+			var game = new BowlingGame();
+			9.times(() => game.Roll(10));
+			2.times(() => game.Roll(0));
+			_score = game.Score;
+		}
+
+		[Specification]
+		public void the_score_should_be_240()
+		{
+			_score.ShouldEqual(240);
+		}
+
+	}
+
+	public class when_rolling_perfect_game : concerns
+	{
+		private int _score;
+
+		protected override void context()
+		{
+			var game = new BowlingGame();
+			9.times(() => game.Roll(10));
+			3.times(() => game.Roll(10));
+			_score = game.Score;
+		}
+
+		[Specification]
+		public void the_score_should_be_300()
+		{
+			_score.ShouldEqual(300);
+		}
+
+	}
 }
