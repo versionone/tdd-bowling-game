@@ -20,7 +20,7 @@ namespace Bowling
 
 		public void Roll(int numberOfPins)
 		{
-			
+			CheckIfGameOver();
 			_score += numberOfPins;
 			if (_ballsToAdd > 0)
 			{
@@ -46,6 +46,12 @@ namespace Bowling
 				_throw++;
 			}
 			_lastRoll = numberOfPins;
+		}
+
+		private void CheckIfGameOver()
+		{
+			if(_frame > 10)
+				throw new Exception("Game Over");
 		}
 
 		private bool IsSpare(int numberOfPins)
