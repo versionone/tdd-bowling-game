@@ -213,4 +213,24 @@ namespace specs_for_bowling
 		}
 	}
 
+	public class when_rolling_a_perfect_game : concerns
+	{
+		private Game _game;
+
+		protected override void context()
+		{
+			_game = new Game();
+			for (int i = 1; i <= 12; i++)
+			{
+				_game.Roll(10);
+			}
+		}	
+
+		[Specification]
+		public void the_score_is_300()
+		{
+			_game.Score.ShouldEqual(300);
+		}
+	}
+
 }

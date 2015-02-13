@@ -58,7 +58,7 @@ namespace Bowling
 
 		private void CheckIfGameOver()
 		{
-			if(_frame > 10)
+			if(_frame > 10 && _ballsToAdd == 0)
 				throw new Exception("Game Over");
 		}
 
