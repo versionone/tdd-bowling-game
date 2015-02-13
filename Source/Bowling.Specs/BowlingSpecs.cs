@@ -58,4 +58,27 @@ namespace specs_for_bowling
 		}
 	}
 
+
+	public class when_first_two_rolls_are_twos_and_the_rest_are_threes : concerns
+	{
+		private Game _game;
+
+		protected override void context()
+		{
+			_game = new Game();
+			_game.Roll(2);
+			_game.Roll(2);
+			for (int i = 1; i <= 18; i++)
+			{
+				_game.Roll(3);
+			}
+		}
+
+		[Specification]
+		public void the_score_is_58()
+		{
+			_game.Score.ShouldEqual(58);
+		}
+	}
+
 }
