@@ -102,5 +102,27 @@ namespace specs_for_bowling
 		}
 	}
 
+	public class when_first_frame_is_spare_and_remaining_are_all_2s : concerns
+	{
+		private Game _game;
+
+		protected override void context()
+		{
+			_game = new Game();
+			_game.Roll(5);
+			_game.Roll(5);
+			for (int i = 1; i <= 18; i++)
+			{
+				_game.Roll(2);
+			}
+		}	
+
+		[Specification]
+		public void the_score_is_48()
+		{
+			_game.Score.ShouldEqual(48);
+		}
+	}
+
 
 }
