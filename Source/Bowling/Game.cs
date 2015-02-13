@@ -22,20 +22,19 @@ namespace Bowling
 		{
 			CheckIfGameOver();
 			_score += numberOfPins;
-			if (_ballsToAdd > 0)
-			{
-				_score += numberOfPins;
-				_ballsToAdd--;
-			}
+
+			AddRollToPreviousFrameIfNeeded(numberOfPins);
 
 			if (IsStrike(numberOfPins))
 			{
-				_ballsToAdd = 2;
+				_ballsToAdd += 2;
+				_throw++;
 			}
 			else if (IsSpare(numberOfPins))
 			{
-				_ballsToAdd = 1;
+				_ballsToAdd += 1;
 			}
+
 			if (_throw == 2)
 			{
 				_throw = 1;
@@ -46,6 +45,15 @@ namespace Bowling
 				_throw++;
 			}
 			_lastRoll = numberOfPins;
+		}
+
+		private void AddRollToPreviousFrameIfNeeded(int numberOfPins)
+		{
+			if (_ballsToAdd > 0)
+			{
+				_score += numberOfPins;
+				_ballsToAdd--;
+			}
 		}
 
 		private void CheckIfGameOver()

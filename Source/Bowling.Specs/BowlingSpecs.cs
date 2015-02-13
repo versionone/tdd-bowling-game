@@ -170,7 +170,7 @@ namespace specs_for_bowling
 		}
 	}
 
-	public class when_first_frame_is_stike_and_rest_are_2s : concerns
+	public class when_first_frame_is_strike_and_rest_are_2s : concerns
 	{
 		private Game _game;
 
@@ -188,6 +188,28 @@ namespace specs_for_bowling
 		public void the_score_is_50()
 		{
 			_game.Score.ShouldEqual(50);
+		}
+	}
+
+	public class when_two_frames_are_strike_and_rest_are_2s : concerns
+	{
+		private Game _game;
+
+		protected override void context()
+		{
+			_game = new Game();
+			_game.Roll(10);
+			_game.Roll(10);
+			for (int i = 1; i <= 16; i++)
+			{
+				_game.Roll(2);
+			}
+		}	
+
+		[Specification]
+		public void the_score_is_68()
+		{
+			_game.Score.ShouldEqual(68);
 		}
 	}
 
