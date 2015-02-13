@@ -50,7 +50,7 @@ namespace Bowling
 
 		private bool IsSpare(int numberOfPins)
 		{
-			return numberOfPins + _lastRoll == 10;
+			return numberOfPins + _lastRoll == 10 && _throw == 2;
 		}
 
 		private bool IsStrike(int numberOfPins)
