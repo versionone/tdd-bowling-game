@@ -126,10 +126,12 @@ namespace specs_for_bowling
 			game.Score().ShouldEqual(300);
 		}
 
-		/*
-() {
-public void when_rolling_alternate_strikes_and_spares_the_score_is_200() {
-		 */
-
+        [Specification]
+        public void when_rolling_alternate_strikes_and_spares_the_score_is_200()
+        {
+            5.times(() => { game.Roll(10); game.Roll(5); game.Roll(5); });
+            game.Roll(10);
+            game.Score().ShouldEqual(200);
+        }
 	}
 }
