@@ -1,6 +1,6 @@
 using Bowling.Specs.Infrastructure;
 using NUnit.Framework;
-using Bowling.Specs;
+using Bowling;
 
 namespace specs_for_bowling
 {
@@ -88,6 +88,29 @@ namespace specs_for_bowling
 		{
 			var score = _bowlingGame.GetScore();
 			score.ShouldEqual(70);
+		}
+	}
+
+	public class when_rolling_a_spare_and_then_all_s2 : concerns
+	{
+		private BowlingGame _bowlingGame;
+
+		protected override void context()
+		{
+			_bowlingGame = new BowlingGame();
+			_bowlingGame.Roll(5);
+			_bowlingGame.Roll(5);
+			for (var i = 0; i < 18; i++)
+			{
+				_bowlingGame.Roll(2);
+			}
+		}
+
+		[Specification]
+		public void score_is_48()
+		{
+			var score = _bowlingGame.GetScore();
+			score.ShouldEqual(48);
 		}
 	}
 }
