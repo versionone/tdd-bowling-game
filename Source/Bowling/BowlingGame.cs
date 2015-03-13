@@ -7,38 +7,73 @@ namespace Bowling
 {
 	public class BowlingGame
 	{
-		private int _currentFrame;
+		private int _framesCompleted;
 		private int _rolls;
+		private readonly IList<int> _frameScores = new List<int>() ;
 
-		private IList<int> _frameScores = new List<int>() ;
+		private bool IsNotFirstFrame
+		{
+			get { return _framesCompleted != 0; }
+		}
 
 		public void Roll(int pins)
 		{
-			if (_currentFrame == 10)
-			{
-				throw new ApplicationException("game over");
-			}
-
 			_rolls += 1;
 			var isFirstRoll= _rolls%2 != 0;
 
 			if (isFirstRoll)
 			{
-				_frameScores.Add(pins);
-				if (_currentFrame != 0)
-				{
-					var previousFrame = _frameScores[_currentFrame - 1];
-					if (previousFrame == 10)
-					{
-						_frameScores[_currentFrame - 1] += pins;
-					}
-				}
+				ScoreFirstRoll(pins);
 			}
 			else
 			{
-				_frameScores[_currentFrame] += pins;
-				_currentFrame++;
+				ScoreSecondRoll(pins);
 			}
+		}
+
+		private void ScoreFirstRoll(int pins)
+		{
+			CheckGameOver();
+			StartNewFrame(pins);
+			if (IsPreviousFrameASpare())
+			{
+				AddBonusToPreviousFrame(pins);
+			}
+		}
+
+		private void StartNewFrame(int pins)
+		{
+			_frameScores.Add(pins);
+		}
+
+		private bool IsPreviousFrameASpare()
+		{
+			return IsNotFirstFrame && IsSpare(_frameScores[_framesCompleted - 1]);
+		}
+
+		private void AddBonusToPreviousFrame(int pins)
+		{
+			_frameScores[_framesCompleted - 1] += pins;
+		}
+
+		private static bool IsSpare(int previousFrame)
+		{
+			var isSpare = previousFrame == 10;
+			return isSpare;
+		}
+
+		private void CheckGameOver()
+		{
+			if (_frameScores.Count == 10)
+			{
+				throw new ApplicationException("game over");
+			}
+		}
+
+		private void ScoreSecondRoll(int pins)
+		{
+			_frameScores[_framesCompleted] += pins;
+			_framesCompleted++;
 		}
 
 		public int GetScore()
