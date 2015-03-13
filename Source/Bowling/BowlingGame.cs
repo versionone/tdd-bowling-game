@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.Versioning;
 using NUnit.Framework;
 
 namespace Bowling
@@ -9,7 +11,7 @@ namespace Bowling
 	{
 		private int _framesCompleted;
 		private int _rolls;
-		private readonly IList<int> _frameScores = new List<int>() ;
+		private readonly IList<Frame> _frames = new List<Frame>();
 
 		private bool IsNotFirstFrame
 		{
@@ -35,6 +37,7 @@ namespace Bowling
 		{
 			CheckGameOver();
 			StartNewFrame(pins);
+
 			if (IsPreviousFrameASpare())
 			{
 				AddBonusToPreviousFrame(pins);
@@ -43,17 +46,24 @@ namespace Bowling
 
 		private void StartNewFrame(int pins)
 		{
-			_frameScores.Add(pins);
+			_frames.Add(new Frame()
+			{
+				Score = pins
+			});
+			if (pins == 10)
+			{
+				_framesCompleted++;
+			}
 		}
 
 		private bool IsPreviousFrameASpare()
 		{
-			return IsNotFirstFrame && IsSpare(_frameScores[_framesCompleted - 1]);
+			return IsNotFirstFrame && IsSpare(_frames[_framesCompleted - 1].Score);
 		}
 
 		private void AddBonusToPreviousFrame(int pins)
 		{
-			_frameScores[_framesCompleted - 1] += pins;
+			_frames[_framesCompleted - 1].Score += pins;
 		}
 
 		private static bool IsSpare(int previousFrame)
@@ -64,7 +74,7 @@ namespace Bowling
 
 		private void CheckGameOver()
 		{
-			if (_frameScores.Count == 10)
+			if (_frames.Count == 10)
 			{
 				throw new ApplicationException("game over");
 			}
@@ -72,13 +82,18 @@ namespace Bowling
 
 		private void ScoreSecondRoll(int pins)
 		{
-			_frameScores[_framesCompleted] += pins;
+			_frames[_framesCompleted].Score += pins;
 			_framesCompleted++;
 		}
 
 		public int GetScore()
 		{
-			return _frameScores.Sum();
+			return _frames.Sum(x => x.Score);
 		}
+	}
+
+	public class Frame
+	{
+		public int Score { get; set; }
 	}
 }
