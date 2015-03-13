@@ -182,5 +182,73 @@ namespace specs_for_bowling
 		}
 	}
 
+    public class when_rolling_two_strikes_and_then_all_2s : concerns
+	{
+		private BowlingGame _bowlingGame;
+
+		protected override void context()
+		{
+			_bowlingGame = new BowlingGame();
+			_bowlingGame.Roll(10);
+			_bowlingGame.Roll(10);
+			for (var i = 0; i < 16; i++)
+			{
+				_bowlingGame.Roll(2);
+			}
+		}
+
+		[Specification]
+		public void score_is_68()
+		{
+			var score = _bowlingGame.GetScore();
+			score.ShouldEqual(68);
+		}
+	}
+
+   public class when_rolling_a_perfec_game : concerns
+	{
+		private BowlingGame _bowlingGame;
+
+		protected override void context()
+		{
+			_bowlingGame = new BowlingGame();
+			for (var i = 0; i < 12; i++)
+			{
+				_bowlingGame.Roll(10);
+			}
+		}
+
+		[Specification]
+		public void score_is_300()
+		{
+			var score = _bowlingGame.GetScore();
+			score.ShouldEqual(300);
+		}
+	}
+
+	public class when_rolling_alternate_strikes_and_spares : concerns
+	{
+		private BowlingGame _bowlingGame;
+
+		protected override void context()
+		{
+			_bowlingGame = new BowlingGame();
+			for (var i = 0; i < 5; i++)
+			{
+				_bowlingGame.Roll(10);
+				_bowlingGame.Roll(5);
+				_bowlingGame.Roll(5);
+			}
+				_bowlingGame.Roll(10);
+		}
+
+		[Specification]
+		public void score_is_200()
+		{
+			var score = _bowlingGame.GetScore();
+			score.ShouldEqual(200);
+		}
+	}
+
 
 }
