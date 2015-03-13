@@ -55,7 +55,6 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BowlingGame.cs" />
     <Compile Include="BowlingSpecs.cs" />
     <Compile Include="Infrastructure\Concerns.cs" />
     <Compile Include="Infrastructure\HelperExtensions.cs" />

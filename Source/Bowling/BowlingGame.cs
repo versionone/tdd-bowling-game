@@ -1,15 +1,15 @@
 ﻿namespace Bowling
 {
-	class BowlingGame
+	public class BowlingGame
 	{
 		private int _totalPins;
 
-		internal void Roll(int pins)
+		public void Roll(int pins)
 		{
 			_totalPins += pins;
 		}
 
-		internal int GetScore()
+		public int GetScore()
 		{
 			return _totalPins;
 		}
