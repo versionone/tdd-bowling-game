@@ -1,3 +1,4 @@
+using System;
 using Bowling.Specs.Infrastructure;
 using NUnit.Framework;
 using Bowling;
@@ -91,7 +92,7 @@ namespace specs_for_bowling
 		}
 	}
 
-	public class when_rolling_a_spare_and_then_all_s2 : concerns
+	public class when_rolling_a_spare_and_then_all_2s : concerns
 	{
 		private BowlingGame _bowlingGame;
 
@@ -111,6 +112,51 @@ namespace specs_for_bowling
 		{
 			var score = _bowlingGame.GetScore();
 			score.ShouldEqual(48);
+		}
+	}
+
+	public class when_rolling_two_2_8_spares_and_then_all_2s : concerns
+	{
+		private BowlingGame _bowlingGame;
+
+		protected override void context()
+		{
+			_bowlingGame = new BowlingGame();
+			_bowlingGame.Roll(2);
+			_bowlingGame.Roll(8);
+			_bowlingGame.Roll(2);
+			_bowlingGame.Roll(8);
+			for (var i = 0; i < 16; i++)
+			{
+				_bowlingGame.Roll(2);
+			}
+		}
+
+		[Specification]
+		public void score_is_56()
+		{
+			var score = _bowlingGame.GetScore();
+			score.ShouldEqual(56);
+		}
+	}
+
+	public class when_10_frames_bowled_allow_no_more_rolls : concerns
+	{
+		private BowlingGame _bowlingGame;
+
+		protected override void context()
+		{
+			_bowlingGame = new BowlingGame();
+			for (var i = 0; i < 20; i++)
+			{
+				_bowlingGame.Roll(2);
+			}
+		}
+
+		[Specification]
+		public void throws_exception()
+		{
+			typeof (ApplicationException).ShouldBeThrownBy(() => _bowlingGame.Roll(2)).Message.ShouldEqual("game over");
 		}
 	}
 }

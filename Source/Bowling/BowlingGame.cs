@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 
@@ -13,6 +14,11 @@ namespace Bowling
 
 		public void Roll(int pins)
 		{
+			if (_currentFrame == 10)
+			{
+				throw new ApplicationException("game over");
+			}
+
 			_rolls += 1;
 			var isFirstRoll= _rolls%2 != 0;
 
