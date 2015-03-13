@@ -159,4 +159,28 @@ namespace specs_for_bowling
 			typeof (ApplicationException).ShouldBeThrownBy(() => _bowlingGame.Roll(2)).Message.ShouldEqual("game over");
 		}
 	}
+
+	public class when_rolling_one_strike_and_then_all_2s : concerns
+	{
+		private BowlingGame _bowlingGame;
+
+		protected override void context()
+		{
+			_bowlingGame = new BowlingGame();
+			_bowlingGame.Roll(10);
+			for (var i = 0; i < 18; i++)
+			{
+				_bowlingGame.Roll(2);
+			}
+		}
+
+		[Specification]
+		public void score_is_50()
+		{
+			var score = _bowlingGame.GetScore();
+			score.ShouldEqual(50);
+		}
+	}
+
+
 }

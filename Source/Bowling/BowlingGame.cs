@@ -42,23 +42,35 @@ namespace Bowling
 			{
 				AddBonusToPreviousFrame(pins);
 			}
+
+			if (pins == 10)
+			{
+				_framesCompleted++;
+				_rolls += 1;
+			}
 		}
 
 		private void StartNewFrame(int pins)
 		{
-			_frames.Add(new Frame()
+			var frame = new Frame()
 			{
 				Score = pins
-			});
+			};
 			if (pins == 10)
 			{
-				_framesCompleted++;
+				frame.IsStrike = true;
 			}
+			_frames.Add(frame);
 		}
 
 		private bool IsPreviousFrameASpare()
 		{
 			return IsNotFirstFrame && IsSpare(_frames[_framesCompleted - 1].Score);
+		}
+
+		private bool IsPreviousFrameAStrike()
+		{
+			return IsNotFirstFrame && IsStrike(_frames[_framesCompleted - 1]);
 		}
 
 		private void AddBonusToPreviousFrame(int pins)
@@ -69,6 +81,12 @@ namespace Bowling
 		private static bool IsSpare(int previousFrame)
 		{
 			var isSpare = previousFrame == 10;
+			return isSpare;
+		}
+
+		private static bool IsStrike(Frame previousFrame)
+		{
+			var isSpare = previousFrame.IsStrike;
 			return isSpare;
 		}
 
@@ -83,6 +101,12 @@ namespace Bowling
 		private void ScoreSecondRoll(int pins)
 		{
 			_frames[_framesCompleted].Score += pins;
+
+			if (IsNotFirstFrame && IsPreviousFrameAStrike())
+			{
+				AddBonusToPreviousFrame(pins);
+			}
+
 			_framesCompleted++;
 		}
 
@@ -95,5 +119,6 @@ namespace Bowling
 	public class Frame
 	{
 		public int Score { get; set; }
+		public bool IsStrike { get; set; }
 	}
 }
