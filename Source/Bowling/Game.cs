@@ -14,6 +14,7 @@ namespace Bowling
 
 		public void Roll(int pinsPerRoll)
 		{
+			if(NumberOfRolls >= 20) throw new Exception("Can not roll more than 10 frames.");
 			Score += (PreviousSpare ? pinsPerRoll * 2 : pinsPerRoll);
 
 			if (NumberOfRolls % 2 == 1 && pinsPerRoll + LastRoll == 10) PreviousSpare = true;

@@ -1,3 +1,4 @@
+using System;
 using System.Security.Policy;
 using Bowling.Specs.Infrastructure;
 using Bowling;
@@ -140,10 +141,28 @@ namespace specs_for_bowling
 		}
 	}
 
+	public class when_rolling_more_frames_than_allowed : concerns
+	{
+		Game game = new Game();
+
+		protected override void context()
+		{
+			for (int i = 0; i < 20; i++)
+			{
+				game.Roll(2);
+			}
+		}
+
+		[Specification]
+		public void then_the_an_exception_is_thrown()
+		{
+			typeof (Exception).ShouldBeThrownBy(()=>game.Roll(2));
+		}
+	}
+
 
 
 	/*
-* when the first 2 frames are spare (as 2,8) and the rest score 2, the score is 56.
 * when 10 frames have been bowled, don't allow any more to be bowled.
 * when the first frame is a strike and the rest score 2, the score is 50.
 * when the first 2 frames are strikes and the rest score 2, the score is 68.
