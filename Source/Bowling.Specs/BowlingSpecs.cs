@@ -117,12 +117,32 @@ namespace specs_for_bowling
 		}
 	}
 
+	public class when_The_first_two_frames_are_spares_and_the_remaining_frames_are_twos : concerns
+	{
+		Game game = new Game();
+
+		protected override void context()
+		{
+			game.Roll(2);
+			game.Roll(8);
+			game.Roll(2);
+			game.Roll(8);
+			for (int i = 0; i < 16; i++)
+			{
+				game.Roll(2);
+			}
+		}
+
+		[Specification]
+		public void then_the_score_is_56()
+		{
+			game.Score.ShouldEqual(56);
+		}
+	}
+
 
 
 	/*
-	 * 
-	 * 
-* when the first frame is a spare and the remaining rolls are all 2, the score is 48.
 * when the first 2 frames are spare (as 2,8) and the rest score 2, the score is 56.
 * when 10 frames have been bowled, don't allow any more to be bowled.
 * when the first frame is a strike and the rest score 2, the score is 50.

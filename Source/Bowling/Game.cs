@@ -15,10 +15,10 @@ namespace Bowling
 		public void Roll(int pinsPerRoll)
 		{
 			Score += (PreviousSpare ? pinsPerRoll * 2 : pinsPerRoll);
-			LastRoll = pinsPerRoll;
 
 			if (NumberOfRolls % 2 == 1 && pinsPerRoll + LastRoll == 10) PreviousSpare = true;
 			else PreviousSpare = false;
+			LastRoll = pinsPerRoll;
 			NumberOfRolls++;
 		}
 	}
