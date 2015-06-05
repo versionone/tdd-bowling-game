@@ -17,7 +17,25 @@ namespace Bowling
 
 		public int Score
 		{
-			get { return Frames.Sum(x => x.FirstRoll.Value + x.SecondRoll.Value); }
+			get
+			{
+				for (int i = 0; i < 10; i++)
+				{
+					var frameScore = Frames[i].GetTotalScore();
+					if (frameScore == 10)
+					{
+						if (Frames[i].FirstRoll == 10)
+						{
+							frameScore += Frames[i + 1].GetTotalScore();
+						}
+						else
+						{
+							frameScore += Frames[i + 1].FirstRoll.GetValueOrDefault();
+						}
+					}
+				}
+			}
+			//get { return Frames.Sum(x => x.FirstRoll.Value + x.SecondRoll.Value); }
 		}
 
 		public Game()

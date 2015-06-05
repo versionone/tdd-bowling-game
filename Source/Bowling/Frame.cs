@@ -9,5 +9,10 @@ namespace Bowling
 	{
 		public int? FirstRoll { get; set; }
 		public int? SecondRoll { get; set; }
+
+		public int GetTotalScore()
+		{
+			return FirstRoll.GetValueOrDefault() + SecondRoll.GetValueOrDefault();
+		}
 	}
 }
