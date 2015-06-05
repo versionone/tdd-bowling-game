@@ -77,6 +77,25 @@ namespace specs_for_bowling
 		}
 	}
 
+	public class when_alternating_twos_and_fives : concerns
+	{
+		Game game = new Game();
+
+		protected override void context()
+		{
+			for (int i = 0; i < 20; i++)
+			{
+				game.Roll((i % 2 == 0 ? 2 : 5));
+			}
+		}
+
+		[Specification]
+		public void then_the_score_is_70()
+		{
+			game.Score.ShouldEqual(70);
+		}
+	}
+
 	/*
 	 * 
 	 * 
