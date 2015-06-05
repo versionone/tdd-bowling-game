@@ -23,20 +23,38 @@ namespace specs_for_bowling
 	public class when_rolling_all_gutter_ball : concerns
 	{
 		Game game = new Game();
-		private int? score;
-
+		
 		protected override void context()
 		{
-			for (int i = 0; i < 10; i++)
+			for (int i = 0; i < 20; i++)
 			{
-				score = game.Play();
+				game.Roll(0);
 			}
 		}
 
 		[Specification]
 		public void then_the_score_is_0()
 		{
-			score.Value.ShouldEqual(0);
+			game.Score.ShouldEqual(0);
+		}
+	}
+
+	public class when_rolling_all_twos : concerns
+	{
+		Game game = new Game();
+
+		protected override void context()
+		{
+			for (int i = 0; i < 20; i++)
+			{
+				game.Roll(2);
+			}
+		}
+
+		[Specification]
+		public void then_the_score_is_40()
+		{
+			game.Score.ShouldEqual(40);
 		}
 	}
 
