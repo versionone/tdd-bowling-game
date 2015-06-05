@@ -58,6 +58,25 @@ namespace specs_for_bowling
 		}
 	}
 
+	public class when_the_first_two_are_2_and_the_rest_are_3 : concerns
+	{
+		Game game = new Game();
+
+		protected override void context()
+		{
+			for (int i = 0; i < 20; i++)
+			{
+				game.Roll((i < 2 ? 2 : 3));
+			}
+		}
+
+		[Specification]
+		public void then_the_score_is_58()
+		{
+			game.Score.ShouldEqual(58);
+		}
+	}
+
 	/*
 	 * 
 	 * 
