@@ -160,9 +160,35 @@ namespace specs_for_bowling
 		}
 	}
 
+	public class when_The_first_frame_is_a_strike_and_the_remaining_frames_are_twos : concerns
+	{
+		Game game = new Game();
+
+		protected override void context()
+		{
+			game.Roll(10);
+			for (int i = 0; i < 18; i++)
+			{
+				game.Roll(2);
+			}
+		}
+
+		[Specification]
+		public void then_the_score_is_50()
+		{
+			game.Score.ShouldEqual(50);
+		}
+	}
+
 
 
 	/*
+* when rolling all gutter balls, the score is 0.
+* when rolling all 2s, the score is 40.
+* when the first 2 rolls are 2 and the rest are 3, the score is 58.
+* when rolling alternating 2s and 5s, the score 70.
+* when the first frame is a spare and the remaining rolls are all 2, the score is 48.
+* when the first 2 frames are spare (as 2,8) and the rest score 2, the score is 56.
 * when 10 frames have been bowled, don't allow any more to be bowled.
 * when the first frame is a strike and the rest score 2, the score is 50.
 * when the first 2 frames are strikes and the rest score 2, the score is 68.
