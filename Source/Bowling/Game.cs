@@ -9,7 +9,7 @@ namespace Bowling
 	{
 		public int Play()
 		{
-			throw new NotImplementedException();
+			return 0;
 		}
 	}
 }
