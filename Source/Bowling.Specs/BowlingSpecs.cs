@@ -48,4 +48,19 @@ namespace specs_for_bowling
 			game.Score.ShouldEqual(0);
 		}
 	}
+	public class when_rolling_all_2s_the_score_is_40 : concerns
+	{
+		private Game game = new Game();
+		protected override void context()
+		{
+			for (int i = 0; i < 20; i++) { game.Roll(2); }
+		}
+
+		[Specification]
+		public void the_score_is_40()
+		{
+			game.Score.ShouldEqual(40);
+		}
+	}
+
 }
