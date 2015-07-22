@@ -22,11 +22,6 @@ namespace Bowling
 		{
 			if (currentFrame.IsComplete && Frames.Count == 10) return false;
 
-			if (previousFrame != null && currentFrame.IsComplete && previousFrame.IsStrike)
-			{
-				previousFrame.Rolls.AddRange(currentFrame.Rolls);
-			}
-
 			if (currentFrame.IsSpare)
 			{
 				currentFrame.Rolls.Add(pins);
@@ -46,7 +41,24 @@ namespace Bowling
 		{
 			get
 			{
-				return Frames.Sum(f => f.Rolls.Sum());
+				var score = Frames.Sum(f => f.Rolls.Sum());
+				for (var i = 0; i < Frames.Count; i++)
+				{
+					if (Frames[i].IsSpare && i+1 < Frames.Count)
+					{
+						score += Frames[i + 1].Rolls[0];
+					}
+
+					if (Frames[i].IsStrike && i+1 < Frames.Count)
+					{
+						score += Frames[i + 1].Rolls.Sum();
+						if (Frames[i + 1].Rolls.Count == 1 && i + 2 < Frames.Count)
+						{
+							score += Frames[i + 2].Rolls[0];
+						}
+					}
+				}
+				return score;
 			}
 		}
 	}
