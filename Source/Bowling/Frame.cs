@@ -19,7 +19,7 @@ namespace Bowling
 
 		public bool IsStrike
 		{
-			get { return Rolls.Count == 1 && Rolls.Sum() == 10; }
+			get { return (Rolls.Sum() > 0 && Rolls.Sum() % 10==0); }
 		}
 
 		public bool IsComplete
