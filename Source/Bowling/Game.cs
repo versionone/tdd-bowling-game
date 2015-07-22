@@ -16,8 +16,9 @@ namespace Bowling
 			Frames.Add(currentFrame);
 		}
 
-		public void Roll(int pins)
+		public bool Roll(int pins)
 		{
+			if (currentFrame.IsComplete && Frames.Count == 10) return false;
 			if (currentFrame.IsSpare)
 			{
 				currentFrame.Rolls.Add(pins);
@@ -28,6 +29,7 @@ namespace Bowling
 				Frames.Add(currentFrame);
 			}
 			currentFrame.Rolls.Add(pins);
+			return true;
 		}
 
 		public int Score

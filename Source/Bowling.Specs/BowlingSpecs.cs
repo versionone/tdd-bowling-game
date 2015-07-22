@@ -140,4 +140,19 @@ namespace specs_for_bowling
 		}
 	}
 
+	public class when_10_frames_have_been_bowled_dont_allow_any_more_to_be_bowled : concerns
+	{
+		private Game game = new Game();
+		protected override void context()
+		{
+			for (int i = 0; i < 20; i++) { game.Roll(2); }
+		}
+
+		[Specification]
+		public void dont_allow_more_to_be_bowled()
+		{
+			game.Roll(0).ShouldEqual(false);
+		}
+	}
+
 }
