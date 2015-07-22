@@ -17,9 +17,14 @@ namespace Bowling
 			get { return Rolls.Count == 2 && Rolls.Sum()== 10; }
 		}
 
+		public bool IsStrike
+		{
+			get { return Rolls.Count == 1 && Rolls.Sum() == 10; }
+		}
+
 		public bool IsComplete
 		{
-			get { return Rolls.Count >= 2; }
+			get { return IsStrike || Rolls.Count >= 2; }
 		}
 	}
 }

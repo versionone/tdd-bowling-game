@@ -154,5 +154,20 @@ namespace specs_for_bowling
 			game.Roll(0).ShouldEqual(false);
 		}
 	}
+	public class when_the_first_frame_is_a_strike_and_the_rest_score_2_the_score_is_50 : concerns
+	{
+		private Game game = new Game();
+		protected override void context()
+		{
+			game.Roll(10);
+			for (int i = 0; i < 18; i++) { game.Roll(2); }
+		}
+
+		[Specification]
+		public void the_score_is_50()
+		{
+			game.Score.ShouldEqual(50);
+		}
+	}
 
 }
