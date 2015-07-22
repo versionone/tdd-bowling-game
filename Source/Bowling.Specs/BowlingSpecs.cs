@@ -63,6 +63,31 @@ namespace specs_for_bowling
 		}
 	}
 
+	public class when_rolling_alternating_2s_and_5s_the_score_70 : concerns
+	{
+		private Game game = new Game();
+		protected override void context()
+		{
+			for (int i = 0; i < 20; i++)
+			{
+				if (i%2==0)
+				{
+					game.Roll(2);
+				}
+				else
+				{
+					game.Roll(5);					
+				}
+			}
+		}
+
+		[Specification]
+		public void the_score_is_70()
+		{
+			game.Score.ShouldEqual(70);
+		}
+	}
+
 	public class when_the_first_2_rolls_are_2_and_the_rest_are_3_the_score_is_58 : concerns
 	{
 		private Game game = new Game();
