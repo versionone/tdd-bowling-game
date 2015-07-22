@@ -121,4 +121,23 @@ namespace specs_for_bowling
 		}
 	}
 
+	public class when_the_first_2_frames_are_spare_as_2_8_and_the_rest_score_2_the_score_is_56: concerns
+	{
+		private Game game = new Game();
+		protected override void context()
+		{
+			game.Roll(2);
+			game.Roll(8);
+			game.Roll(2);
+			game.Roll(8);
+			for (int i = 0; i < 16; i++) { game.Roll(2); }
+		}
+
+		[Specification]
+		public void the_score_is_56()
+		{
+			game.Score.ShouldEqual(56);
+		}
+	}
+
 }
