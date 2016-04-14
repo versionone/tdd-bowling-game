@@ -75,4 +75,27 @@ namespace specs_for_bowling
 			_scoreboard.Score.ShouldEqual(58);
 		}
 	}
+
+	//when rolling alternating 2s and 5s, the score 70.
+	public class when_rolling_alternate_2s_and_5s : concerns
+	{
+		private Scoreboard _scoreboard;
+
+		protected override void context()
+		{
+			_scoreboard = new Scoreboard();
+
+			10.times(() =>
+			{
+				_scoreboard.Record(2);
+				_scoreboard.Record(5);
+			});
+		}
+
+		[Specification]
+		public void the_score_is_70()
+		{
+			_scoreboard.Score.ShouldEqual(70);
+		}
+	}
 }
