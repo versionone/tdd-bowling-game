@@ -36,4 +36,23 @@ namespace specs_for_bowling
 			_scoreboard.Score.ShouldEqual(0);
 		}
 	}
+
+	public class when_rolling_all_2s : concerns
+	{
+		private Scoreboard _scoreboard;
+
+		protected override void context()
+		{
+			_scoreboard = new Scoreboard();
+
+			20.times(() => _scoreboard.Record(2));
+		}
+
+		[Specification]
+		public void the_score_is_40()
+		{
+			_scoreboard.Score.ShouldEqual(40);
+		}
+	}
+
 }
