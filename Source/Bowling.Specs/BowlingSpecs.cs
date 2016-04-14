@@ -117,4 +117,26 @@ namespace specs_for_bowling
 			_scoreboard.Score.ShouldEqual(48);
 		}
 	}
+
+	// when the first 2 frames are spare (as 2,8) and the rest score 2, the score is 56.
+	public class when_rolling_two_2_8_spares_followed_by_2s : concerns
+	{
+		private Scoreboard _scoreboard;
+
+		protected override void context()
+		{
+			_scoreboard = new Scoreboard();
+
+			_scoreboard.Record(2, 8);
+			_scoreboard.Record(2, 8);
+
+			8.times(() => _scoreboard.Record(2, 2));
+		}
+
+		[Specification]
+		public void the_score_is_56()
+		{
+			_scoreboard.Score.ShouldEqual(56);
+		}
+	}
 }
