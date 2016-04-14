@@ -1,3 +1,4 @@
+using System;
 using Bowling;
 using Bowling.Specs.Infrastructure;
 
@@ -137,6 +138,25 @@ namespace specs_for_bowling
 		public void the_score_is_56()
 		{
 			_scoreboard.Score.ShouldEqual(56);
+		}
+	}
+
+	// when 10 frames have been bowled, don't allow any more to be bowled.
+	public class when_10_frames_are_complete : concerns
+	{
+		private Scoreboard _scoreboard;
+
+		protected override void context()
+		{
+			_scoreboard = new Scoreboard();
+
+			10.times(() => _scoreboard.Record(0, 0));
+		}
+
+		[Specification]
+		public void no_more_rolls_are_permitted()
+		{
+			typeof (Exception).ShouldBeThrownBy(() => _scoreboard.Record(0, 0));
 		}
 	}
 }
