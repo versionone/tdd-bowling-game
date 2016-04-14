@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Versioning;
 using System.Security.Policy;
 
@@ -73,6 +75,15 @@ namespace Bowling
 			}
 		}
 
+		public override IEnumerable<int> Bonuses
+		{
+			get
+			{
+				yield return pins1;
+				yield return IsStrike ? bonus1 ?? 0 : pins2;
+			}
+		}
+
 		public override void Record(int pins)
 		{
 			if (_currentBox == 0)
@@ -107,7 +118,7 @@ namespace Bowling
 			var baseScore = base.Score(nextFrame, nextNextFrame);
 			if (IsStrike)
 			{
-				baseScore += bonus1 ?? 0 + bonus2 ?? 0;
+				baseScore += (bonus1 ?? 0) + (bonus2 ?? 0);
 			}
 			return baseScore;
 		}
@@ -125,6 +136,18 @@ namespace Bowling
 			get
 			{
 				return IsStrike || _currentBox == 2;
+			}
+		}
+
+		public virtual IEnumerable<int> Bonuses
+		{
+			get
+			{
+				yield return pins1;
+				if (!IsStrike)
+				{
+					yield return pins2;
+				}
 			}
 		}
 
@@ -157,18 +180,11 @@ namespace Bowling
 			if (IsStrike)
 			{
 				// Add the next two roll values as bonus
-				if (nextFrame.IsStrike)
-				{
-					total += 10 + nextNextFrame.pins1;
-				}
-				else
-				{
-					total += nextFrame.pins1 + nextFrame.pins2;
-				}
+				total += nextFrame.Bonuses.Concat(nextNextFrame.Bonuses).Take(2).Sum();
 			}
 			else if (IsSpare)
 			{
-				total += nextFrame.pins1;
+				total += nextFrame.Bonuses.First();
 			}
 			return total;
 		}
