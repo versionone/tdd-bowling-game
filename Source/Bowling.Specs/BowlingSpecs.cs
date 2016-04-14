@@ -27,7 +27,7 @@ namespace specs_for_bowling
 		{
 			_scoreboard = new Scoreboard();
 
-			20.times(() => _scoreboard.Record(0));
+			10.times(() => _scoreboard.Record(0, 0));
 		}
 
 		[Specification]
@@ -45,7 +45,7 @@ namespace specs_for_bowling
 		{
 			_scoreboard = new Scoreboard();
 
-			20.times(() => _scoreboard.Record(2));
+			10.times(() => _scoreboard.Record(2, 2));
 		}
 
 		[Specification]
@@ -64,9 +64,8 @@ namespace specs_for_bowling
 		{
 			_scoreboard = new Scoreboard();
 
-			_scoreboard.Record(2);
-			_scoreboard.Record(2);
-			18.times(() => _scoreboard.Record(3));
+			_scoreboard.Record(2, 2);
+			9.times(() => _scoreboard.Record(3, 3));
 		}
 
 		[Specification]
@@ -87,8 +86,7 @@ namespace specs_for_bowling
 
 			10.times(() =>
 			{
-				_scoreboard.Record(2);
-				_scoreboard.Record(5);
+				_scoreboard.Record(2, 5);
 			});
 		}
 
@@ -96,6 +94,27 @@ namespace specs_for_bowling
 		public void the_score_is_70()
 		{
 			_scoreboard.Score.ShouldEqual(70);
+		}
+	}
+
+	// when the first frame is a spare and the remaining rolls are all 2, the score is 48.
+	public class when_rolling_a_spare_followed_by_2s : concerns
+	{
+		private Scoreboard _scoreboard;
+
+		protected override void context()
+		{
+			_scoreboard = new Scoreboard();
+
+			_scoreboard.Record(3, 7);
+
+			9.times(() => _scoreboard.Record(2, 2));
+		}
+
+		[Specification]
+		public void the_score_is_48()
+		{
+			_scoreboard.Score.ShouldEqual(48);
 		}
 	}
 }

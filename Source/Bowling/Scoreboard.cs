@@ -1,12 +1,21 @@
 namespace Bowling
 {
+
 	public class Scoreboard
 	{
+	
 		private int _score;
+		private bool _lastFrameWasSpare;
 
-		public void Record(int pins)
+		public void Record(int pins1, int pins2)
 		{
-			_score += pins;
+			var frameScore = pins1 + pins2;
+			_score += frameScore;
+			if (_lastFrameWasSpare)
+			{
+				_score += pins1;
+			}
+			_lastFrameWasSpare = frameScore == 10;
 		}
 
 		public int Score
