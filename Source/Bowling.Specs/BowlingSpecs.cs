@@ -195,4 +195,26 @@ namespace specs_for_bowling
 		}
 	}
 
+	// when the first two frames are strikes and the rest score 2, the score is 68.
+	public class when_rolling_two_strikes_followed_by_2s : concerns
+	{
+		private Scoreboard _scoreboard;
+
+		protected override void context()
+		{
+			_scoreboard = new Scoreboard();
+
+			_scoreboard.Record(10);
+			_scoreboard.Record(10);
+
+			16.times(() => _scoreboard.Record(2));
+		}
+
+		[Specification]
+		public void the_score_is_68()
+		{
+			_scoreboard.Score.ShouldEqual(68);
+		}
+	}
+
 }

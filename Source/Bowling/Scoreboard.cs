@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.Versioning;
+using System.Security.Policy;
 
 namespace Bowling
 {
@@ -9,6 +10,7 @@ namespace Bowling
 		private int _framesBowled = 0;
 		private int _score;
 
+		private Frame _lastLastFrame;
 		private Frame _lastFrame;
 		private Frame _currentFrame;
 		private int _currentBox = 0;
@@ -43,14 +45,16 @@ namespace Bowling
 
 		private void CloseFrame()
 		{
-			_score += _lastFrame.Score(_currentFrame);
+			_score += _lastLastFrame.Score(_lastFrame, _currentFrame);
+			_lastLastFrame = _lastFrame;
 			_lastFrame = _currentFrame;
 			_currentFrame = new Frame();
 			_framesBowled++;
 			if (_framesBowled == 10)
 			{
 				// Game is complete
-				_score += _lastFrame.Score(_currentFrame);
+				_score += _lastLastFrame.Score(_lastFrame, _currentFrame);
+				_score += _lastFrame.Score(_currentFrame, new Frame());
 			}
 		}
 
@@ -65,14 +69,32 @@ namespace Bowling
 		public int pins1;
 		public int pins2;
 
-		public int Score(Frame nextFrame)
+		public bool IsStrike
+		{
+			get { return pins1 == 10; }
+		}
+
+		public bool IsSpare
+		{
+			get { return pins1 + pins2 == 10 && pins1 < 10; }
+		}
+
+		public int Score(Frame nextFrame, Frame nextNextFrame)
 		{
 			var total = pins1 + pins2;
-			if (pins1 == 10)
+			if (IsStrike)
 			{
-				total += nextFrame.pins1 + nextFrame.pins2;
+				// Add the next two roll values as bonus
+				if (nextFrame.IsStrike)
+				{
+					total += 10 + nextNextFrame.pins1;
+				}
+				else
+				{
+					total += nextFrame.pins1 + nextFrame.pins2;
+				}
 			}
-			else if (pins1 + pins2 == 10)
+			else if (IsSpare)
 			{
 				total += nextFrame.pins1;
 			}
