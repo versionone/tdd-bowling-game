@@ -12,49 +12,41 @@ namespace Bowling
 
 		private Frame _lastLastFrame;
 		private Frame _lastFrame;
-		private Frame _currentFrame;
-		private int _currentBox = 0;
+		private Frame _currentFrame = new Frame();
 
 		public void Record(int pins)
 		{
 			if (_framesBowled >= 10)
 			{
-				throw new Exception("You already bowled 10 frames");
+				throw new Exception("Can't bowl more than ten frames");
 			}
 
-			if (_currentBox == 0 && pins == 10)
+			_currentFrame.Record(pins);
+			if (_currentFrame.IsDone)
 			{
-				// strike!
-				_currentFrame.pins1 = pins;
-				CloseFrame();
-			}
-			else if (_currentBox == 0)
-			{
-				// First box in the frame
-				_currentBox = 1;
-				_currentFrame.pins1 = pins;
-			}
-			else
-			{
-				// Second box in the frame
-				_currentBox = 0;
-				_currentFrame.pins2 = pins;
 				CloseFrame();
 			}
 		}
 
 		private void CloseFrame()
 		{
-			_score += _lastLastFrame.Score(_lastFrame, _currentFrame);
+			if (_lastLastFrame != null && _lastFrame != null && _currentFrame != null)
+			{
+				_score += _lastLastFrame.Score(_lastFrame, _currentFrame);
+			}
 			_lastLastFrame = _lastFrame;
 			_lastFrame = _currentFrame;
-			_currentFrame = new Frame();
+
 			_framesBowled++;
+			_currentFrame = _framesBowled == 9 ? new TenthFrame() : new Frame();
+
 			if (_framesBowled == 10)
 			{
 				// Game is complete
-				_score += _lastLastFrame.Score(_lastFrame, _currentFrame);
-				_score += _lastFrame.Score(_currentFrame, new Frame());
+				// Score the ninth frame
+				_score += _lastLastFrame.Score(_lastFrame, new Frame());
+				// Score the tenth frame
+				_score += _lastFrame.Score(new Frame(), new Frame());
 			}
 		}
 
@@ -64,10 +56,77 @@ namespace Bowling
 		}
 	}
 
-	struct Frame
+	class TenthFrame : Frame
+	{
+		public int? bonus1;
+		public int? bonus2;
+
+		public override bool IsDone
+		{
+			get
+			{
+				if (IsStrike)
+				{
+					return bonus1.HasValue && bonus2.HasValue;
+				}
+				return base.IsDone;
+			}
+		}
+
+		public override void Record(int pins)
+		{
+			if (_currentBox == 0)
+			{
+				pins1 = pins;
+			}
+			else if (_currentBox == 1)
+			{
+				if (IsStrike)
+				{
+					bonus1 = pins;
+				}
+				else
+				{
+					pins2 = pins;
+				}
+			}
+			else if (_currentBox == 2 && IsStrike)
+			{
+				bonus2 = pins;
+			}
+			else
+			{
+				throw new Exception("Recorded too many rolls");
+			}
+
+			_currentBox++;
+		}
+
+		public override int Score(Frame nextFrame, Frame nextNextFrame)
+		{
+			var baseScore = base.Score(nextFrame, nextNextFrame);
+			if (IsStrike)
+			{
+				baseScore += bonus1 ?? 0 + bonus2 ?? 0;
+			}
+			return baseScore;
+		}
+	}
+
+	class Frame
 	{
 		public int pins1;
 		public int pins2;
+
+		protected int _currentBox = 0;
+
+		public virtual bool IsDone
+		{
+			get
+			{
+				return IsStrike || _currentBox == 2;
+			}
+		}
 
 		public bool IsStrike
 		{
@@ -79,7 +138,20 @@ namespace Bowling
 			get { return pins1 + pins2 == 10 && pins1 < 10; }
 		}
 
-		public int Score(Frame nextFrame, Frame nextNextFrame)
+		public virtual void Record(int pins)
+		{
+			if (_currentBox == 0)
+			{
+				pins1 = pins;
+			}
+			else
+			{
+				pins2 = pins;
+			}
+			_currentBox++;
+		}
+
+		public virtual int Score(Frame nextFrame, Frame nextNextFrame)
 		{
 			var total = pins1 + pins2;
 			if (IsStrike)

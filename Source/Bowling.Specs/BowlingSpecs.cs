@@ -217,4 +217,23 @@ namespace specs_for_bowling
 		}
 	}
 
+	// when rolling a perfect game, the score is 300.
+	public class when_rolling_a_perfect_game : concerns
+	{
+		private Scoreboard _scoreboard;
+
+		protected override void context()
+		{
+			_scoreboard = new Scoreboard();
+
+			12.times(() => _scoreboard.Record(10));
+		}
+
+		[Specification]
+		public void the_score_is_300()
+		{
+			_scoreboard.Score.ShouldEqual(300);
+		}
+	}
+
 }
