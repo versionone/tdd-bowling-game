@@ -55,4 +55,24 @@ namespace specs_for_bowling
 		}
 	}
 
+	// when the first 2 rolls are 2 and the rest are 3, the score is 58.
+	public class when_rolling_2_2s_then_3s : concerns
+	{
+		private Scoreboard _scoreboard;
+
+		protected override void context()
+		{
+			_scoreboard = new Scoreboard();
+
+			_scoreboard.Record(2);
+			_scoreboard.Record(2);
+			18.times(() => _scoreboard.Record(3));
+		}
+
+		[Specification]
+		public void the_score_is_58()
+		{
+			_scoreboard.Score.ShouldEqual(58);
+		}
+	}
 }
