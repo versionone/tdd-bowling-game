@@ -71,6 +71,10 @@ namespace Bowling
 				{
 					return bonus1.HasValue && bonus2.HasValue;
 				}
+				if (IsSpare)
+				{
+					return bonus1.HasValue;
+				}
 				return base.IsDone;
 			}
 		}
@@ -101,9 +105,16 @@ namespace Bowling
 					pins2 = pins;
 				}
 			}
-			else if (_currentBox == 2 && IsStrike)
+			else if (_currentBox == 2)
 			{
-				bonus2 = pins;
+				if (IsStrike)
+				{
+					bonus2 = pins;
+				}
+				else if (IsSpare)
+				{
+					bonus1 = pins;
+				}
 			}
 			else
 			{
@@ -119,6 +130,10 @@ namespace Bowling
 			if (IsStrike)
 			{
 				baseScore += (bonus1 ?? 0) + (bonus2 ?? 0);
+			}
+			else if (IsSpare)
+			{
+				baseScore += (bonus1 ?? 0);
 			}
 			return baseScore;
 		}

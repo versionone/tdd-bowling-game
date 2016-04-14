@@ -236,4 +236,29 @@ namespace specs_for_bowling
 		}
 	}
 
+	//when rolling alternate strikes and spares, the score is 200.
+	public class when_rolling_alternating_strikes_and_spares : concerns
+	{
+		private Scoreboard _scoreboard;
+
+		protected override void context()
+		{
+			_scoreboard = new Scoreboard();
+
+			5.times(() =>
+			{
+				_scoreboard.Record(10);
+				_scoreboard.Record(3);
+				_scoreboard.Record(7);
+			});
+
+			_scoreboard.Record(10);
+		}
+
+		[Specification]
+		public void the_score_is_200()
+		{
+			_scoreboard.Score.ShouldEqual(200);
+		}
+	}
 }
