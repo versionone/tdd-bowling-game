@@ -20,7 +20,13 @@ namespace Bowling
 				throw new Exception("You already bowled 10 frames");
 			}
 
-			if (_currentBox == 0)
+			if (_currentBox == 0 && pins == 10)
+			{
+				// strike!
+				_currentFrame.pins1 = pins;
+				CloseFrame();
+			}
+			else if (_currentBox == 0)
 			{
 				// First box in the frame
 				_currentBox = 1;
@@ -31,15 +37,20 @@ namespace Bowling
 				// Second box in the frame
 				_currentBox = 0;
 				_currentFrame.pins2 = pins;
-				var frameScore = _currentFrame.pins1 + _currentFrame.pins2;
-				_score += frameScore;
-				if (_lastFrame.pins1 + _lastFrame.pins2 == 10)
-				{
-					_score += _currentFrame.pins1;
-				}
-				_lastFrame = _currentFrame;
-				_currentFrame = new Frame();
-				_framesBowled++;
+				CloseFrame();
+			}
+		}
+
+		private void CloseFrame()
+		{
+			_score += _lastFrame.Score(_currentFrame);
+			_lastFrame = _currentFrame;
+			_currentFrame = new Frame();
+			_framesBowled++;
+			if (_framesBowled == 10)
+			{
+				// Game is complete
+				_score += _lastFrame.Score(_currentFrame);
 			}
 		}
 
@@ -53,5 +64,19 @@ namespace Bowling
 	{
 		public int pins1;
 		public int pins2;
+
+		public int Score(Frame nextFrame)
+		{
+			var total = pins1 + pins2;
+			if (pins1 == 10)
+			{
+				total += nextFrame.pins1 + nextFrame.pins2;
+			}
+			else if (pins1 + pins2 == 10)
+			{
+				total += nextFrame.pins1;
+			}
+			return total;
+		}
 	}
 }
