@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.Versioning;
 
 namespace Bowling
 {
@@ -7,28 +8,50 @@ namespace Bowling
 	{
 		private int _framesBowled = 0;
 		private int _score;
-		private bool _lastFrameWasSpare;
 
-		public void Record(int pins1, int pins2)
+		private Frame _lastFrame;
+		private Frame _currentFrame;
+		private int _currentBox = 0;
+
+		public void Record(int pins)
 		{
 			if (_framesBowled >= 10)
 			{
 				throw new Exception("You already bowled 10 frames");
 			}
 
-			var frameScore = pins1 + pins2;
-			_score += frameScore;
-			if (_lastFrameWasSpare)
+			if (_currentBox == 0)
 			{
-				_score += pins1;
+				// First box in the frame
+				_currentBox = 1;
+				_currentFrame.pins1 = pins;
 			}
-			_lastFrameWasSpare = frameScore == 10;
-			_framesBowled++;
+			else
+			{
+				// Second box in the frame
+				_currentBox = 0;
+				_currentFrame.pins2 = pins;
+				var frameScore = _currentFrame.pins1 + _currentFrame.pins2;
+				_score += frameScore;
+				if (_lastFrame.pins1 + _lastFrame.pins2 == 10)
+				{
+					_score += _currentFrame.pins1;
+				}
+				_lastFrame = _currentFrame;
+				_currentFrame = new Frame();
+				_framesBowled++;
+			}
 		}
 
 		public int Score
 		{
 			get { return _score; }
 		}
+	}
+
+	struct Frame
+	{
+		public int pins1;
+		public int pins2;
 	}
 }

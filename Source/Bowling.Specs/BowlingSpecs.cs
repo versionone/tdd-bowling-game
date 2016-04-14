@@ -28,7 +28,7 @@ namespace specs_for_bowling
 		{
 			_scoreboard = new Scoreboard();
 
-			10.times(() => _scoreboard.Record(0, 0));
+			20.times(() => _scoreboard.Record(0));
 		}
 
 		[Specification]
@@ -46,7 +46,7 @@ namespace specs_for_bowling
 		{
 			_scoreboard = new Scoreboard();
 
-			10.times(() => _scoreboard.Record(2, 2));
+			20.times(() => _scoreboard.Record(2));
 		}
 
 		[Specification]
@@ -65,8 +65,9 @@ namespace specs_for_bowling
 		{
 			_scoreboard = new Scoreboard();
 
-			_scoreboard.Record(2, 2);
-			9.times(() => _scoreboard.Record(3, 3));
+			_scoreboard.Record(2);
+			_scoreboard.Record(2);
+			18.times(() => _scoreboard.Record(3));
 		}
 
 		[Specification]
@@ -87,7 +88,8 @@ namespace specs_for_bowling
 
 			10.times(() =>
 			{
-				_scoreboard.Record(2, 5);
+				_scoreboard.Record(2);
+				_scoreboard.Record(5);
 			});
 		}
 
@@ -107,9 +109,14 @@ namespace specs_for_bowling
 		{
 			_scoreboard = new Scoreboard();
 
-			_scoreboard.Record(3, 7);
+			_scoreboard.Record(3);
+			_scoreboard.Record(7);
 
-			9.times(() => _scoreboard.Record(2, 2));
+			9.times(() =>
+			{
+				_scoreboard.Record(2);
+				_scoreboard.Record(2);
+			});
 		}
 
 		[Specification]
@@ -128,10 +135,17 @@ namespace specs_for_bowling
 		{
 			_scoreboard = new Scoreboard();
 
-			_scoreboard.Record(2, 8);
-			_scoreboard.Record(2, 8);
+			2.times(() =>
+			{
+				_scoreboard.Record(2);
+				_scoreboard.Record(8);
+			});
 
-			8.times(() => _scoreboard.Record(2, 2));
+			8.times(() =>
+			{
+				_scoreboard.Record(2);
+				_scoreboard.Record(2);
+			});
 		}
 
 		[Specification]
@@ -150,13 +164,35 @@ namespace specs_for_bowling
 		{
 			_scoreboard = new Scoreboard();
 
-			10.times(() => _scoreboard.Record(0, 0));
+			20.times(() => _scoreboard.Record(0));
 		}
 
 		[Specification]
 		public void no_more_rolls_are_permitted()
 		{
-			typeof (Exception).ShouldBeThrownBy(() => _scoreboard.Record(0, 0));
+			typeof (Exception).ShouldBeThrownBy(() => _scoreboard.Record(0));
 		}
 	}
+
+	// when the first frame is a strike and the rest score 2, the score is 50.
+	public class when_rolling_a_strike_followed_by_2s : concerns
+	{
+		private Scoreboard _scoreboard;
+
+		protected override void context()
+		{
+			_scoreboard = new Scoreboard();
+
+			_scoreboard.Record(10);
+
+			18.times(() => _scoreboard.Record(2));
+		}
+
+		[Specification]
+		public void the_score_is_50()
+		{
+			_scoreboard.Score.ShouldEqual(50);
+		}
+	}
+
 }
