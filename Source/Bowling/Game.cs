@@ -61,11 +61,16 @@ namespace Bowling
 		public int GetScore()
 		{
 			int myScore = First.Value + Second.Value;
-			if (myScore == 10)
+			if (isSpare())
 			{
 				return myScore + NextFrame.First.Value;
 			}
 			return myScore;
+		}
+
+		public bool isSpare()
+		{
+			return First.Value + Second.Value == 10;
 		}
 	}
 }
