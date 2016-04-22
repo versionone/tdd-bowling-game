@@ -73,7 +73,14 @@ namespace Bowling
 
 			if (isStrike())
 			{
-				return myScore + NextFrame.GetScore();
+				if (NextFrame.isStrike())
+				{
+					return myScore + NextFrame.First.Value + NextFrame.NextFrame.First.Value;
+				}
+				else
+				{
+					return myScore + NextFrame.First.Value + NextFrame.Second.Value;
+				}
 			}
 
 			return myScore;
