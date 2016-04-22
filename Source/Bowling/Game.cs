@@ -29,7 +29,7 @@ namespace Bowling
 			}
 			else if (frames.Last().IsComplete())
 			{
-				if (frames.Count >= 10)
+				if (frames.Count >= 10 )
 				{
 					throw new Exception();
 				}
@@ -50,13 +50,34 @@ namespace Bowling
 		}
 	}
 
+	internal class SpecialFrame : Frame
+	{
+		public int? Third { get; set; }
+
+		public override bool IsComplete()
+		{
+			if (isSpare())
+			{
+				if (Third.HasValue)
+				{
+					return true;
+				}		
+			}
+
+			if (isStrike())
+			{
+				
+			}
+		}
+	}
+
 	internal class Frame
 	{
 		public Frame NextFrame { get; set; }
 		public int? First { get; set; }
 		public int? Second { get; set; }
 
-		public bool IsComplete()
+		public virtual bool IsComplete()
 		{
 			bool isComplete = isStrike() || First.HasValue && Second.HasValue;
 

@@ -228,9 +228,28 @@ namespace specs_for_bowling
 
 	}
 
+	public class when_rolling_a_perfect_game : concerns
+	{
+		private Game game;
+		protected override void context()
+		{
+			game = new Game();
+
+			
+			for (int i = 0; i < 12; i++)
+			{
+				game.roll(10);
+			}
+		}
+
+		[Specification]
+		public void the_score_is_300()
+		{
+			game.GetScore().ShouldEqual(300);
+		}
+	}
+
 	/*
-*_when_the_first_frame_is_a_strike_and_the_rest_score_2_the_score_is_50.
-*_when_the_first_2_frames_are_strikes_and_the_rest_score_2_the_score_is_68.
 *_when_rolling_a_perfect_game_the_score_is_300.
 *_when_rolling_alternate_strikes_and_spares_the_score_is_200._
 	 */
