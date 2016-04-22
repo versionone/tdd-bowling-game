@@ -83,10 +83,28 @@ namespace specs_for_bowling
 		}
 	}
 
+	public class when_rolling_alternating_2s_and_5s : concerns
+	{
+		private Game game;
+		protected override void context()
+		{
+			game = new Game();
+
+			for (int i = 0; i < 10; i++)
+			{
+				game.roll(2);
+				game.roll(5);
+			}
+		}
+
+		[Specification]
+		public void the_score_is_70()
+		{
+			game.GetScore().ShouldEqual(70);
+		}
+	}
+
 	/*
-	 
-*_when_rolling_all_2s_the_score_is_40.
-*_when_the_first_2_rolls_are_2_and_the_rest_are_3_the_score_is_58.
 *_when_rolling_alternating_2s_and_5s_the_score_70.
 *_when_the_first_frame_is_a_spare_and_the_remaining_rolls_are_all_2_the_score_is_48.
 *_when_the_first_2_frames_are_spare_(as_28)_and_the_rest_score_2_the_score_is_56.
