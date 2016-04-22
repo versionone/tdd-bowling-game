@@ -32,7 +32,23 @@ namespace specs_for_bowling
 		public void the_score_is_0()
 		{
 			// assert that the score is 0
-			game.getScore().ShouldEqual(0);
+			game.GetScore().ShouldEqual(0);
+		}
+	}
+
+	public class when_rolling_all_2s : concerns
+	{
+		private Game game;
+		protected override void context()
+		{
+			game = new Game();
+			game.rolls(20, 2);
+		}
+
+		[Specification]
+		public void the_score_is_40()
+		{
+			game.GetScore().ShouldEqual(40);
 		}
 	}
 

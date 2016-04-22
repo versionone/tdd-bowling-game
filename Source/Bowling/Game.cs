@@ -7,9 +7,17 @@ namespace Bowling
 {
 	public class Game
 	{
-		public int getScore()
+
+		private int score = 0;
+
+		public int GetScore()
 		{
-			return 0;
+			return score;
+		}
+
+		public void rolls(int numberOfRolls, int numberOfPins)
+		{
+			score = numberOfRolls * numberOfPins;
 		}
 	}
 }
