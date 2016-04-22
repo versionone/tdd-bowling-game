@@ -22,9 +22,14 @@ namespace Bowling
 
 		public void roll(int numberOfPins)
 		{
-			if (frames.Count == 0 || frames.Last().IsComplete())
+			if (frames.Count == 0)
 			{
 				frames.Add(new Frame());
+			}
+			else if (frames.Last().IsComplete())
+			{
+				frames.Last().NextFrame = new Frame();
+				frames.Add(frames.Last().NextFrame);
 			}
 			Frame f = frames.Last();
 
@@ -42,6 +47,7 @@ namespace Bowling
 
 	internal class Frame
 	{
+		public Frame NextFrame { get; set; }
 		public int? First { get; set; }
 		public int? Second { get; set; }
 
@@ -54,7 +60,12 @@ namespace Bowling
 
 		public int GetScore()
 		{
-			return First.Value + Second.Value;
+			int myScore = First.Value + Second.Value;
+			if (myScore == 10)
+			{
+				return myScore + NextFrame.First.Value;
+			}
+			return myScore;
 		}
 	}
 }
