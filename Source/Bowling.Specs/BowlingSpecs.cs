@@ -1,6 +1,7 @@
 using Bowling;
 using Bowling.Specs.Infrastructure;
 using Gallio.Framework.Assertions;
+using NUnit.Framework;
 
 namespace specs_for_bowling
 {
@@ -151,6 +152,33 @@ namespace specs_for_bowling
 			game.GetScore().ShouldEqual(56);
 		}
 		
+	}
+
+	public class when_10_frames_have_been_bowled : concerns
+	{
+		private Game game;
+		protected override void context()
+		{
+			game = new Game();
+
+			game.roll(2);
+			game.roll(8);
+			game.roll(2);
+			game.roll(8);
+
+			for (int i = 0; i < 16; i++)
+			{
+				game.roll(2);
+			}
+		}
+
+		[Specification]
+		[ExpectedException]
+		public void dont_allow_any_more_to_be_bowled()
+		{
+			game.roll(3);
+		}
+
 	}
 
 	/*

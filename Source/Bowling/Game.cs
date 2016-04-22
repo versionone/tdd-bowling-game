@@ -22,12 +22,17 @@ namespace Bowling
 
 		public void roll(int numberOfPins)
 		{
+			
 			if (frames.Count == 0)
 			{
 				frames.Add(new Frame());
 			}
 			else if (frames.Last().IsComplete())
 			{
+				if (frames.Count >= 10)
+				{
+					throw new Exception();
+				}
 				frames.Last().NextFrame = new Frame();
 				frames.Add(frames.Last().NextFrame);
 			}
