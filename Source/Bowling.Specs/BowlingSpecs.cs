@@ -127,8 +127,33 @@ namespace specs_for_bowling
 		}
 	}
 
+	public class when_the_first_2_frames_are_spare_and_the_rest_score_2 : concerns
+	{
+		private Game game;
+		protected override void context()
+		{
+			game = new Game();
+
+			game.roll(2);
+			game.roll(8);
+			game.roll(2);
+			game.roll(8);
+
+			for (int i = 0; i < 16; i++)
+			{
+				game.roll(2);
+			}
+		}
+
+		[Specification]
+		public void the_score_is_56()
+		{
+			game.GetScore().ShouldEqual(56);
+		}
+		
+	}
+
 	/*
-*_when_the_first_frame_is_a_spare_and_the_remaining_rolls_are_all_2_the_score_is_48.
 *_when_the_first_2_frames_are_spare_(as_28)_and_the_rest_score_2_the_score_is_56.
 *_when_10_frames_have_been_bowled_don't_allow_any_more_to_be_bowled.
 *_when_the_first_frame_is_a_strike_and_the_rest_score_2_the_score_is_50.
