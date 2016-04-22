@@ -8,16 +8,21 @@ namespace Bowling
 	public class Game
 	{
 
-		private int score = 0;
+		private List<int> scores = new List<int>();
 
 		public int GetScore()
 		{
-			return score;
+			int theScore  = 0;
+			for (int i = 0; i < scores.Count; i++)
+			{
+				theScore += scores[i];
+			}
+			return theScore;
 		}
 
 		public void roll(int numberOfPins)
 		{
-			score += numberOfPins;
+			scores.Add(numberOfPins);
 		}
 	}
 }
