@@ -58,24 +58,35 @@ namespace Bowling
 
 		public bool IsComplete()
 		{
-			bool isComplete = First.HasValue && Second.HasValue;
+			bool isComplete = isStrike() || First.HasValue && Second.HasValue;
 
 			return isComplete;
 		}
 
 		public int GetScore()
 		{
-			int myScore = First.Value + Second.Value;
+			int myScore = First.GetValueOrDefault() + Second.GetValueOrDefault();
 			if (isSpare())
 			{
 				return myScore + NextFrame.First.Value;
 			}
+
+			if (isStrike())
+			{
+				return myScore + NextFrame.GetScore();
+			}
+
 			return myScore;
 		}
 
 		public bool isSpare()
 		{
-			return First.Value + Second.Value == 10;
+			return Second.HasValue && First.Value + Second.Value == 10;
+		}
+
+		public bool isStrike()
+		{
+			return First.Value == 10;
 		}
 	}
 }
