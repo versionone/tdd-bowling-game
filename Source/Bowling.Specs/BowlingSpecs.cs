@@ -26,6 +26,11 @@ namespace specs_for_bowling
 		protected override void context()
 		{
 			game = new Game();
+
+			for (int i = 0; i < 20; i++)
+			{
+				game.roll(0);
+			}
 		}
 
 		[Specification]
@@ -42,13 +47,39 @@ namespace specs_for_bowling
 		protected override void context()
 		{
 			game = new Game();
-			game.rolls(20, 2);
+
+			for (int i = 0; i < 20; i++)
+			{
+				game.roll(2);	
+			}
 		}
 
 		[Specification]
 		public void the_score_is_40()
 		{
 			game.GetScore().ShouldEqual(40);
+		}
+	}
+
+	public class when_the_first_2_rolls_are_2_and_the_rest_are_3 : concerns
+	{
+		private Game game;
+		protected override void context()
+		{
+			game = new Game();
+
+			game.roll(2);
+			game.roll(2);
+			for (int i = 0; i < 18; i++)
+			{
+				game.roll(3);
+			}
+		}
+
+		[Specification]
+		public void the_score_is_58()
+		{
+			game.GetScore().ShouldEqual(58);
 		}
 	}
 

@@ -15,9 +15,9 @@ namespace Bowling
 			return score;
 		}
 
-		public void rolls(int numberOfRolls, int numberOfPins)
+		public void roll(int numberOfPins)
 		{
-			score = numberOfRolls * numberOfPins;
+			score += numberOfPins;
 		}
 	}
 }
