@@ -17,8 +17,55 @@ namespace Bowling
 
 		public bool IsSpare => Second.HasValue && First + Second == 10;
 		public bool IsStrike => First == 10;
-		public bool IsComplete => Second.HasValue || IsStrike;
-	
+		public virtual bool IsComplete => Second.HasValue || IsStrike;
+
+		public virtual int Score(List<Frame> frames, int myIndex)
+		{
+			if (IsStrike)
+			{
+				return 10 + frames[myIndex+1].First + (frames[myIndex + 1].Second.HasValue ? frames[myIndex + 1].Second.Value : frames[myIndex + 2].First);
+			}
+			else if (IsSpare)
+			{
+				return 10 + frames[myIndex + 1].First;
+			}
+			else
+			{
+				return First + Second.GetValueOrDefault();
+			}
+		}
+
+		public virtual void Roll(int pins)
+		{
+			Second = pins;
+		}
+	}
+
+	public class LastFrame : Frame
+	{
+		public LastFrame(int pins) : base(pins)
+		{
+
+		}
+
+		public int? Third { get; set; }
+		public override bool IsComplete => Third.HasValue || !(IsSpare || IsStrike) && Second.HasValue;
+
+		public override void Roll(int pins)
+		{
+			if (Second.HasValue)
+				Third = pins;
+			else
+			{
+				base.Roll(pins);
+			}
+		}
+
+		public override int Score(List<Frame> frames, int myIndex)
+		{
+			return First + Second.Value + Third.GetValueOrDefault();
+		}
+
 	}
 
 	public class Bowl
@@ -27,22 +74,15 @@ namespace Bowling
 
 		public int Frame { get; set; }
 
-		public int Score {
+		public int Score
+		{
 			get
 			{
+
 				int score = 0;
-				bool isSpare = false;
-				bool isStrike = false;
-				foreach (var f in frames)
+				for (int i = 0; i < frames.Count; i++)
 				{
-					if (isSpare || isStrike)
-						score += f.First;
-					if (isStrike)
-						score += f.Second.GetValueOrDefault();
-					score += f.First;
-					score += f.Second.GetValueOrDefault();
-					isSpare = f.IsSpare;
-					isStrike = f.IsStrike;
+					score += frames[i].Score(frames, i);
 				}
 				return score;
 			}
@@ -52,13 +92,12 @@ namespace Bowling
 		{
 			if (frames.Count == 0 || frames.Last().IsComplete)
 			{
-				frames.Add(new Frame(pins));
+				frames.Add(frames.Count == 9 ? new LastFrame(pins) : new Frame(pins));
 			}
 			else
 			{
-				frames.Last().Second = pins;
+				frames.Last().Roll(pins);
 			}
-
 		}
 
 		public void PlayGame(int pins = 0)

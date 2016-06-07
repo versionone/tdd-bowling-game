@@ -12,7 +12,6 @@ Below are some scenarios we can use to drive the development of the game.
 
 *_when_10_frames_have_been_bowled,_don't_allow_any_more_to_be_bowled.
 
-*_when_the_first_2_frames_are_strikes_and_the_rest_score_2,_the_score_is_68.
 *_when_rolling_a_perfect_game,_the_score_is_300.
 *_when_rolling_alternate_strikes_and_spares,_the_score_is_200.
 
@@ -230,6 +229,28 @@ namespace specs_for_bowling
 		public void the_score_is_68()
 		{
 			_bowl.Score.ShouldEqual(68);
+		}
+	}
+
+	public class when_rolling_a_perfect_game : concerns
+	{
+		readonly Bowl _bowl = new Bowl();
+
+		protected override void context()
+		{
+			List<int> pins = new List<int>();
+			for (int i = 0; i < 12; i++)
+			{
+				pins.Add(10);
+			}
+
+			_bowl.PlayGame(pins);
+		}
+
+		[Specification]
+		public void the_score_is_300()
+		{
+			_bowl.Score.ShouldEqual(300);
 		}
 	}
 }
