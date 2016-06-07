@@ -11,7 +11,7 @@ An example of doing Test-Driven Development using Bowling as the domain.
 Below are some scenarios we can use to drive the development of the game.
 
 *_when_10_frames_have_been_bowled,_don't_allow_any_more_to_be_bowled.
-*_when_the_first_frame_is_a_strike_and_the_rest_score_2,_the_score_is_50.
+
 *_when_the_first_2_frames_are_strikes_and_the_rest_score_2,_the_score_is_68.
 *_when_rolling_a_perfect_game,_the_score_is_300.
 *_when_rolling_alternate_strikes_and_spares,_the_score_is_200.
@@ -207,6 +207,29 @@ namespace specs_for_bowling
 		public void the_score_is_50()
 		{
 			_bowl.Score.ShouldEqual(50);
+		}
+	}
+	public class when_the_first_2_frames_are_strikes_and_the_rest_score_2 : concerns
+	{
+		readonly Bowl _bowl = new Bowl();
+
+		protected override void context()
+		{
+			List<int> pins = new List<int>();
+			pins.Add(10);
+			pins.Add(10);
+			for (int i = 0; i < 16; i++)
+			{
+				pins.Add(2);
+			}
+
+			_bowl.PlayGame(pins);
+		}
+
+		[Specification]
+		public void the_score_is_68()
+		{
+			_bowl.Score.ShouldEqual(68);
 		}
 	}
 }
