@@ -138,5 +138,30 @@ namespace specs_for_bowling
 			_bowl.Score.ShouldEqual(48);
 		}
 	}
+	public class when_the_first_2_frames_are_spare_as_2_8_and_the_rest_score_2 : concerns
+	{
+		readonly Bowl _bowl = new Bowl();
+
+		protected override void context()
+		{
+			List<int> pins = new List<int>();
+			pins.Add(2);
+			pins.Add(8);
+			pins.Add(2);
+			pins.Add(8);
+			for (int i = 0; i < 16; i++)
+			{
+				pins.Add(2);
+			}
+
+			_bowl.PlayGame(pins);
+		}
+
+		[Specification]
+		public void the_score_is_56()
+		{
+			_bowl.Score.ShouldEqual(56);
+		}
+	}
 
 }
