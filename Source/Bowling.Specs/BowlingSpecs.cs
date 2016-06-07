@@ -10,10 +10,6 @@ An example of doing Test-Driven Development using Bowling as the domain.
 ## The game to be played
 Below are some scenarios we can use to drive the development of the game.
 
-*_
-*_.
-*_.
-*_when_the_first_2_frames_are_spare_(as_2,8)_and_the_rest_score_2,_the_score_is_56.
 *_when_10_frames_have_been_bowled,_don't_allow_any_more_to_be_bowled.
 *_when_the_first_frame_is_a_strike_and_the_rest_score_2,_the_score_is_50.
 *_when_the_first_2_frames_are_strikes_and_the_rest_score_2,_the_score_is_68.
@@ -164,4 +160,53 @@ namespace specs_for_bowling
 		}
 	}
 
+	//DEFERRING UNTIL LATER --KG
+	//	public class when_10_frames_have_been_bowled : concerns
+	//	{
+	//		readonly Bowl _bowl = new Bowl();
+	//
+	//		protected override void context()
+	//		{
+	//			List<int> pins = new List<int>();
+	//			pins.Add(2);
+	//			pins.Add(8);
+	//			pins.Add(2);
+	//			pins.Add(8);
+	//			for (int i = 0; i < 16; i++)
+	//			{
+	//				pins.Add(2);
+	//			}
+	//
+	//			_bowl.PlayGame(pins);
+	//		}
+	//
+	//		[Specification]
+	//		public void dont_allow_any_more_to_be_bowled()
+	//		{
+	//			_bowl.Score.ShouldEqual(56);
+	//		}
+	//	}
+
+	public class when_the_first_frame_is_a_strike_and_the_rest_score_2 : concerns
+	{
+		readonly Bowl _bowl = new Bowl();
+
+		protected override void context()
+		{
+			List<int> pins = new List<int>();
+			pins.Add(10);
+			for (int i = 0; i < 18; i++)
+			{
+				pins.Add(2);
+			}
+
+			_bowl.PlayGame(pins);
+		}
+
+		[Specification]
+		public void the_score_is_50()
+		{
+			_bowl.Score.ShouldEqual(50);
+		}
+	}
 }

@@ -15,8 +15,9 @@ namespace Bowling
 		public int First { get; private set; }
 		public int? Second { get; set; }
 
-		public bool IsSpare => First + Second == 10;
-		public bool IsComplete => Second.HasValue;
+		public bool IsSpare => Second.HasValue && First + Second == 10;
+		public bool IsStrike => First == 10;
+		public bool IsComplete => Second.HasValue || IsStrike;
 	
 	}
 
@@ -31,13 +32,17 @@ namespace Bowling
 			{
 				int score = 0;
 				bool isSpare = false;
+				bool isStrike = false;
 				foreach (var f in frames)
 				{
-					if (isSpare)
+					if (isSpare || isStrike)
 						score += f.First;
+					if (isStrike)
+						score += f.Second.GetValueOrDefault();
 					score += f.First;
 					score += f.Second.GetValueOrDefault();
 					isSpare = f.IsSpare;
+					isStrike = f.IsStrike;
 				}
 				return score;
 			}
