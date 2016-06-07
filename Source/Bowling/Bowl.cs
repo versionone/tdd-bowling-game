@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NUnit.Framework;
+﻿using System.Collections.Generic;
 
 namespace Bowling
 {
@@ -21,5 +17,14 @@ namespace Bowling
 				Roll(pins);
 
 		}
+
+		public void PlayGame(List<int> pins)
+		{
+			foreach (var i in pins)
+			{
+				Roll(i);
+			}
+		}
+	
 	}
 }

@@ -1,5 +1,8 @@
 using Bowling;
 using Bowling.Specs.Infrastructure;
+using NUnit.Framework;
+using System.Collections.Generic;
+
 /*
  *# TDD Bowling Game
 An example of doing Test-Driven Development using Bowling as the domain.
@@ -7,8 +10,7 @@ An example of doing Test-Driven Development using Bowling as the domain.
 ## The game to be played
 Below are some scenarios we can use to drive the development of the game.
 
-*_when_rolling_all_2s,_the_score_is_40.
-*_when_the_first_2_rolls_are_2_and_the_rest_are_3,_the_score_is_58.
+*_
 *_when_rolling_alternating_2s_and_5s,_the_score_70.
 *_when_the_first_frame_is_a_spare_and_the_remaining_rolls_are_all_2,_the_score_is_48.
 *_when_the_first_2_frames_are_spare_(as_2,8)_and_the_rest_score_2,_the_score_is_56.
@@ -68,4 +70,27 @@ namespace specs_for_bowling
 			_bowl.Score.ShouldEqual(40);
 		}
 	}
+	
+	public class when_the_first_2_rolls_are_2_and_the_rest_are_3 : concerns
+	{
+		readonly Bowl _bowl = new Bowl();
+
+		protected override void context()
+		{
+			List<int> pins = new List<int>() {2, 2};
+			for (int i = 0; i < 18; i ++)
+			{
+				pins.Add(3);
+			}
+
+			_bowl.PlayGame(pins);
+		}
+
+		[Specification]
+		public void the_score_is_58()
+		{
+			_bowl.Score.ShouldEqual(58);
+		}
+	}
+
 }
