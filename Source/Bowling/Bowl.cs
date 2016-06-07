@@ -10,15 +10,15 @@ namespace Bowling
 	{
 		public int Score { get; set; }
 
-		public int Roll()
+		public void Roll(int pins = 0)
 		{
-			return 0;
+			Score += pins;
 		}
 
-		public void PlayGame()
+		public void PlayGame(int pins = 0 )
 		{
-			for (var i = 0; i < 10; i++)
-				Roll();
+			for (var i = 0; i < 20; i++)
+				Roll(pins);
 
 		}
 	}

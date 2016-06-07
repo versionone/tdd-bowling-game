@@ -7,7 +7,6 @@ An example of doing Test-Driven Development using Bowling as the domain.
 ## The game to be played
 Below are some scenarios we can use to drive the development of the game.
 
-*_when_rolling_all_gutter_balls,_the_score_is_0.
 *_when_rolling_all_2s,_the_score_is_40.
 *_when_the_first_2_rolls_are_2_and_the_rest_are_3,_the_score_is_58.
 *_when_rolling_alternating_2s_and_5s,_the_score_70.
@@ -40,7 +39,7 @@ namespace specs_for_bowling
 
 	public class when_rolling_all_gutter_balls : concerns
 	{
-		Bowl _bowl = new Bowl();
+		readonly Bowl _bowl = new Bowl();
 
 		protected override void context()
 		{
@@ -51,6 +50,22 @@ namespace specs_for_bowling
 		public void the_score_is_0()
 		{
 			_bowl.Score.ShouldEqual(0);
+		}
+	}
+
+	public class when_rolling_all_2s : concerns
+	{
+		readonly Bowl _bowl = new Bowl();
+
+		protected override void context()
+		{
+			_bowl.PlayGame(2);
+		}
+
+		[Specification]
+		public void the_score_is_40()
+		{
+			_bowl.Score.ShouldEqual(40);
 		}
 	}
 }
