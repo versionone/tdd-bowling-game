@@ -9,7 +9,7 @@ namespace Bowling.Specs.Infrastructure
 	{
 		private Exception ContextSetupException;
 
-		[TestFixtureSetUp]
+		[OneTimeSetUp]
 		public virtual void main_setup()
 		{
 			try

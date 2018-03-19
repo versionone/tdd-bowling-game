@@ -88,7 +88,7 @@ namespace Bowling.Specs.Infrastructure
 
 		public static T ShouldBeA<T>(this object actual)
 		{
-			Assert.IsInstanceOfType(typeof(T), actual);
+			Assert.IsInstanceOf(typeof(T), actual);
 			return (T)actual;
 		}
 
