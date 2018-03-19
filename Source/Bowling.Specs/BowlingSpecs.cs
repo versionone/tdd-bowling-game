@@ -1,17 +1,19 @@
 using Bowling.Specs.Infrastructure;
+using NUnit.Framework;
 
-namespace specs_for_bowling
+namespace Bowling.Specs
 {
-	public class when_everything_is_wired_up : concerns
+	public class when_everything_is_wired_up
 	{
 		private bool _itWorked;
 
-		protected override void context()
+		[SetUp]
+		public void context()
 		{
 			_itWorked = true;
 		}
 
-		[Specification]
+		[Test]
 		public void it_works()
 		{
 			_itWorked.ShouldBeTrue();
