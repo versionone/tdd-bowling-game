@@ -1,3 +1,4 @@
+using System;
 using Bowling.Specs.Infrastructure;
 using NUnit.Framework;
 
@@ -67,6 +68,61 @@ namespace Bowling.Specs
 			}
 
 			Assert.AreEqual(48, game.GetScore());
+		}	
+		
+		[Test]
+		public void when_the_first_two_frames_are_spare_and_the_rest_score_is_2()
+		{
+			var game = new Game();
+			game.Roll(2);
+			game.Roll(8);
+			game.Roll(2);
+			game.Roll(8);
+			for (var i = 0; i < 16; ++i)
+			{
+				game.Roll(2);
+			}
+
+			Assert.AreEqual(56, game.GetScore());
+		}		
+		
+		[Test]
+		public void when_10_frames_have_been_bowled()
+		{
+			var game = new Game();
+			for (var i = 0; i < 20; ++i)
+			{
+				game.Roll(2);
+			}
+
+			Assert.Throws<Exception>(() => { game.Roll(1); });
+		}		
+		
+		[Test]
+		public void when_the_first_frame_is_a_strike_and_the_rest_score_2()
+		{
+			var game = new Game();
+			game.Roll(10);
+			for (var i = 0; i < 18; ++i)
+			{
+				game.Roll(2);
+			}
+
+			Assert.AreEqual(50, game.GetScore());
+		}		
+		
+		[Test]
+		public void when_the_first_two_frames_are_strikes_and_the_rest_score_2()
+		{
+			var game = new Game();
+			game.Roll(10);
+			game.Roll(10);
+			for (var i = 0; i < 16; ++i)
+			{
+				game.Roll(2);
+			}
+
+			Assert.AreEqual(68, game.GetScore());
 		}
 	}
 }
