@@ -21,46 +21,49 @@ namespace Bowling
 
 		private Frame CurrentFrame => frames[frameIndex];
 
-		public int Score()
-		{
-			var frameIndex = 0;
+        public int Score()
+        {
+            var frameIndex = 0;
 
-			var score = frames.Aggregate(0, (runningTotal, frame) =>
-			{
-				var bonusTotal = 0;
-
-				if (frame.IsSpare())
-				{
-					if (HasFrameAtIndex(frameIndex + 1))
-					{
-						bonusTotal += frames[frameIndex + 1].Rolls[0];
-					}
-				}
-				else if (frame.IsStrike())
-				{
-				
-					if (HasFrameAtIndex(frameIndex + 1) && !frames[frameIndex + 1].IsStrike())
-					{
-						bonusTotal += frames[frameIndex + 1].Total();
-					}
-					else if (HasFrameAtIndex(frameIndex + 1) && HasFrameAtIndex(frameIndex + 2))
-					{
-						bonusTotal += frames[frameIndex + 1].Rolls[0];
-						bonusTotal += frames[frameIndex + 2].Rolls[0];
-					}
-					else if (HasFrameAtIndex(frameIndex + 1))
-					{
-						if (frameIndex + 1 == 9)
-						{
-							bonusTotal += frames[frameIndex + 1].Rolls[0];
-						}
-						else
-						{
-							bonusTotal += frames[frameIndex + 1].Total();
-						}
-					}
-				}
-
+            var score = frames.Aggregate(0, (runningTotal, frame) =>
+            {
+                var bonusTotal = 0;
+                if (frame.IsSpare())
+                {
+                    if (HasFrameAtIndex(frameIndex + 1))
+                    {
+                        bonusTotal += frames[frameIndex + 1].Rolls[0];
+                    }
+                    else //I'm on the last frame, take the third roll
+                    {
+                        bonusTotal += frames[frameIndex + 1].Rolls[2];
+                    }
+                }
+                else if (frame.IsStrike())
+                {
+                    if (HasFrameAtIndex(frameIndex + 1))
+                    {
+                        if (frames[frameIndex + 1].IsOpen() || frames[frameIndex + 1].IsSpare())
+                        {
+                            bonusTotal += frames[frameIndex + 1].Total();
+                        }
+                        else //strike rolled in next frame
+                        {
+                            bonusTotal += frames[frameIndex + 1].Rolls[0];
+                            if (HasFrameAtIndex(frameIndex + 2))
+                            {
+                                bonusTotal += frames[frameIndex + 2].Rolls[0];
+                            }
+                            else
+                            {
+                                bonusTotal += frames[frameIndex + 1].Rolls[1];
+                            }
+                        }
+                       
+                    }
+                   
+                 
+                }
 				frameIndex++;
 
 				var frameTotal = frame.Total();
@@ -88,13 +91,21 @@ namespace Bowling
 			}
 			else //frame 10
 			{
-				CurrentFrame.Roll(pins);
-				if (CurrentFrame.IsOpen() || CurrentFrame.Rolls.Count == 3)
-				{
-					frameIndex++;
-				}
-				
-			}
+
+                if (CurrentFrame.CurrentRoll < 2)
+                {
+                    CurrentFrame.Roll(pins);
+                }
+                else if (CurrentFrame.IsOpen())
+                {
+                    throw new GameOverException();
+                }
+                else {
+                   if (CurrentFrame.CurrentRoll < 3){
+                        CurrentFrame.Roll(pins);
+                    }
+                } 
+            }
 		}
 	}
 
@@ -117,11 +128,9 @@ namespace Bowling
 			return Rolls.Sum();
 		}
 
-		public bool IsSpare() =>
-			Total() == 10 && Rolls[0] != 10;
+		public bool IsSpare() => Total() == 10 && Rolls[0] != 10 && Rolls.Count == 2;
 
 		public bool IsStrike() => Rolls[0] == 10;
-
 
 		public bool IsOpen() => Rolls.Count == 2 && Total() < 10;
 	}
