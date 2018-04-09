@@ -236,4 +236,27 @@ namespace Bowling.Specs
 			_game.Score.ShouldEqual(68);
 		}
 	}
+
+	public class when_roling_alternating_strikes_and_spares
+	{
+		private Game _game;
+
+		[SetUp]
+		public void context()
+		{
+			_game = new Game();
+			for (int i = 0; i < 5; i++)
+			{
+				_game.Roll(10);
+				_game.Roll(5);
+				_game.Roll(5);
+			}
+		}
+
+		[Test]
+		public void the_score_is_200()
+		{
+			_game.Score.ShouldEqual(200);
+		}
+	}
 }
