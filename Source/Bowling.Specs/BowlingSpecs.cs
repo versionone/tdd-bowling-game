@@ -189,4 +189,28 @@ namespace Bowling.Specs
 			}
 		}
 	}
+
+	public class when_first_frame_is_strike_and_subsequent_rolls_are_two
+	{
+		private Game _game;
+
+		[SetUp]
+		public void context()
+		{
+			_game = new Game();
+			_game.Roll(10);
+			for (int i = 0; i < 9; i++)
+			{
+				_game.Roll(2);
+				_game.Roll(2);
+			}
+		}
+
+		[Test]
+		public void the_score_is_50()
+		{
+			_game.Score.ShouldEqual(50);
+		}
+	}
+
 }

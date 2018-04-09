@@ -31,7 +31,7 @@ namespace Bowling
 
 			TrackRollOfCurrentFrame(pins);
 
-			AddSpareBonus(pins);
+			AddBonus(pins);
 
 			if (HaveCompleteCurrentFrame())
 				StartNewFrame();
@@ -43,10 +43,17 @@ namespace Bowling
 			get { return _frames[_frames.Count - 2]; }
 		}
 
-		private void AddSpareBonus(int pins)
+		private Frame FrameBeforeLast
+		{
+			get { return _frames[_frames.Count - 3]; }
+		}
+
+		private void AddBonus(int pins)
 		{
 			if (_frames.Count > 1)
 				LastFrame.AddBonus(pins);
+			if (_frames.Count > 2)
+				FrameBeforeLast.AddBonus(pins);
 		}
 
 		private void CheckForGameOver()
@@ -79,13 +86,16 @@ namespace Bowling
 		{
 			private int? _firstRoll;
 			private int? _secondRoll;
-			private int? _bonus;
+			private int? _firstBonus;
+			private int? _secondBonus;
 
-			public int Score { get { return (_firstRoll ?? 0) + (_secondRoll ?? 0) + (_bonus ?? 0); } }
+			public int Score { get { return (_firstRoll ?? 0) + (_secondRoll ?? 0) + (_firstBonus ?? 0) +(_secondBonus ?? 0); } }
 
 			public bool IsSpare { get { return _secondRoll.HasValue && (_firstRoll.Value + _secondRoll.Value) == 10; } }
 
-			public bool IsComplete { get { return _secondRoll.HasValue; } }
+			public bool IsStrike { get { return _firstRoll.Value == 10; } }
+
+			public bool IsComplete { get { return _secondRoll.HasValue || IsStrike; } }
 
 			public void Roll(int pins)
 			{
@@ -97,8 +107,15 @@ namespace Bowling
 
 			public void AddBonus(int pins)
 			{
-				if (IsSpare && !_bonus.HasValue)
-					_bonus = pins;
+				if (IsSpare && !_firstBonus.HasValue)
+					_firstBonus = pins;
+				if (IsStrike)
+				{
+					if (!_firstBonus.HasValue)
+						_firstBonus = pins;
+					else
+						_secondBonus = pins;
+				}
 			}
 		}
 	}
