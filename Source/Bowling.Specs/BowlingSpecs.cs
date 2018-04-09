@@ -1,5 +1,6 @@
 using Bowling.Specs.Infrastructure;
 using NUnit.Framework;
+using Rhino.Mocks.Exceptions;
 
 namespace Bowling.Specs
 {
@@ -160,4 +161,32 @@ namespace Bowling.Specs
 		}
 	}
 
+	public class when_10_frames_have_been_bowled
+	{
+		private Game _game;
+
+		[SetUp]
+		public void context()
+		{
+			_game = new Game();
+			for (int i = 0; i < 10; i++)
+			{
+				_game.Roll(2);
+				_game.Roll(2);
+			}
+		}
+
+		[Test]
+		public void dont_allow_additional_frames_to_be_bowled()
+		{
+			try
+			{
+				_game.Roll(2);
+				Assert.Fail("allowed to roll more than 10 frames");
+			}
+			catch (TooManyFramesException ex)
+			{
+			}
+		}
+	}
 }
