@@ -134,4 +134,30 @@ namespace Bowling.Specs
 		}
 	}
 
+	public class when_Rolling_the_first_two_frames_as_spares_and_2s_for_the_rest
+	{
+		private Game _game;
+
+		[SetUp]
+		public void context()
+		{
+			_game = new Game();
+			_game.Roll(2);
+			_game.Roll(8);
+			_game.Roll(2);
+			_game.Roll(8);
+			for (int i = 0; i < 8; i++)
+			{
+				_game.Roll(2);
+				_game.Roll(2);
+			}
+		}
+
+		[Test]
+		public void the_score_is_56()
+		{
+			_game.Score.ShouldEqual(56);
+		}
+	}
+
 }
