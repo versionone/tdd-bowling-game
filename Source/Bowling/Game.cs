@@ -17,30 +17,72 @@ namespace Bowling
 
 		public void Roll(int pins)
 		{
-			if (_numberOfFrames > 10)
-				throw new TooManyFramesException();
+			CheckForGameOver();
 
-			_ballsThrown += 1;
-			if (_isSpare == true)
+			AdvanceToNextBallOfCurrentFrame();
+
+			if (_isSpare)
 			{
-				_score += pins;
+				AddSpareBonus(pins);
 				_isSpare = false;
 			}
 
-			if (_ballsThrown == 2 && (pins + _lastBallThrown) == 10)
+			if (HaveCompleteFrame() && CurrentFrameIsSpare(pins))
 				_isSpare = true;
 
-			_score = _score + pins;
+			AddRollToScore(pins);
 
-			if (_ballsThrown == 2)
+			if (HaveCompleteFrame())
 			{
-				_ballsThrown = 0;
-				_numberOfFrames++;
+				StartNewFrame();
 			}
+			else
+				TrackFirstRollOfCurrentFrame(pins);
+		}
 
-			_lastBallThrown = pins;
+		private int AdvanceToNextBallOfCurrentFrame()
+		{
+			return _ballsThrown += 1;
+		}
+
+		private int AddRollToScore(int pins)
+		{
+			return _score = _score + pins;
+		}
+
+		private void AddSpareBonus(int pins)
+		{
+			_score += pins;
+		}
+
+		private void CheckForGameOver()
+		{
+			if (_numberOfFrames > 10)
+				throw new TooManyFramesException();
+		}
+
+		private int TrackFirstRollOfCurrentFrame(int pins)
+		{
+			return _lastBallThrown = pins;
+		}
+
+		private void StartNewFrame()
+		{
+			_ballsThrown = 0;
+			_numberOfFrames++;
+		}
+
+		private bool CurrentFrameIsSpare(int pins)
+		{
+			return (pins + _lastBallThrown) == 10;
+		}
+
+		private bool HaveCompleteFrame()
+		{
+			return _ballsThrown == 2;
 		}
 	}
+
 
 	public class TooManyFramesException : Exception { }
 }
