@@ -109,4 +109,29 @@ namespace Bowling.Specs
 			_game.Score.ShouldEqual(70);
 		}
 	}
+
+	public class when_rolling_a_spare_followed_by_all_2s
+	{
+		private Game _game;
+
+		[SetUp]
+		public void context()
+		{
+			_game = new Game();
+			_game.Roll(8);
+			_game.Roll(2);
+			for (int i = 0; i < 9; i++)
+			{
+				_game.Roll(2);
+				_game.Roll(2);
+			}
+		}
+
+		[Test]
+		public void the_score_is_48()
+		{
+			_game.Score.ShouldEqual(48);
+		}
+	}
+
 }
