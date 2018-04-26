@@ -5,13 +5,12 @@ namespace Bowling
 	public class Game
 	{
 		private Frame _currentFrame;
-		private Frame _lastFrame;
 		private int _frameCount = 1;
 		public int Score { get; private set; }
 
 		public Game()
 		{
-			_currentFrame = new Frame();
+			_currentFrame = new Frame(null);
 		}
 
 		public void Roll(int pins)
@@ -21,17 +20,13 @@ namespace Bowling
 				if (_frameCount == 10)
 					throw new InvalidOperationException("Game is already finished");
 
-				_lastFrame = _currentFrame;
-				_currentFrame = new Frame();
+				_currentFrame = new Frame(_currentFrame);
 				_frameCount ++;
 			}
 
 			_currentFrame.TrackPins(pins);
 
-			if (_lastFrame != null && _lastFrame.NeedsBonus())
-			{
-				Score += pins;
-			}
+			Score += pins*_currentFrame.GetBonusCount();
 
 			Score += pins;
 		}
@@ -41,7 +36,14 @@ namespace Bowling
 	{
 		private int? _firstRoll;
 		public bool IsComplete { get; private set; }
+
 		private int _bonusBalls;
+		private readonly Frame _previousFrame;
+
+		public Frame(Frame frame)
+		{
+			_previousFrame = frame;
+		}
 
 		public void TrackPins(int pins)
 		{
@@ -65,7 +67,7 @@ namespace Bowling
 		}
 
 
-		public bool NeedsBonus()
+		private bool NeedsBonus()
 		{
 			if (_bonusBalls > 0)
 			{
@@ -73,6 +75,19 @@ namespace Bowling
 				return true;
 			}
 			return false;
+		}
+
+		public int GetBonusCount()
+		{
+			var bonusCount = 0;
+			if (_previousFrame != null)
+			{
+				if (_previousFrame.NeedsBonus())
+					bonusCount++;
+				bonusCount += _previousFrame.GetBonusCount();
+			}
+			return bonusCount;
+
 		}
 	}
 }

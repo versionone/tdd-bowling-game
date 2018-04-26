@@ -203,4 +203,30 @@ namespace Bowling.Specs
 			_game.Score.ShouldEqual(50);
 		}
 	}
+
+	public class when_first_two_frames_is_strike_followed_by_twos
+	{
+		private Game _game;
+
+		[SetUp]
+		public void context()
+		{
+			_game = new Game();
+
+			_game.Roll(10);
+
+			_game.Roll(10);
+
+			16.times(() =>
+			{
+				_game.Roll(2);
+			});
+		}
+
+		[Test]
+		public void the_sore_is_68()
+		{
+			_game.Score.ShouldEqual(68);
+		}
+	}
 }
