@@ -1,8 +1,11 @@
-﻿namespace Bowling
+﻿using System;
+
+namespace Bowling
 {
 	public class Game
 	{
 		private Frame _currentFrame;
+		private int _frameCount = 1;
 		public int Score { get; private set; }
 
 		public Game()
@@ -13,6 +16,7 @@
 		public void Roll(int pins)
 		{
 
+
 			if (_currentFrame.IsComplete)
 			{
 				if (_currentFrame.IsSpare)
@@ -20,7 +24,11 @@
 					Score += pins;
 				}
 
+				if (_frameCount == 10)
+					throw new InvalidOperationException("Game is already finished");
+
 				_currentFrame = new Frame();
+				_frameCount ++;
 			}
 
 			_currentFrame.TrackPins(pins);

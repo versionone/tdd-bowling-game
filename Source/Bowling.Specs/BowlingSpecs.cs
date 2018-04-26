@@ -1,3 +1,4 @@
+using System;
 using Bowling.Specs.Infrastructure;
 using NUnit.Framework;
 
@@ -126,6 +127,56 @@ namespace Bowling.Specs
 		public void the_score_is_fourty_eight()
 		{
 			_game.Score.ShouldEqual(48);
+		}
+	}
+
+	public class when_rolling_a_two_spares_followed_by_all_twos
+	{
+		private Game _game;
+
+		[SetUp]
+		public void context()
+		{
+			_game = new Game();
+
+			2.times(() =>
+			{
+				_game.Roll(2);
+				_game.Roll(8);
+			});
+
+			16.times(() =>
+			{
+				_game.Roll(2);
+			});
+		}
+
+		[Test]
+		public void the_score_is_fifty_six()
+		{
+			_game.Score.ShouldEqual(56);
+		}
+	}
+	
+	public class when_ten_frames_have_been_bowled
+	{
+		private Game _game;
+
+		[SetUp]
+		public void context()
+		{
+			_game = new Game();
+
+			20.times(() =>
+			{
+				_game.Roll(2);
+			});
+		}
+
+		[Test]
+		public void dont_allow_more()
+		{
+			Assert.Throws<InvalidOperationException>(() => _game.Roll(2));
 		}
 	}
 }
