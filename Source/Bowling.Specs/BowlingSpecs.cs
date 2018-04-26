@@ -157,7 +157,7 @@ namespace Bowling.Specs
 			_game.Score.ShouldEqual(56);
 		}
 	}
-	
+
 	public class when_ten_frames_have_been_bowled
 	{
 		private Game _game;
@@ -177,6 +177,30 @@ namespace Bowling.Specs
 		public void dont_allow_more()
 		{
 			Assert.Throws<InvalidOperationException>(() => _game.Roll(2));
+		}
+	}
+
+	public class when_first_frame_is_strike_followed_by_twos
+	{
+		private Game _game;
+
+		[SetUp]
+		public void context()
+		{
+			_game = new Game();
+
+			_game.Roll(10);
+
+			18.times(() =>
+			{
+				_game.Roll(2);
+			});
+		}
+
+		[Test]
+		public void the_sore_is_50()
+		{
+			_game.Score.ShouldEqual(50);
 		}
 	}
 }
