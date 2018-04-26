@@ -229,4 +229,26 @@ namespace Bowling.Specs
 			_game.Score.ShouldEqual(68);
 		}
 	}
+
+	public class when_bowling_a_perfect_game
+	{
+		private Game _game;
+
+		[SetUp]
+		public void context()
+		{
+			_game = new Game();
+
+			12.times(() =>
+			{
+				_game.Roll(10);
+			});
+		}
+
+		[Test]
+		public void the_sore_is_300()
+		{
+			_game.Score.ShouldEqual(300);
+		}
+	}
 }

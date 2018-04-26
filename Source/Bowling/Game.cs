@@ -20,8 +20,10 @@ namespace Bowling
 				if (_frameCount == 10)
 					throw new InvalidOperationException("Game is already finished");
 
-				_currentFrame = new Frame(_currentFrame);
-				_frameCount ++;
+				_frameCount++;
+				_currentFrame = _frameCount == 10 ?
+					new TenthFrame(_currentFrame) :
+					new Frame(_currentFrame);
 			}
 
 			_currentFrame.TrackPins(pins);
@@ -34,8 +36,8 @@ namespace Bowling
 
 	public class Frame
 	{
-		private int? _firstRoll;
-		public bool IsComplete { get; private set; }
+		protected int? _firstRoll;
+		public bool IsComplete { get; protected set; }
 
 		private int _bonusBalls;
 		private readonly Frame _previousFrame;
@@ -45,7 +47,7 @@ namespace Bowling
 			_previousFrame = frame;
 		}
 
-		public void TrackPins(int pins)
+		public virtual void TrackPins(int pins)
 		{
 			if (_firstRoll == null )
 			{
@@ -88,6 +90,28 @@ namespace Bowling
 			}
 			return bonusCount;
 
+		}
+	}
+
+	public class TenthFrame : Frame
+	{
+		private int _needRolls = 2;
+
+		public TenthFrame(Frame frame) : base(frame)
+		{
+		}
+
+		public override void TrackPins(int pins)
+		{
+			if (!_firstRoll.HasValue && pins == 10)
+			{
+				_needRolls++;
+			}
+			else if (_firstRoll.HasValue && _firstRoll + pins == 10)
+				_needRolls++;
+
+			if (--_needRolls == 0)
+				IsComplete = true;
 		}
 	}
 }
