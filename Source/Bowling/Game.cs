@@ -103,11 +103,13 @@ namespace Bowling
 
 		public override void TrackPins(int pins)
 		{
-			if (!_firstRoll.HasValue && pins == 10)
+			if (!_firstRoll.HasValue)
 			{
-				_needRolls++;
+				_firstRoll = pins;
+				if (pins == 10)
+					_needRolls++;
 			}
-			else if (_firstRoll.HasValue && _firstRoll + pins == 10)
+			else if (_firstRoll + pins == 10)
 				_needRolls++;
 
 			if (--_needRolls == 0)
