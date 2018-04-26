@@ -28,9 +28,14 @@ namespace Bowling
 
 			_currentFrame.TrackPins(pins);
 
-			Score += pins*_currentFrame.GetBonusCount();
+			Score += CalculateBonus(pins);
 
 			Score += pins;
+		}
+
+		private int CalculateBonus(int pins)
+		{
+			return pins*_currentFrame.GetBonusCount();
 		}
 	}
 
@@ -39,7 +44,7 @@ namespace Bowling
 		protected int? _firstRoll;
 		public bool IsComplete { get; protected set; }
 
-		private int _bonusBalls;
+		private int _bonusBallsNeeded;
 		private readonly Frame _previousFrame;
 
 		public Frame(Frame frame)
@@ -51,9 +56,9 @@ namespace Bowling
 		{
 			if (_firstRoll == null )
 			{
-				if (pins == 10)
+				if (IsStrikeBowled(pins))
 				{
-					_bonusBalls = 2;
+					_bonusBallsNeeded = 2;
 					IsComplete = true;
 				}
 				_firstRoll = pins;
@@ -61,19 +66,29 @@ namespace Bowling
 			else
 			{
 				IsComplete = true;
-				if (_firstRoll + pins == 10)
+				if (IsSpareBowled(pins))
 				{
-					_bonusBalls = 1;
+					_bonusBallsNeeded = 1;
 				}
 			}
+		}
+
+		protected bool IsSpareBowled(int pins)
+		{
+			return _firstRoll + pins == 10;
+		}
+
+		protected static bool IsStrikeBowled(int pins)
+		{
+			return pins == 10;
 		}
 
 
 		private bool NeedsBonus()
 		{
-			if (_bonusBalls > 0)
+			if (_bonusBallsNeeded > 0)
 			{
-				_bonusBalls--;
+				_bonusBallsNeeded--;
 				return true;
 			}
 			return false;
@@ -106,10 +121,10 @@ namespace Bowling
 			if (!_firstRoll.HasValue)
 			{
 				_firstRoll = pins;
-				if (pins == 10)
+				if (IsStrikeBowled(pins))
 					_needRolls++;
 			}
-			else if (_firstRoll + pins == 10)
+			else if (IsSpareBowled(pins))
 				_needRolls++;
 
 			if (--_needRolls == 0)
