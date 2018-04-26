@@ -40,8 +40,6 @@ namespace Bowling
 	public class Frame
 	{
 		private int? _firstRoll;
-		public bool IsSpare { get; private set; }
-		public bool IsStrike { get; set; }
 		public bool IsComplete { get; private set; }
 		private int _bonusBalls;
 
@@ -51,7 +49,6 @@ namespace Bowling
 			{
 				if (pins == 10)
 				{
-					IsStrike = true;
 					_bonusBalls = 2;
 					IsComplete = true;
 				}
@@ -62,7 +59,6 @@ namespace Bowling
 				IsComplete = true;
 				if (_firstRoll + pins == 10)
 				{
-					IsSpare = true;
 					_bonusBalls = 1;
 				}
 			}
