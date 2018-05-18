@@ -1,6 +1,26 @@
 # TDD Bowling Game
 An example of doing Test-Driven Development using Bowling as the domain.
 
+## Getting Started
+
+1. Ensure `python` and `pip` are in your PATH.  In a Windows MinGW environment with a Python 2.7 installation, this can be accomplished with:
+
+	```bash
+	export PATH="$PATH:/c/Python27:/c/Python27/Scripts"
+	```
+
+1. Install packages:
+
+	```bash
+	pip install -r requirements.txt
+	```
+
+1. Verify your environment is working:
+
+	```bash
+	pytest
+	```
+
 ## The game to be played
 Below are some scenarios we can use to drive the development of the game.
 
