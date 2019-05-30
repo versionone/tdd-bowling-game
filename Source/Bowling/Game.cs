@@ -8,9 +8,15 @@ namespace Bowling
 		private int _score;
 		private int? _firstRoll;
 		private int? _secondRoll;
+		private int _framesBowled;
 
 		public void Roll(int pins)
 		{
+			if (_framesBowled == 10)
+			{
+				throw new InvalidOperationException("out of frames");
+			}
+
 			if (_firstRoll.HasValue && _secondRoll.HasValue)
 			{
 				if (_firstRoll + _secondRoll == 10)
@@ -29,8 +35,8 @@ namespace Bowling
 			else
 			{
 				_secondRoll = pins;
+				_framesBowled++;
 			}
-
 
 			_score += pins;
 		}

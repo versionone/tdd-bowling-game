@@ -1,3 +1,4 @@
+using System;
 using Bowling.Specs.Infrastructure;
 using NUnit.Framework;
 
@@ -144,6 +145,40 @@ namespace Bowling.Specs
 		public void score_is_56()
 		{
 			_score.ShouldEqual(56);
+		}
+	}
+
+	public class when_bowling_more_than_10_frames
+	{
+		private int _score;
+		private bool _error;
+
+		[SetUp]
+		public void context()
+		{
+			var game = new Game();
+			20.times(() => game.Roll(2));
+			try
+			{
+				game.Roll(2);
+			}
+			catch (Exception e)
+			{
+				_error = true;
+			}
+			_score = game.Score;
+		}
+
+		[Test]
+		public void score_not_altered()
+		{
+			_score.ShouldEqual(40);
+		}
+
+		[Test]
+		public void roll_not_allowed()
+		{
+			_error.ShouldBeTrue();
 		}
 	}
 }
