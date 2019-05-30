@@ -37,12 +37,14 @@ namespace Bowling
 
 			if (!_firstRoll.HasValue)
 			{
-				_firstRoll = pins;
-				if (_firstRoll == 10)
+				if (pins == 10)
 				{
 					_isStrike = true;
-					_firstRoll = null;
 					_framesBowled++;
+				}
+				else
+				{
+					_firstRoll = pins;
 				}
 			}
 			else
