@@ -122,4 +122,28 @@ namespace Bowling.Specs
 			_score.ShouldEqual(48);
 		}
 	}
+
+	public class when_rolling_two_spares_then_all_2s
+	{
+		private int _score;
+
+		[SetUp]
+		public void context()
+		{
+			var game = new Game();
+			2.times(() =>
+			{
+				game.Roll(2);
+				game.Roll(8);
+			});
+			16.times(() => game.Roll(2));
+			_score = game.Score;
+		}
+
+		[Test]
+		public void score_is_56()
+		{
+			_score.ShouldEqual(56);
+		}
+	}
 }
