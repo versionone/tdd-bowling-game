@@ -9,12 +9,19 @@ namespace Bowling
 		private int? _firstRoll;
 		private int? _secondRoll;
 		private int _framesBowled;
+		private bool _isStrike;
 
 		public void Roll(int pins)
 		{
 			if (_framesBowled == 10)
 			{
 				throw new InvalidOperationException("out of frames");
+			}
+
+			if (_isStrike && _firstRoll.HasValue && _secondRoll.HasValue)
+			{
+				_score += _firstRoll.Value + _secondRoll.Value;
+				_isStrike = false;
 			}
 
 			if (_firstRoll.HasValue && _secondRoll.HasValue)
@@ -31,6 +38,12 @@ namespace Bowling
 			if (!_firstRoll.HasValue)
 			{
 				_firstRoll = pins;
+				if (_firstRoll == 10)
+				{
+					_isStrike = true;
+					_firstRoll = null;
+					_framesBowled++;
+				}
 			}
 			else
 			{

@@ -181,4 +181,23 @@ namespace Bowling.Specs
 			_error.ShouldBeTrue();
 		}
 	}
+	public class when_rolling_a_strike_then_all_2s
+	{
+		private int _score;
+
+		[SetUp]
+		public void context()
+		{
+			var game = new Game();
+			game.Roll(10);
+			18.times(() => game.Roll(2));
+			_score = game.Score;
+		}
+
+		[Test]
+		public void score_is_50()
+		{
+			_score.ShouldEqual(50);
+		}
+	}
 }
