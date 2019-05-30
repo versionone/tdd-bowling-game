@@ -16,26 +16,21 @@ namespace Bowling
 				if (_firstRoll + _secondRoll == 10)
 				{
 					_score += pins;
-					_firstRoll = pins;
-					_secondRoll = null;
 				}
-				else
-				{
-					_firstRoll = pins;
-					_secondRoll = null;
-				}
+
+				_firstRoll = null;
+				_secondRoll = null;
+			}
+
+			if (!_firstRoll.HasValue)
+			{
+				_firstRoll = pins;
 			}
 			else
 			{
-				if (!_firstRoll.HasValue)
-				{
-					_firstRoll = pins;
-				}
-				else
-				{
-					_secondRoll = pins;
-				}
+				_secondRoll = pins;
 			}
+
 
 			_score += pins;
 		}
