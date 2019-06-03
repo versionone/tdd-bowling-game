@@ -221,5 +221,23 @@ namespace Bowling.Specs
 		}
 	}
 
+	/*public class when_rolling_the_perfect_game
+	{
+		private int _score;
+
+		[SetUp]
+		public void context()
+		{
+			var game = new Game();
+			12.times(() => game.Roll(10));
+			_score = game.Score;
+		}
+
+		[Test]
+		public void score_is_300()
+		{
+			_score.ShouldEqual(300);
+		}
+	}*/
 
 }
