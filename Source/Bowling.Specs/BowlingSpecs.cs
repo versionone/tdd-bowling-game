@@ -133,4 +133,27 @@ namespace Bowling.Specs
 		}
 	}
 
+	public class when_rolling_tow_spares_as_2_8_followed_by_all_2s
+	{
+		Game _game = new Game();
+
+		[SetUp]
+		public void context()
+		{
+			for (var i = 0; i < 2; i++)
+			{
+				_game.Roll(2);
+				_game.Roll(8);
+			}
+
+			for (var i = 0; i < 16; i++)
+				_game.Roll(2);
+		}
+
+		[Test]
+		public void the_score_is_56()
+		{
+			_game.GetScore().ShouldEqual(56);
+		}
+	}
 }
