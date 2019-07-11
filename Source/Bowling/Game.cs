@@ -8,17 +8,12 @@
 
 		public void Roll(int pins)
 		{
-/*			if (_score == 10 && _rollCount == 2)
-			{
-				_score += pins;
-			}*/
-
 			_score += pins;
 			_rollCount++;
 
-			if (_rollCount % 2 == 1)
+			if (IsNewFrame)
 			{
-				if (_frameScore == 10)
+				if (IsPriorFrameSpare)
 				{
 					_score += pins;
 				}
@@ -27,6 +22,13 @@
 			}
 
 			_frameScore += pins;
+		}
+
+		private bool IsPriorFrameSpare => _frameScore == 10;
+
+		private bool IsNewFrame
+		{
+			get { return _rollCount % 2 == 1; }
 		}
 
 		public int GetScore()
