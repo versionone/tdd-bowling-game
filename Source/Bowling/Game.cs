@@ -20,18 +20,23 @@ namespace Bowling
 					_score += pins;
 				}
 
-				_frameScore = 0;
-				_frameCount++;
-				_frameRollCount = 1;
+				StartNewFrame();
 
-				if (_frameCount > 10)
-				{
+				if (IsGameOver)
 					throw new Exception("game over");
-				}
 			}
 
 			_score += pins;
 			_frameScore += pins;
+		}
+
+		private bool IsGameOver => _frameCount > 10;
+
+		private void StartNewFrame()
+		{
+			_frameScore = 0;
+			_frameCount++;
+			_frameRollCount = 1;
 		}
 
 		private bool IsPriorFrameSpare => _frameScore == 10;
