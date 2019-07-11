@@ -1,3 +1,4 @@
+using System;
 using Bowling.Specs.Infrastructure;
 using NUnit.Framework;
 
@@ -154,6 +155,42 @@ namespace Bowling.Specs
 		public void the_score_is_56()
 		{
 			_game.GetScore().ShouldEqual(56);
+		}
+	}
+
+	public class when_10_frames_have_been_bowled
+	{
+		Game _game;
+		private Exception _caughtException;
+
+		[SetUp]
+		public void context()
+		{
+			_game = new Game();
+
+			for (var i = 0; i < 20; i++)
+				_game.Roll(2);
+
+			try
+			{
+				_game.Roll(2);
+			}
+			catch (Exception ex)
+			{
+				_caughtException = ex;
+			}
+		}
+
+		[Test]
+		public void dont_allow_any_more()
+		{
+			_caughtException.ShouldNotBeNull();
+		}
+
+		[Test]
+		public void score_is_unchanged()
+		{
+			_game.GetScore().ShouldEqual(40);
 		}
 	}
 }
