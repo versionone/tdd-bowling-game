@@ -75,6 +75,7 @@ namespace Bowling.Specs
 			_game.GetScore().ShouldEqual(58);
 		}
 	}
+
 	public class when_rolling_alternating_2s_and_5s
 	{
 		Game _game = new Game();
@@ -111,4 +112,25 @@ namespace Bowling.Specs
 			_game.GetScore().ShouldEqual(70);
 		}
 	}
+
+	public class when_rolling_a_spare_followed_by_all_2s
+	{
+		Game _game = new Game();
+
+		[SetUp]
+		public void context()
+		{
+			_game.Roll(9);
+			_game.Roll(1);
+			for (var i = 0; i < 18; i++)
+				_game.Roll(2);
+		}
+
+		[Test]
+		public void the_score_is_48()
+		{
+			_game.GetScore().ShouldEqual(48);
+		}
+	}
+
 }
