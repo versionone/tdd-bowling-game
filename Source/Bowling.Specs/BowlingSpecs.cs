@@ -193,4 +193,25 @@ namespace Bowling.Specs
 			_game.GetScore().ShouldEqual(40);
 		}
 	}
+
+	public class when_frame_is_a_strike_and_rest
+	{
+		Game _game = new Game();
+
+		[SetUp]
+		public void context()
+		{
+			_game.Roll(10);
+
+			for (var i = 0; i < 18; i++)
+				_game.Roll(2);
+		}
+
+		[Test]
+		public void the_score_is_50()
+		{
+			_game.GetScore().ShouldEqual(50);
+		}
+	}
+
 }
