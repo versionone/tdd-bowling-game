@@ -5,20 +5,13 @@ namespace Bowling
 	public class Game
 	{
 		private int _score;
-		private int _rollCount;
 		private int _frameScore;
-		//private int _frameCount;
+		private int _frameCount = 1;
+		private int _frameRollCount;
 
 		public void Roll(int pins)
 		{
-			//if (_frameCount >= 10)
-			if (_rollCount >= 20)
-			{
-				throw new Exception("game over");
-			}
-
-			_score += pins;
-			_rollCount++;
+			_frameRollCount++;
 
 			if (IsNewFrame)
 			{
@@ -28,9 +21,16 @@ namespace Bowling
 				}
 
 				_frameScore = 0;
-				//_frameCount++;
+				_frameCount++;
+				_frameRollCount = 1;
+
+				if (_frameCount > 10)
+				{
+					throw new Exception("game over");
+				}
 			}
 
+			_score += pins;
 			_frameScore += pins;
 		}
 
@@ -38,7 +38,7 @@ namespace Bowling
 
 		private bool IsNewFrame
 		{
-			get { return _rollCount % 2 == 1; }
+			get { return _frameRollCount == 3; }
 		}
 
 		public int GetScore()
