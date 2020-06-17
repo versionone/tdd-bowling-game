@@ -11,7 +11,7 @@ namespace Bowling.Specs
 		{
 			_game = new Game();
 			int gutterball = 0;
-			20.times(()=> _game.roll(gutterball));
+			10.times(()=> _game.RollFrame(gutterball,gutterball));
 		}
 
 		[Test]
@@ -29,7 +29,7 @@ namespace Bowling.Specs
 		public void context()
 		{
 			_game = new Game();
-			20.times(() => _game.roll(2));
+			10.times(() => _game.RollFrame(2,2));
 			
 		}
 
@@ -48,8 +48,8 @@ namespace Bowling.Specs
 		public void context()
 		{
 			_game = new Game();
-			2.times(() => _game.roll(2));
-			18.times(() => _game.roll(3));
+			_game.RollFrame(2,2);
+			9.times(() => _game.RollFrame(3,3));
 
 		}
 
@@ -68,11 +68,7 @@ namespace Bowling.Specs
 		public void context()
 		{
 			_game = new Game();
-			10.times(() =>
-			{
-				_game.roll(2);
-				_game.roll(5);
-			});
+			10.times(() => { _game.RollFrame(2, 5); });
 
 		}
 
@@ -91,11 +87,10 @@ namespace Bowling.Specs
 		public void context()
 		{
 			_game = new Game();
-			_game.roll(2);
-			_game.roll(8);
-			18.times(() =>
+			_game.RollFrame(2, 8);
+			9.times(() =>
 			{
-				_game.roll(2);
+				_game.RollFrame(2,2);
 			});
 
 		}
@@ -104,6 +99,30 @@ namespace Bowling.Specs
 		public void score_is_48()
 		{
 			(_game.Score).ShouldEqual(48);
+		}
+	}
+
+	//when the first 2 frames are spare (as 2,8) and the rest score 2, the score is 56.
+	public class first_two_frame_is_2_8_rest_2
+	{
+		private Game _game;
+		[SetUp]
+		public void context()
+		{
+			_game = new Game();
+			_game.RollFrame(2, 8);
+			_game.RollFrame(2, 8);
+			8.times(() =>
+			{
+				_game.RollFrame(2,2);
+			});
+
+		}
+
+		[Test]
+		public void score_is_48()
+		{
+			(_game.Score).ShouldEqual(56);
 		}
 	}
 }
