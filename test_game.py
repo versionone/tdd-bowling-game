@@ -37,3 +37,22 @@ def test_one_spare(game):
 	for i in range(18):
 		game.roll(2)
 	assert game.score() == 48
+
+def test_two_spares(game):
+	for i in range(2):
+		game.roll(2)
+		game.roll(8)
+	for i in range(16):
+		game.roll(2)
+	assert game.score() == 56
+
+def test_too_many_rolls(game):
+	for i in range(22):
+		game.roll(2)
+	assert game.score() == 40
+
+def test_first_strike(game):
+	game.roll(10)
+	for i in range(18):
+		game.roll(2)
+	assert game.score() == 50

@@ -1,19 +1,46 @@
 class Game:
 
+	MAX_FRAMES = 10
+	SPARE = 10
+	STRIKE = 10
+
 	def __init__(self):
-		self.rolls = []
+		self.frame_index = 0
+		self.frames = {}
 
 	def roll(self, roll_score):
-		self.rolls.append(roll_score)
+		if self.frame_index not in self.frames:
+			self.frames[self.frame_index] = []
+		elif len(self.frames[self.frame_index]) == 2:
+			self.frame_index += 1
+			self.frames[self.frame_index] = []
+
+		self.frames[self.frame_index].append(roll_score)
+
+		if roll_score == self.STRIKE and len(self.frames[self.frame_index]) < 2:
+			self.frame_index += 1
 
 	def score(self):
 		score = 0
-		partial_score = 0
-		for idx, roll in enumerate(self.rolls):
-			partial_score += roll
-			if (idx + 1) % 2 == 0:
-				if partial_score == 10 and idx + 1 < len(self.rolls):
-					partial_score += self.rolls[idx + 1]
-				score += partial_score
-				partial_score = 0
+		for frame_idx in self.frames:
+			if frame_idx == self.MAX_FRAMES:
+				break
+
+			frame = self.frames[frame_idx]
+			frame_sum = sum(frame)
+
+			if len(frame) and frame[0] == self.STRIKE:
+				# strike logic: add the value of the next two rolls
+				if (frame_idx + 1) in self.frames:
+					frame_sum += sum(self.frames[frame_idx + 1])
+					if len(self.frames[frame_idx + 1]) < 2:
+						if (frame_idx + 2) in self.frames and len(self.frames[frame_idx + 2]):
+							frame_sum += self.frames[frame_idx + 2][0]
+			elif frame_sum == self.SPARE:
+				# spare logic: add the first roll of the next frame
+				if (frame_idx + 1) in self.frames and len(self.frames[frame_idx + 1]):
+					frame_sum += self.frames[frame_idx + 1][0]
+
+			score += frame_sum
+
 		return score
