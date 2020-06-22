@@ -56,3 +56,25 @@ def test_first_strike(game):
 	for i in range(18):
 		game.roll(2)
 	assert game.score() == 50
+
+def test_first_two_strikes(game):
+	game.roll(10)
+	game.roll(10)
+	for i in range(16):
+		game.roll(2)
+	assert game.score() == 68
+
+def test_perfect_game(game):
+	for i in range(10):
+		game.roll(10)
+	game.roll(10)
+	game.roll(10)
+	assert game.score() == 300
+
+def test_strike_and_spare(game):
+	for i in range(5):
+		game.roll(10)
+		game.roll(2)
+		game.roll(8)
+	game.roll(10)
+	assert game.score() == 200
