@@ -57,4 +57,32 @@ namespace Bowling.Specs
 			_game.Score.ShouldEqual(40);
 		}
 	}
+
+	public class when_rolling_2s_3s
+	{
+		private Game _game;
+
+		[SetUp]
+		public void context()
+		{
+			_game = new Game();
+			for (var i = 0; i < 20; i++)
+			{
+				if (i == 0 || i == 1)
+				{
+					_game.Roll(2);
+				}
+				else
+				{
+					_game.Roll(3);
+				}
+			}
+		}
+
+		[Test]
+		public void the_score_is_58()
+		{
+			_game.Score.ShouldEqual(58);
+		}
+	}
 }

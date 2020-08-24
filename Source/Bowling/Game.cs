@@ -19,6 +19,10 @@
 			{
 				_score +=pins;
 			}
+			if (pins == 3)
+			{
+				_score +=pins;
+			}
 		}
 
 		
