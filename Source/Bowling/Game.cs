@@ -11,7 +11,7 @@
 
 		public void Roll(int pins)
 		{	  
-		  if (pins == 0 || pins == 2 || pins == 3)
+		  if (pins >= 0 &&  pins <=10)
 		  {
 				_score +=pins;
 		  }
