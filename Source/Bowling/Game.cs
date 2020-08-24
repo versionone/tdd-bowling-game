@@ -11,18 +11,11 @@
 
 		public void Roll(int pins)
 		{	  
-			if (pins == 0)
-			{
-				_score = 0;
-			}
-			if (pins == 2)
-			{
+		  if (pins == 0 || pins == 2 || pins == 3)
+		  {
 				_score +=pins;
-			}
-			if (pins == 3)
-			{
-				_score +=pins;
-			}
+		  }
+			
 		}
 
 		
