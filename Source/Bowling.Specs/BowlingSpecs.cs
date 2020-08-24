@@ -19,4 +19,24 @@ namespace Bowling.Specs
 			_itWorked.ShouldBeTrue();
 		}
 	}
+
+	public class when_rolling_all_gutter_balls
+	{
+		private Game _game;
+
+		[SetUp]
+		public void context()
+		{
+			_game = new Game();
+			for (var i = 0; i < 20; i++)
+				_game.Roll(0);
+		}
+
+		[Test]
+		public void the_score_is_0()
+		{
+			_game.Score.ShouldEqual(0);
+		}
+	}
+
 }
