@@ -15,6 +15,10 @@
 			{
 				_score = 0;
 			}
+			if (pins == 2)
+			{
+				_score +=pins;
+			}
 		}
 
 		

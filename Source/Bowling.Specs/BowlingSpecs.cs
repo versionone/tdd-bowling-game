@@ -39,4 +39,22 @@ namespace Bowling.Specs
 		}
 	}
 
+	public class when_rolling_all_2s
+	{
+		private Game _game;
+
+		[SetUp]
+		public void context()
+		{
+			_game = new Game();
+			for (var i = 0; i < 20; i++)
+				_game.Roll(2);
+		}
+
+		[Test]
+		public void the_score_is_40()
+		{
+			_game.Score.ShouldEqual(40);
+		}
+	}
 }
