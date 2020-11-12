@@ -7,12 +7,13 @@
 
 		public void Roll(int pins)
 		{
-			if (pins == 0)
+			/*if (pins == 0)
 				_score = 0;
-			else   
+			else if()
 			{
-				_score = 40;
-			}
+				  _score = 40;
+			}*/
+			_score += pins;
 		}
 
 		public int Score

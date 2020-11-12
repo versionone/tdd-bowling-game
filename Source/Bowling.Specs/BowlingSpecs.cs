@@ -39,7 +39,7 @@ namespace Bowling.Specs
 		}
 	}
 
-	public class when_rolling_all_twos
+	  public class when_rolling_all_twos
 	{
 		private Game _game;
 
@@ -57,5 +57,27 @@ namespace Bowling.Specs
 			_game.Score.ShouldEqual(40);
 		}
 	}
+
+	  public class when_rolling_two_twos_followed_by_all_threes
+	  {
+		  private Game _game;
+
+		  [SetUp]
+		  public void context()
+		  {
+			  _game = new Game();
+			  for (int i = 0; i < 2; ++i)
+				  _game.Roll(2);
+
+			  for (int i = 0; i < 17; ++i)
+				  _game.Roll(3);
+		  }
+
+		  [Test]
+		  public void the_score_is_58()
+		  {
+			  _game.Score.ShouldEqual(58);
+		  }
+	  }
 
 }
